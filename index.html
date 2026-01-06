@@ -3,24 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Unificado - Operações VIVO</title>
+    <title>Painel Integrado - COPE PADTEC</title>
+    <!-- Bibliotecas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+        :root {
+            --padtec-orange: #F37021;
+            --padtec-black: #1A1A1A;
+            --vivo-orange: #FF8C00;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
             color: #111827;
+            transition: background-color 0.3s ease;
         }
 
-        .bg-orange-brand { background-color: #FF8C00; }
-        .text-orange-brand { color: #FF8C00; }
-        .border-orange-brand { border-color: #FF8C00; }
+        /* Estilos Volumetria (Tema Dark) */
+        .volumetria-mode {
+            background-color: var(--padtec-black);
+            background-image: 
+                linear-gradient(135deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(225deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(315deg, #1a1a1a 25%, #262626 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 20px 20px;
+            background-attachment: fixed;
+        }
 
+        /* Efeito de Elevação e Cor para Caixas (Cards) */
+        .hover-lift-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .hover-lift-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--vivo-orange);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            background-color: #ffffff;
+        }
+
+        /* Buttons */
         .btn-depth {
-            background: #FF8C00;
+            background: var(--vivo-orange);
             border: none;
             padding: 16px 32px;
             color: white;
@@ -28,21 +61,25 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             border-radius: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             box-shadow: 0 6px 0 #cc7000, 0 12px 20px rgba(0,0,0,0.15);
             position: relative;
             cursor: pointer;
             width: 100%;
         }
-
-        .btn-depth:hover {
-            box-shadow: 0 4px 0 #cc7000, 0 8px 15px rgba(0,0,0,0.15);
-            transform: translateY(2px);
+        .btn-depth:hover { 
+            transform: translateY(-4px); 
+            background-color: #ff9d26;
+            box-shadow: 0 8px 0 #cc7000, 0 15px 25px rgba(0,0,0,0.2); 
         }
+        .btn-depth:active { transform: translateY(2px); box-shadow: 0 2px 0 #cc7000; }
 
-        .btn-depth:active {
-            box-shadow: 0 0 0 #cc7000;
-            transform: translateY(6px);
+        .btn-action {
+            transition: all 0.3s ease;
+        }
+        .btn-action:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
         }
 
         .table-container {
@@ -52,464 +89,473 @@
             border-radius: 8px;
             background: white;
         }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { position: sticky; top: 0; background: #000; color: white; z-index: 10; padding: 12px 16px; text-align: left; font-size: 0.75rem; text-transform: uppercase; }
+        td { padding: 10px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.8rem; }
+        .modified-cell { background-color: #fef3c7; color: #92400e; font-weight: 600; }
+        .blank-row { background-color: #e5e7eb !important; height: 20px; }
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+        .letterhead-container {
+            background: #ffffff;
+            border-top: 8px solid var(--padtec-orange);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            color: #1a1a1a;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .chart-container { position: relative; height: 280px; width: 100%; }
+        
+        .kpi-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: 1px solid #f1f5f9; 
+            background: #ffffff; 
+        }
+        .kpi-card:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--padtec-orange); 
+            box-shadow: 0 15px 30px rgba(243, 112, 33, 0.1);
         }
 
-        th {
-            position: sticky;
-            top: 0;
-            background: #000;
-            color: white;
-            z-index: 10;
-            padding: 12px 16px;
-            text-align: left;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 10px 16px;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 0.8rem;
-            max-width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        tr:hover { background-color: #fff7ed; }
-
-        .modified-cell {
-            background-color: #fef3c7;
-            color: #92400e;
-            font-weight: 600;
-        }
-
-        .blank-row {
-            background-color: #e5e7eb !important;
-            height: 20px;
-        }
+        .number-badge { background-color: rgba(243, 112, 33, 0.12); padding: 0.4rem 1.2rem; border-radius: 1rem; display: inline-block; min-width: 70px; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--vivo-orange); border-radius: 10px; }
 
         .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #FF8C00;
-            animation: spin 1s linear infinite;
+            border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px;
+            border-radius: 50%; border-left-color: var(--vivo-orange); animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .nav-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover { 
+            background-color: var(--vivo-orange); 
+            color: white; 
+            border-color: var(--vivo-orange);
+            transform: translateY(-3px);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .btn-export-es {
+            background-color: var(--padtec-orange);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-export-es:hover {
+            transform: translateY(-2px);
+            background-color: #d65d1a;
+            box-shadow: 0 4px 8px rgba(243, 112, 33, 0.3);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #FF8C00; border-radius: 10px; }
-
-        /* Efeito para as caixas de upload "acenderem" */
-.bg-white.p-8.rounded-2xl {
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.bg-white.p-8.rounded-2xl:hover {
-    border-color: #FF8C00;
-    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.2);
-    transform: scale(1.02);
-}
+        .pdf-export-mode { padding: 20px !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
     </style>
 </head>
+<body class="min-h-screen flex flex-col" id="main-body">
 
-    <!-- Back Button -->
-    <div class="fixed top-4 left-4 z-50">
-        <a href="https://jefferson-silva-padtec.github.io/COPE/" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg">
+    <!-- Global Back Button -->
+    <div class="fixed top-4 left-4 z-50 no-print">
+        <a href="SITE COPE/index.html" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
             Voltar
         </a>
     </div>
-<body class="min-h-screen flex flex-col">
 
-    <header class="bg-black text-white py-6 shadow-xl border-b-4 border-orange-brand">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight uppercase">
-                Painel de Operações <span class="text-orange-brand">COPE</span>
-            </h1>
-            <p class="text-gray-400 mt-2 text-sm uppercase tracking-widest font-semibold">Processamento de Notificações e Análise de Causa Comum</p>
-        </div>
-    </header>
+    <!-- PÁGINA 1: OPERAÇÕES -->
+    <section id="page-operacoes" class="flex-grow flex flex-col">
+        <header class="bg-black text-white py-6 shadow-xl border-b-4 border-orange-500">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight uppercase">Painel de Operações <span class="text-orange-500">COPE</span></h1>
+                    <p class="text-gray-400 mt-1 text-xs uppercase tracking-widest font-semibold">Notificações e Causa Comum</p>
+                </div>
+                <button onclick="switchPage('volumetria')" class="nav-btn">Ir para Volumetria →</button>
+            </div>
+        </header>
 
-    <main class="flex-grow container mx-auto px-4 py-10">
-        
-        <!-- Secções de Upload Lado a Lado -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            
-            <!-- Secção TA -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center">
-                <div class="mb-6 text-center">
-                    <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-10 h-10 text-orange-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+        <main class="flex-grow container mx-auto px-4 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center hover-lift-card">
+                    <div class="mb-6 text-center">
+                        <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">Limpador Notificação TA</h2>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (Parcial.xls) do SIGO.</p>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">Limpador Notificação TA</h2>
-                    <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (Parcial.xls) importado do SIGO.</p>
+                    <input type="file" id="fileInputTA" accept=".xls,.xlsx,.csv" class="hidden">
+                    <button onclick="document.getElementById('fileInputTA').click()" class="btn-depth">Selecionar Arquivo</button>
+                    <div id="loadingTA" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
-                <input type="file" id="fileInputTA" accept=".xls,.xlsx,.csv" class="hidden">
-                <button onclick="document.getElementById('fileInputTA').click()" class="btn-depth">
-                    Selecionar Arquivo
-                </button>
-                <div id="loadingTA" class="hidden mt-6 flex flex-col items-center">
-                    <div class="loading-spinner"></div>
-                    <p class="mt-2 text-orange-brand text-xs font-bold">Limpando dados...</p>
-                </div>
-            </div>
 
-            <!-- Secção Causa Comum -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center">
-                <div class="mb-6 text-center">
-                    <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-10 h-10 text-orange-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h1m-5 10v-5a2 2 0 012-2h3m2 4l2 2m0 0l2-2m-2 2v-5a2 2 0 012-2h3"></path></svg>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center hover-lift-card">
+                    <div class="mb-6 text-center">
+                        <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h1m-5 10v-5a2 2 0 012-2h3m2 4l2 2m0 0l2-2m-2 2v-5a2 2 0 012-2h3"></path></svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">Tickets Causa Comum</h2>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (ARM-Splitter.xls) do SIGO.</p>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">Tickets Causa Comum</h2>
-                    <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (ARM-Splitter.xls) importado do SIGO.</p>
-                </div>
-                <input type="file" id="fileInputCausa" accept=".xls,.xlsx,.csv" class="hidden">
-                <button onclick="document.getElementById('fileInputCausa').click()" class="btn-depth">
-                    Selecionar Arquivo
-                </button>
-                <div id="loadingCausa" class="hidden mt-6 flex flex-col items-center">
-                    <div class="loading-spinner"></div>
-                    <p class="mt-2 text-orange-brand text-xs font-bold">Analisando duplicados...</p>
+                    <input type="file" id="fileInputCausa" accept=".xls,.xlsx,.csv" class="hidden">
+                    <button onclick="document.getElementById('fileInputCausa').click()" class="btn-depth">Selecionar Arquivo</button>
+                    <div id="loadingCausa" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
             </div>
 
+            <!-- Results Panels (TA / Causa) -->
+            <div id="results-ta" class="hidden w-full mb-12">
+                <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-500">
+                    <div><h3 class="text-lg font-bold text-gray-800">Resultado: Limpador TA</h3><p id="stats-ta" class="text-gray-500 text-xs"></p></div>
+                    <div class="flex gap-2"><button onclick="clearTA()" class="bg-white border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadTA()" class="bg-orange-500 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow btn-action">BAIXAR TA</button></div>
+                </div>
+                <div class="table-container shadow-xl rounded-b-xl"><table id="tableTA"><thead id="headTA"></thead><tbody id="bodyTA"></tbody></table></div>
+            </div>
+
+            <div id="results-causa" class="hidden w-full">
+                <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-500">
+                    <div><h3 class="text-lg font-bold text-gray-800">Resultado: Causa Comum</h3><p id="stats-causa" class="text-gray-500 text-xs"></p></div>
+                    <div class="flex gap-2"><button onclick="clearCausa()" class="bg-white border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadCausaExcel()" class="bg-orange-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow btn-action">EXPORTAR XLS</button></div>
+                </div>
+                <div class="table-container shadow-xl rounded-b-xl"><table id="tableCausa"><thead><tr><th>Cidade</th><th>Splitter</th><th>CI</th><th>Sub Cat</th><th>Ref</th><th>Tag Ori</th><th>Status</th></tr></thead><tbody id="bodyCausa"></tbody></table></div>
+            </div>
+        </main>
+    </section>
+
+    <!-- PÁGINA 2: VOLUMETRIA (DASHBOARD) -->
+    <section id="page-volumetria" class="hidden flex-grow py-8 md:py-12">
+        <div id="dashboard-content" class="letterhead-container space-y-8 p-10 rounded-sm">
+            <div class="flex flex-col md:flex-row justify-between items-start border-b-2 border-slate-100 pb-8 gap-6">
+                <div class="flex items-center gap-5">
+                    <div class="w-2.5 h-14 bg-orange-500 rounded-full"></div>
+                    <div>
+                        <h1 class="text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRODUÇÃO COPE</h1>
+                        <p class="text-slate-400 font-bold mt-2 tracking-widest text-xs">RELATÓRIO DE PRODUTIVIDADE | PADTEC</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-3 no-print">
+                    <div class="flex gap-3">
+                        <button onclick="switchPage('operacoes')" class="bg-slate-800 text-white px-6 py-3 rounded-lg font-black text-[10px] hover:bg-black transition shadow-xl btn-action">← VOLTAR PARA OPERAÇÕES</button>
+                        <label class="cursor-pointer bg-orange-500 text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] btn-action">IMPORTAR DADOS<input type="file" id="fileInputVol" class="hidden" accept=".xls,.xlsx,.csv"></label>
+                        <button onclick="downloadPDF()" class="bg-black text-white px-6 py-3 rounded-lg font-black transition shadow-xl text-[10px] btn-action">EXPORTAR PDF</button>
+                    </div>
+                    <p id="data-referencia-display" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Data Referência: --/--/----</p>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                <div class="kpi-card md:col-span-2 p-8 rounded-2xl flex flex-col justify-center items-center relative text-center shadow-sm hover-lift-card">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Total de Tickets</p>
+                    <div class="number-badge"><h2 id="kpi-total" class="text-[66px] font-black text-slate-800 leading-none">0</h2></div>
+                    <div class="flex gap-6 mt-8 w-full justify-center">
+                        <div class="text-center"><p id="stat-agregadores-val" class="text-[33px] font-black text-slate-700 leading-none">0</p><p class="text-[9px] font-bold text-slate-400 uppercase mt-2">Agregadores</p></div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <div class="text-center"><p id="stat-agregado-val" class="text-[33px] font-black text-slate-700 leading-none">0</p><p class="text-[9px] font-bold text-slate-400 uppercase mt-2">Agregado</p></div>
+                    </div>
+                </div>
+                
+                <!-- Card ES com Botão de Exportar Planilha ES -->
+                <div class="kpi-card md:col-span-3 p-8 rounded-2xl flex flex-col items-stretch bg-slate-50/20 shadow-sm border-l-4 border-l-orange-500 overflow-hidden hover-lift-card relative">
+                    <button onclick="downloadExcelES()" class="absolute top-4 right-14 btn-export-es no-print">EXPORTAR DADOS ES</button>
+                    <div class="flex flex-col gap-3 flex-1">
+                        <div class="flex items-end justify-between border-b-2 border-slate-100/50 pb-2">
+                            <div><p class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-2 leading-tight">TOTAL ESPÍRITO SANTO</p><div class="number-badge"><h2 id="kpi-es" class="text-[46px] font-black text-slate-800 leading-none">0</h2></div></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-10 items-start">
+                            <div class="flex-1 w-full min-w-0"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-sm"></span>CIDADES EM FOCO</p><div id="top-cities-es" class="flex flex-col gap-2 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-xs italic py-2">Importe dados...</p></div></div>
+                            <div class="flex-1 w-full min-w-0 md:pl-10 md:border-l-2 md:border-slate-100"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-slate-800 rounded-sm"></span>PRINCIPAIS CAUSAS ES</p><div id="causas-es-list-container" class="space-y-1.5 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-[10px] italic py-2">Importe dados...</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts / General Analysis -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card">
+                    <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Causas Gerais</h3></div>
+                    <div id="causas-list-container" class="space-y-4 h-[300px] overflow-y-auto pr-3 custom-scrollbar"><p class="text-center text-slate-300 text-xs italic py-24">Aguardando...</p></div>
+                </div>
+                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card">
+                    <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Distribuição de Tags</h3></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-[300px]">
+                        <div class="bg-slate-50 border-2 border-slate-900 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-slate-100 transition-all">
+                            <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">Operacionais</h4>
+                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-adm-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400">ADM COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-desag-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400">DESAGREGADO</p></div></div>
+                        </div>
+                        <div class="bg-orange-50 border-2 border-orange-500 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-orange-100 transition-all">
+                            <h4 class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] text-center">Salas de Crise</h4>
+                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-cope-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400">Salas COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-noc-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400">Salas NOC</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card"><h3 class="font-black text-slate-800 mb-8 text-center uppercase text-xs tracking-[0.2em]">Top 5 Regiões</h3><div class="chart-container"><canvas id="regioesChart"></canvas></div></div>
+                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card"><h3 class="font-black text-slate-800 mb-8 text-center uppercase text-xs tracking-[0.2em]">Progressão Diária</h3><div class="chart-container"><canvas id="timelineChart"></canvas></div></div>
+            </div>
+
+            <div class="mt-16 pt-10 border-t-2 border-slate-100 flex flex-row justify-between items-end opacity-70 pb-6">
+                <div class="space-y-2"><p class="text-[14px] font-black uppercase tracking-[0.4em] text-slate-900 leading-none">PADTEC S.A.</p><p class="text-[10px] font-bold text-slate-400 uppercase leading-none">Campinas - São Paulo, Brasil</p></div>
+                <div class="text-right"><p class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">WWW.PADTEC.COM.BR</p></div>
+            </div>
         </div>
+    </section>
 
-        <!-- Resultados TA -->
-        <div id="results-ta" class="hidden w-full mb-12 animate-in fade-in duration-500">
-            <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-brand">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800">Resultado: Limpador TA</h3>
-                    <p id="stats-ta" class="text-gray-500 text-xs"></p>
-                </div>
-                <div class="flex gap-2 mt-3 md:mt-0">
-                    <button onclick="clearTA()" class="bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 px-5 py-2 rounded-lg text-xs font-bold transition">
-                        LIMPAR
-                    </button>
-                    <button onclick="downloadTA()" class="bg-orange-brand hover:bg-orange-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        DESCARREGAR ARQUIVO LIMPO
-                    </button>
-                </div>
-            </div>
-            <div class="table-container shadow-xl rounded-b-xl border-t-0">
-                <table id="tableTA">
-                    <thead id="headTA"></thead>
-                    <tbody id="bodyTA"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Resultados Causa Comum -->
-        <div id="results-causa" class="hidden w-full animate-in fade-in duration-500">
-            <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-brand">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800">Resultado: Causa Comum</h3>
-                    <p id="stats-causa" class="text-gray-500 text-xs"></p>
-                </div>
-                <div class="flex gap-2 mt-3 md:mt-0">
-                    <button onclick="clearCausa()" class="bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-lg text-xs font-bold transition">
-                        LIMPAR
-                    </button>
-                    <button onclick="downloadCausaExcel()" class="bg-orange-brand hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Exportar em XLS
-                    </button>
-                </div>
-            </div>
-            <div class="table-container shadow-xl rounded-b-xl border-t-0">
-                <table id="tableCausa">
-                    <thead>
-                        <tr>
-                            <th>Cidade</th>
-                            <th>Splitter Designado</th>
-                            <th>Nome CI</th>
-                            <th>Sub Categoria</th>
-                            <th>Referência</th>
-                            <th>Tag Original</th>
-                            <th>Contém TAG</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyCausa"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="bg-gray-900 text-gray-500 py-6 text-center text-xs mt-auto">
-        <div class="container mx-auto px-4">
-            &copy; 2026 - Central de Ferramentas COPE PADTEC | Processamento de Dados Unificado
-        </div>
+    <footer class="bg-gray-900 text-gray-500 py-6 text-center text-xs no-print">
+        <div class="container mx-auto px-4">&copy; 2026 - Central de Ferramentas COPE PADTEC | Painel Integrado</div>
     </footer>
 
     <script>
+        // --- NAVEGAÇÃO ---
+        function switchPage(page) {
+            const body = document.getElementById('main-body');
+            document.getElementById('page-operacoes').classList.toggle('hidden', page !== 'operacoes');
+            document.getElementById('page-volumetria').classList.toggle('hidden', page !== 'volumetria');
+            body.classList.toggle('volumetria-mode', page === 'volumetria');
+            window.scrollTo(0, 0);
+        }
+
         // --- VARIÁVEIS GLOBAIS ---
-        let processedTA = [];
-        let headersTA = [];
-        let processedCausa = [];
-        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
+        let processedTA = [], headersTA = [], processedCausa = [];
+        let volDataES = [], volSummaryES = {}; // Dados filtrados do ES
+        let charts = {};
+        const CIDADES_ES_ALVO = ["VIANA", "CACHOEIRO DE ITAPEMERIM", "GUARAPARI", "SAO MATEUS", "SANTA MARIA DE JETIBA", "ARACRUZ"];
         const DATE_STAMP_REGEX = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
+        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
 
-        // --- LÓGICA LIMPADEIRA TA ---
-
+        // --- LÓGICA TA ---
         document.getElementById('fileInputTA').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const file = e.target.files[0]; if (!file) return;
             document.getElementById('loadingTA').classList.remove('hidden');
-            document.getElementById('results-ta').classList.add('hidden');
-
             const reader = new FileReader();
             reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1, defval: "" });
-                    handleTA(jsonData);
-                } catch (err) {
-                    alert("Erro no arquivo TA");
-                    document.getElementById('loadingTA').classList.add('hidden');
-                }
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                handleTA(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1, defval: "" }));
             };
             reader.readAsArrayBuffer(file);
         });
 
         function handleTA(data) {
-            if (data.length === 0) return;
             headersTA = Object.keys(data[0]);
-            let modCount = 0;
-
             processedTA = data.map(row => {
                 const newRow = { ...row, _mod: [] };
                 const hist = String(row['Histórico Comentários'] || "");
-                
-                // Lógica Robusta de Limpeza de Histórico
                 let blocks = hist.split(/\n\s*\n/).filter(b => b.trim().length > 0);
-                let selectedBlock = "";
-
                 if (blocks.length > 0) {
-                    // Percorre de trás para frente até achar um comentário que não seja a mensagem de sucesso ou automação
+                    let selected = "";
                     for (let i = blocks.length - 1; i >= 0; i--) {
                         let b = blocks[i].trim();
-                        if (!b.includes(TARGET_TEXT_TA) && 
-                            !b.toLowerCase().includes("notificação de ta") &&
-                            !b.toLowerCase().includes("passagem automática")) {
-                            selectedBlock = b;
-                            break;
+                        if (!b.includes(TARGET_TEXT_TA) && !b.toLowerCase().includes("notificação de ta") && !b.toLowerCase().includes("passagem automática")) {
+                            selected = b; break;
                         }
                     }
-
-                    if (selectedBlock) {
-                        const dateMatch = selectedBlock.match(DATE_STAMP_REGEX);
-                        if (dateMatch) {
-                            selectedBlock = selectedBlock.substring(dateMatch.index + dateMatch[0].length).trim();
-                        }
-                        selectedBlock = selectedBlock.replace(/^ATUALIZAÇÃO\s+CCR(\s+TTK)?[:\s]*/i, "").trim();
-                        
-                        newRow['Histórico Comentários'] = selectedBlock;
-                        newRow._mod.push('Histórico Comentários');
+                    if (selected) {
+                        const dateMatch = selected.match(DATE_STAMP_REGEX);
+                        if (dateMatch) selected = selected.substring(dateMatch.index + dateMatch[0].length).trim();
+                        selected = selected.replace(/^ATUALIZAÇÃO\s+CCR(\s+TTK)?[:\s]*/i, "").trim();
+                        newRow['Histórico Comentários'] = selected; newRow._mod.push('Histórico Comentários');
                     }
                 }
-
-                // UF
-                if (String(row['UF']).trim() === "") {
-                    const eq = String(row['Equipe Responsável'] || "");
-                    const match = eq.match(/\/\s*([A-Z]{2})/i);
-                    if (match) {
-                        newRow['UF'] = match[1].toUpperCase();
-                        newRow._mod.push('UF');
-                    }
+                if (!String(row['UF']).trim()) {
+                    const match = String(row['Equipe Responsável']).match(/\/\s*([A-Z]{2})/i);
+                    if (match) { newRow['UF'] = match[1].toUpperCase(); newRow._mod.push('UF'); }
                 }
-
-                if (newRow._mod.length > 0) modCount++;
                 return newRow;
             });
-
             renderTA();
-            document.getElementById('stats-ta').innerText = `${processedTA.length} registos lidos. ${modCount} linhas processadas com alterações.`;
+            document.getElementById('stats-ta').innerText = `${processedTA.length} lidos.`;
             document.getElementById('results-ta').classList.remove('hidden');
             document.getElementById('loadingTA').classList.add('hidden');
         }
 
         function renderTA() {
-            const head = document.getElementById('headTA');
-            const body = document.getElementById('bodyTA');
-            head.innerHTML = `<tr>${headersTA.map(h => `<th>${h}</th>`).join('')}</tr>`;
-            body.innerHTML = processedTA.slice(0, 30).map(row => {
-                return `<tr>${headersTA.map(h => `<td class="${row._mod.includes(h) ? 'modified-cell' : ''}">${row[h]}</td>`).join('')}</tr>`;
-            }).join('');
+            document.getElementById('headTA').innerHTML = `<tr>${headersTA.map(h => `<th>${h}</th>`).join('')}</tr>`;
+            document.getElementById('bodyTA').innerHTML = processedTA.slice(0, 30).map(row => `<tr>${headersTA.map(h => `<td class="${row._mod.includes(h) ? 'modified-cell' : ''}">${row[h]}</td>`).join('')}</tr>`).join('');
         }
 
-        function clearTA() {
-            processedTA = [];
-            document.getElementById('fileInputTA').value = "";
-            document.getElementById('results-ta').classList.add('hidden');
-            document.getElementById('bodyTA').innerHTML = "";
-        }
-
+        function clearTA() { processedTA = []; document.getElementById('results-ta').classList.add('hidden'); document.getElementById('fileInputTA').value = ""; }
         function downloadTA() {
-            const data = processedTA.map(r => {
-                const { _mod, ...clean } = r;
-                return clean;
-            });
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "TA_Limpo");
-            XLSX.writeFile(wb, "PARCIAL_ARQUIVO_LIMPO.xlsx");
+            const ws = XLSX.utils.json_to_sheet(processedTA.map(({_mod, ...r}) => r));
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "TA");
+            XLSX.writeFile(wb, "TA_LIMPO.xlsx");
         }
 
         // --- LÓGICA CAUSA COMUM ---
-
         document.getElementById('fileInputCausa').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const file = e.target.files[0]; if (!file) return;
             document.getElementById('loadingCausa').classList.remove('hidden');
-            document.getElementById('results-causa').classList.add('hidden');
-
             const reader = new FileReader();
             reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1 });
-                    handleCausa(jsonData);
-                } catch (err) {
-                    alert("Erro no arquivo Causa Comum");
-                    document.getElementById('loadingCausa').classList.add('hidden');
-                }
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                handleCausa(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1 }));
             };
             reader.readAsArrayBuffer(file);
         });
 
         function handleCausa(data) {
             const clean = data.map(row => {
-                const norm = {};
-                Object.keys(row).forEach(k => norm[k.trim().replace(/\s+/g, ' ')] = row[k]);
-                
-                const cidade = String(norm['Área Rede'] || '').replace(/^-+/, '').trim();
-                const tagOri = String(norm['Tag'] || 'Unknown');
-                const tagStatus = tagOri.toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG';
-                const subCat = norm['Sub-Categoria'] || norm['Sub categoria'] || '';
-
-                return { ...norm, Cidade: cidade, TagOriginal: tagOri, ContemTag: tagStatus, SubCat: subCat };
+                const n = {}; Object.keys(row).forEach(k => n[k.trim().replace(/\s+/g, ' ')] = row[k]);
+                return { ...n, Cidade: String(n['Área Rede'] || '').replace(/^-+/, '').trim(), ContemTag: String(n['Tag'] || '').toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: n['Sub-Categoria'] || n['Sub categoria'] || '' };
             });
-
-            const counts = {};
-            clean.forEach(r => {
-                const s = r['Splitter Designado'];
-                if (s) counts[s] = (counts[s] || 0) + 1;
-            });
-
-            processedCausa = clean.filter(r => r['Splitter Designado'] && counts[r['Splitter Designado']] > 1);
-            processedCausa.sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
-
+            const counts = {}; clean.forEach(r => { if(r['Splitter Designado']) counts[r['Splitter Designado']] = (counts[r['Splitter Designado']] || 0) + 1; });
+            processedCausa = clean.filter(r => r['Splitter Designado'] && counts[r['Splitter Designado']] > 1).sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
             renderCausa();
-            document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados encontrados com base no Splitter Designado.`;
+            document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados.`;
             document.getElementById('results-causa').classList.remove('hidden');
             document.getElementById('loadingCausa').classList.add('hidden');
         }
 
         function renderCausa() {
-            const body = document.getElementById('bodyCausa');
-            body.innerHTML = "";
-            
-            if (processedCausa.length === 0) {
-                body.innerHTML = '<tr><td colspan="7" class="text-center py-8">Nenhum duplicado.</td></tr>';
-                return;
-            }
-
-            processedCausa.forEach((row, i) => {
-                const isTag = row.ContemTag === 'Contém TAG';
-                const tr = document.createElement('tr');
-                if (isTag) tr.classList.add('bg-green-50');
-
-                const values = [
-                    row.Cidade, 
-                    row['Splitter Designado'], 
-                    row['Nome CI'], 
-                    row.SubCat, 
-                    row['Referência'], 
-                    row.TagOriginal, 
-                    row.ContemTag
-                ];
-
-                values.forEach((v, idx) => {
+            const body = document.getElementById('bodyCausa'); body.innerHTML = "";
+            processedCausa.forEach((r, i) => {
+                const tr = document.createElement('tr'); if(r.ContemTag === 'Contém TAG') tr.classList.add('bg-green-50');
+                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r.SubCat, r['Referência'], r['Tag'] || '', r.ContemTag];
+                vls.forEach((v, idx) => {
                     const td = document.createElement('td');
-                    // Ajuste para mostrar o texto completo "Contém TAG" em vez de apenas "TAG"
-                    if (idx === 6 && v === 'Contém TAG') {
-                        td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold">Contém TAG</span>`;
-                    } else if (idx === 3 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) {
-                        td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
-                    } else {
-                        td.textContent = v;
-                    }
+                    if (idx === 6 && v === 'Contém TAG') td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold">Contém TAG</span>`;
+                    else if (idx === 3 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
+                    else td.textContent = v;
                     tr.appendChild(td);
                 });
-
                 body.appendChild(tr);
-
-                if (i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) {
-                    const blank = document.createElement('tr');
-                    blank.className = 'blank-row';
-                    blank.innerHTML = '<td colspan="7"></td>';
-                    body.appendChild(blank);
-                }
+                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="7"></td></tr>';
             });
         }
 
-        function clearCausa() {
-            processedCausa = [];
-            document.getElementById('fileInputCausa').value = "";
-            document.getElementById('results-causa').classList.add('hidden');
-            document.getElementById('bodyCausa').innerHTML = "";
+        function clearCausa() { processedCausa = []; document.getElementById('results-causa').classList.add('hidden'); document.getElementById('fileInputCausa').value = ""; }
+        function downloadCausaExcel() {
+            const ws = XLSX.utils.json_to_sheet(processedCausa);
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Causa");
+            XLSX.writeFile(wb, "CAUSA_COMUM.xlsx");
         }
 
-        function downloadCausaExcel() {
-            if (processedCausa.length === 0) return;
-            
-            const cols = ['Cidade', 'Splitter Designado', 'Nome CI', 'Sub Categoria', 'Referência', 'Tag Original', 'Contém TAG'];
-            const excelRows = [];
+        // --- LÓGICA VOLUMETRIA ---
+        document.getElementById('fileInputVol').addEventListener('change', (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
+                const hIdx = rows.findIndex(r => r && r.some(c => String(c).toLowerCase().includes('causa')));
+                processVolData(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: hIdx === -1 ? 0 : hIdx }));
+            };
+            reader.readAsArrayBuffer(file);
+        });
 
-            for (let i = 0; i < processedCausa.length; i++) {
-                const r = processedCausa[i];
-                excelRows.push({
-                    'Cidade': r.Cidade,
-                    'Splitter Designado': r['Splitter Designado'],
-                    'Nome CI': r['Nome CI'],
-                    'Sub Categoria': r.SubCat,
-                    'Referência': r['Referência'],
-                    'Tag Original': r.TagOriginal,
-                    'Contém TAG': r.ContemTag
-                });
+        function processVolData(data) {
+            const s = { total: 0, agr: 0, agrs: 0, adm: 0, des: 0, c: 0, n: 0, es: 0, esC: {}, d: [] };
+            const cm = {}, esm = {}, rm = {}, tm = {};
+            volDataES = []; // Resetar dados ES
 
-                if (i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i + 1].Cidade) {
-                    excelRows.push({}); 
+            data.forEach(r => {
+                const ag = String(r['Agregação'] || '').trim().toLowerCase();
+                if(ag === 'agregado') { s.agr++; return; }
+                if(ag === "" || ag === "null") s.agrs++;
+                s.total++;
+                
+                const t = String(r['Tag'] || '').toUpperCase();
+                if(t.includes("ADM COPE")) s.adm++; if(t.includes("DESAGREGADO")) s.des++;
+                if(t.includes("SALA DE CRISE")) { if(/\bC\b/.test(t) || t.includes("CRISE C")) s.c++; else s.n++; }
+                
+                const ar = String(r['Área Rede'] || '').toUpperCase();
+                const c = String(r['Causa'] || 'N/A').trim().toUpperCase();
+                const esc = CIDADES_ES_ALVO.find(x => ar.includes(x));
+                
+                if(esc) {
+                    s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[c] = (esm[c] || 0) + 1;
+                    volDataES.push(r); // Salva linha bruta do ES
                 }
-            }
+                
+                const df = r['Data Fim'];
+                if(df) {
+                    const p = String(df).split(' ')[0].split(/[-/]/);
+                    let d = p[0].length === 4 ? new Date(p[0], p[1]-1, p[2]) : new Date(p[2], p[1]-1, p[0]);
+                    if(!isNaN(d)) { s.d.push(d); const k = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; tm[k] = (tm[k] || 0) + 1; }
+                }
+                cm[c] = (cm[c] || 0) + 1;
+                let reg = String(r['Área Rede'] || 'N/A').replace(/-/g, '').trim().toUpperCase();
+                if(reg && reg !== '-') rm[reg] = (rm[reg] || 0) + 1;
+            });
+            
+            volSummaryES = s.esC;
+            updateVolUI(s, cm, esm, rm, tm);
+        }
 
-            const ws = XLSX.utils.json_to_sheet(excelRows);
+        function updateVolUI(s, cm, esm, rm, tm) {
+            document.getElementById('kpi-total').innerText = s.total;
+            document.getElementById('stat-agregadores-val').innerText = s.agrs;
+            document.getElementById('stat-agregado-val').innerText = s.agr;
+            document.getElementById('kpi-es').innerText = s.es;
+            document.getElementById('tag-adm-val').innerText = s.adm;
+            document.getElementById('tag-desag-val').innerText = s.des;
+            document.getElementById('tag-sala-cope-val').innerText = s.c;
+            document.getElementById('tag-sala-noc-val').innerText = s.n;
+            if(s.d.length) document.getElementById('data-referencia-display').innerText = `Data Referência: ${new Date(Math.min(...s.d)).toLocaleDateString('pt-PT')} a ${new Date(Math.max(...s.d)).toLocaleDateString('pt-PT')}`;
+            
+            const render = (id, arr, tot) => {
+                document.getElementById(id).innerHTML = arr.map(([k,v]) => `<div class="flex items-center gap-3 p-1 border-l-4 border-slate-100 hover:border-orange-500 mb-1 transition-all"><div class="min-w-[34px] bg-slate-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div><div class="flex-1"><p class="text-[9px] font-black text-slate-600 uppercase mb-1 truncate">${k}</p><div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-orange-500 h-full rounded" style="width:${(v/tot*100).toFixed(1)}%"></div></div></div></div>`).join('');
+            };
+            
+            render('causas-list-container', Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,10), s.total);
+            render('causas-es-list-container', Object.entries(esm).sort((a,b)=>b[1]-a[1]).slice(0,10), s.es);
+            document.getElementById('top-cities-es').innerHTML = Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="bg-white p-2 border border-slate-100 rounded shadow-sm flex items-center gap-2 mb-1 hover:border-orange-500 transition-all"><div class="bg-slate-900 text-white min-w-[30px] text-center text-[9px] font-black py-0.5 rounded">${v}</div><span class="text-[9px] font-black uppercase text-slate-700 truncate">${k}</span></div>`).join('');
+            
+            const rData = Object.entries(rm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            const tData = Object.entries(tm).sort((a,b)=>{ const [d1,m1]=a[0].split('/').map(Number); const [d2,m2]=b[0].split('/').map(Number); return (m1*100+d1)-(m2*100+d2); });
+            updateCharts({ reg: { l: rData.map(x=>x[0]), d: rData.map(x=>x[1]) }, tim: { l: tData.map(x=>x[0]), d: tData.map(x=>x[1]) } });
+        }
+
+        function updateCharts(p) {
+            Object.values(charts).forEach(c => c.destroy());
+            const opt = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9, weight: '700' } } }, x: { ticks: { font: { size: 9, weight: '700' } } } } };
+            charts.reg = new Chart(document.getElementById('regioesChart'), { type: 'bar', data: { labels: p.reg.l, datasets: [{ data: p.reg.d, backgroundColor: '#1e293b', barThickness: 12 }] }, options: { ...opt, indexAxis: 'y' } });
+            charts.tim = new Chart(document.getElementById('timelineChart'), { type: 'line', data: { labels: p.tim.l, datasets: [{ data: p.tim.d, borderColor: '#F37021', backgroundColor: 'rgba(243, 112, 33, 0.05)', fill: true, tension: 0.4 }] }, options: opt });
+        }
+
+        // --- EXPORTAR EXCEL ES ---
+        function downloadExcelES() {
+            if (volDataES.length === 0) { alert("Nenhum dado do Espírito Santo disponível."); return; }
+
+            // 1. Aba de Dados Brutos ES
+            const wsData = XLSX.utils.json_to_sheet(volDataES);
+
+            // 2. Aba de Resumo por Cidade
+            const summaryRows = Object.entries(volSummaryES).map(([city, total]) => ({ "Cidade": city, "Volume Total": total }));
+            const wsSummary = XLSX.utils.json_to_sheet(summaryRows);
+
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Resultados");
-            XLSX.writeFile(wb, "CAUSA_COMUM_SIGO.xlsx");
+            XLSX.utils.book_append_sheet(wb, wsData, "Dados Completos ES");
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Resumo Cidades");
+
+            XLSX.writeFile(wb, "PRODUCAO_DETALHADA_ES.xlsx");
+        }
+
+        async function downloadPDF() {
+            const el = document.getElementById('dashboard-content');
+            const originalStyle = el.getAttribute('style') || "";
+            el.style.width = '1120px'; el.style.maxWidth = 'none';
+            el.classList.add('pdf-export-mode');
+            const opt = { margin: [10, 5, 10, 5], filename: 'Producao_COPE_Padtec.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, letterRendering: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
+            try { await html2pdf().set(opt).from(el).save(); } finally { el.setAttribute('style', originalStyle); el.classList.remove('pdf-export-mode'); }
         }
     </script>
 </body>
 </html>
-
