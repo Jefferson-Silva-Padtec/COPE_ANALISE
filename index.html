@@ -169,7 +169,7 @@
 
     <!-- Global Back Button -->
     <div class="fixed top-4 left-4 z-50 no-print">
-        <a href="SITE COPE/index.html" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
+        <a href="https://jefferson-silva-padtec.github.io/COPE/links_cope.html" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -197,7 +197,7 @@
                             <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-800">Limpador Notificação TA</h2>
-                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (Parcial.xls) do SIGO.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (Parcial.xls) importado do SIGO.</p>
                     </div>
                     <input type="file" id="fileInputTA" accept=".xls,.xlsx,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputTA').click()" class="btn-depth">Selecionar Arquivo</button>
@@ -210,7 +210,7 @@
                             <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h1m-5 10v-5a2 2 0 012-2h3m2 4l2 2m0 0l2-2m-2 2v-5a2 2 0 012-2h3"></path></svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-800">Tickets Causa Comum</h2>
-                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (ARM-Splitter.xls) do SIGO.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (ARM-Splitter.xls) importado do SIGO.</p>
                     </div>
                     <input type="file" id="fileInputCausa" accept=".xls,.xlsx,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputCausa').click()" class="btn-depth">Selecionar Arquivo</button>
@@ -222,7 +222,7 @@
             <div id="results-ta" class="hidden w-full mb-12">
                 <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-500">
                     <div><h3 class="text-lg font-bold text-gray-800">Resultado: Limpador TA</h3><p id="stats-ta" class="text-gray-500 text-xs"></p></div>
-                    <div class="flex gap-2"><button onclick="clearTA()" class="bg-white border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadTA()" class="bg-orange-500 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow btn-action">BAIXAR TA</button></div>
+                    <div class="flex gap-2"><button onclick="clearTA()" class="bg-white border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadTA()" class="bg-orange-500 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow btn-action">EXPORTAR .XLS</button></div>
                 </div>
                 <div class="table-container shadow-xl rounded-b-xl"><table id="tableTA"><thead id="headTA"></thead><tbody id="bodyTA"></tbody></table></div>
             </div>
@@ -381,7 +381,7 @@
                 return newRow;
             });
             renderTA();
-            document.getElementById('stats-ta').innerText = `${processedTA.length} lidos.`;
+            document.getElementById('stats-ta').innerText = `${processedTA.length} registos lidos. ${modCount} linhas processadas com alterações.`;
             document.getElementById('results-ta').classList.remove('hidden');
             document.getElementById('loadingTA').classList.add('hidden');
         }
@@ -395,7 +395,7 @@
         function downloadTA() {
             const ws = XLSX.utils.json_to_sheet(processedTA.map(({_mod, ...r}) => r));
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "TA");
-            XLSX.writeFile(wb, "TA_LIMPO.xlsx");
+            XLSX.writeFile(wb, "ARQUIVO_PARCIAL_LIMPA.xlsx");
         }
 
         // --- LÓGICA CAUSA COMUM ---
@@ -559,3 +559,4 @@
     </script>
 </body>
 </html>
+
