@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
@@ -41,17 +42,17 @@
 
         /* Efeito de Elevação e Cor para Caixas (Cards) */
         .hover-lift-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid transparent;
         }
         .hover-lift-card:hover {
             transform: translateY(-8px);
             border-color: var(--vivo-orange);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            background-color: #ffffff; /* Garante fundo branco para destacar */
+            background-color: #ffffff;
         }
 
-        /* Shared Components - Buttons */
+        /* Buttons */
         .btn-depth {
             background: var(--vivo-orange);
             border: none;
@@ -72,12 +73,8 @@
             background-color: #ff9d26;
             box-shadow: 0 8px 0 #cc7000, 0 15px 25px rgba(0,0,0,0.2); 
         }
-        .btn-depth:active { 
-            transform: translateY(2px); 
-            box-shadow: 0 2px 0 #cc7000; 
-        }
+        .btn-depth:active { transform: translateY(2px); box-shadow: 0 2px 0 #cc7000; }
 
-        /* Botões Secundários */
         .btn-action {
             transition: all 0.3s ease;
         }
@@ -87,7 +84,7 @@
         }
 
         .table-container {
-            max-height: 500px;
+            max-height: 550px;
             overflow: auto;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
@@ -95,11 +92,23 @@
         }
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
         th { position: sticky; top: 0; background: #000; color: white; z-index: 10; padding: 12px 16px; text-align: left; font-size: 0.75rem; text-transform: uppercase; }
-        td { padding: 10px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.8rem; }
+        td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.8rem; }
+        
         .modified-cell { background-color: #fef3c7; color: #92400e; font-weight: 600; }
         .blank-row { background-color: #e5e7eb !important; height: 20px; }
 
-        /* Volumetria Specific */
+        /* Coluna de Histórico Otimizada (Caixa Grande e Quebra de Linha) */
+        .col-historico {
+            min-width: 450px;
+            max-width: 600px;
+            white-space: normal !important;
+            word-break: break-word;
+            line-height: 1.5;
+            text-transform: uppercase; /* Caixa Grande */
+            color: #1f2937;
+            font-weight: 500;
+        }
+
         .letterhead-container {
             background: #ffffff;
             border-top: 8px solid var(--padtec-orange);
@@ -111,7 +120,7 @@
         .chart-container { position: relative; height: 280px; width: 100%; }
         
         .kpi-card { 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             border: 1px solid #f1f5f9; 
             background: #ffffff; 
         }
@@ -123,7 +132,7 @@
 
         .number-badge { background-color: rgba(243, 112, 33, 0.12); padding: 0.4rem 1.2rem; border-radius: 1rem; display: inline-block; min-width: 70px; }
         
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--vivo-orange); border-radius: 10px; }
 
@@ -151,20 +160,30 @@
             transform: translateY(-3px);
         }
 
-        /* Estilos específicos para impressão PDF via script */
-        .pdf-export-mode {
-            padding: 20px !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            border: none !important;
+        .btn-export-es {
+            background-color: var(--padtec-orange);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .btn-export-es:hover {
+            transform: translateY(-2px);
+            background-color: #d65d1a;
+            box-shadow: 0 4px 8px rgba(243, 112, 33, 0.3);
+        }
+
+        .pdf-export-mode { padding: 20px !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" id="main-body">
 
     <!-- Global Back Button -->
     <div class="fixed top-4 left-4 z-50 no-print">
-        <a href="https://jefferson-silva-padtec.github.io/COPE/" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
+        <a href="SITE COPE/index.html" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -172,42 +191,35 @@
         </a>
     </div>
 
-    <!-- PÁGINA 1: OPERAÇÕES (TA / CAUSA COMUM) -->
+    <!-- PÁGINA 1: OPERAÇÕES -->
     <section id="page-operacoes" class="flex-grow flex flex-col">
         <header class="bg-black text-white py-6 shadow-xl border-b-4 border-orange-500">
             <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight uppercase">
-                        Painel de Operações <span class="text-orange-500">COPE</span>
-                    </h1>
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight uppercase">Painel de Operações <span class="text-orange-500">COPE</span></h1>
                     <p class="text-gray-400 mt-1 text-xs uppercase tracking-widest font-semibold">Notificações e Causa Comum</p>
                 </div>
-                <button onclick="switchPage('volumetria')" class="nav-btn">
-                    Ir para Volumetria →
-                </button>
+                <nav class="flex items-center gap-6">
+                    <button onclick="switchPage('volumetria')" class="nav-btn">Ir para Volumetria →</button>
+                </nav>
             </div>
         </header>
 
         <main class="flex-grow container mx-auto px-4 py-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <!-- TA Section -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center hover-lift-card">
                     <div class="mb-6 text-center">
                         <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-800">Limpador Notificação TA</h2>
-                        <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (Parcial.xls) importado do SIGO.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arraste ou carregue o arquivo (Parcial.xls) importado do SIGO..</p>
                     </div>
                     <input type="file" id="fileInputTA" accept=".xls,.xlsx,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputTA').click()" class="btn-depth">Selecionar Arquivo</button>
-                    <div id="loadingTA" class="hidden mt-6 flex flex-col items-center">
-                        <div class="loading-spinner"></div>
-                        <p class="mt-2 text-orange-500 text-xs font-bold">Limpando dados...</p>
-                    </div>
+                    <div id="loadingTA" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
 
-                <!-- Causa Comum Section -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center hover-lift-card">
                     <div class="mb-6 text-center">
                         <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -218,64 +230,34 @@
                     </div>
                     <input type="file" id="fileInputCausa" accept=".xls,.xlsx,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputCausa').click()" class="btn-depth">Selecionar Arquivo</button>
-                    <div id="loadingCausa" class="hidden mt-6 flex flex-col items-center">
-                        <div class="loading-spinner"></div>
-                        <p class="mt-2 text-orange-500 text-xs font-bold">Analisando duplicados...</p>
-                    </div>
+                    <div id="loadingCausa" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
             </div>
 
-            <!-- Results TA -->
             <div id="results-ta" class="hidden w-full mb-12">
                 <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-500">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">Resultado: Limpador TA</h3>
-                        <p id="stats-ta" class="text-gray-500 text-xs"></p>
-                    </div>
-                    <div class="flex gap-2 mt-3 md:mt-0">
-                        <button onclick="clearTA()" class="bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 px-5 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button>
-                        <button onclick="downloadTA()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow btn-action">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            DESCARREGAR ARQUIVO LIMPO
-                        </button>
-                    </div>
+                    <div><h3 class="text-lg font-bold text-gray-800">Resultado: Limpador TA</h3><p id="stats-ta" class="text-gray-500 text-xs"></p></div>
+                    <div class="flex gap-2"><button onclick="clearTA()" class="bg-white border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadTA()" class="bg-orange-500 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow btn-action">BAIXAR ARQUIVO LIMPO</button></div>
                 </div>
-                <div class="table-container shadow-xl rounded-b-xl">
-                    <table id="tableTA"><thead id="headTA"></thead><tbody id="bodyTA"></tbody></table>
-                </div>
+                <div class="table-container shadow-xl rounded-b-xl"><table id="tableTA"><thead id="headTA"></thead><tbody id="bodyTA"></tbody></table></div>
             </div>
 
-            <!-- Results Causa Comum -->
             <div id="results-causa" class="hidden w-full">
                 <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-t-xl shadow border-l-8 border-orange-500">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">Resultado: Causa Comum</h3>
-                        <p id="stats-causa" class="text-gray-500 text-xs"></p>
-                    </div>
-                    <div class="flex gap-2 mt-3 md:mt-0">
-                        <button onclick="clearCausa()" class="bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 px-4 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button>
-                        <button onclick="downloadCausaExcel()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow btn-action">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Exportar em XLS
-                        </button>
-                    </div>
+                    <div><h3 class="text-lg font-bold text-gray-800">Resultado: Causa Comum</h3><p id="stats-causa" class="text-gray-500 text-xs"></p></div>
+                    <div class="flex gap-2"><button onclick="clearCausa()" class="bg-white border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-xs font-bold transition btn-action">LIMPAR</button><button onclick="downloadCausaExcel()" class="bg-orange-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow btn-action">EXPORTAR XLS</button></div>
                 </div>
-                <div class="table-container shadow-xl rounded-b-xl">
-                    <table id="tableCausa">
-                        <thead><tr><th>Cidade</th><th>Splitter Designado</th><th>Nome CI</th><th>Sub Categoria</th><th>Referência</th><th>Tag Original</th><th>Contém TAG</th></tr></thead>
-                        <tbody id="bodyCausa"></tbody>
-                    </table>
-                </div>
+                <div class="table-container shadow-xl rounded-b-xl"><table id="tableCausa"><thead><tr><th>Cidade</th><th>Splitter</th><th>CI</th><th>Sub Cat</th><th>Ref</th><th>Tag Ori</th><th>Status</th></tr></thead><tbody id="bodyCausa"></tbody></table></div>
             </div>
         </main>
     </section>
 
-    <!-- PÁGINA 2: VOLUMETRIA (DASHBOARD) -->
+    <!-- PÁGINA 2: VOLUMETRIA -->
     <section id="page-volumetria" class="hidden flex-grow py-8 md:py-12">
         <div id="dashboard-content" class="letterhead-container space-y-8 p-10 rounded-sm">
             <div class="flex flex-col md:flex-row justify-between items-start border-b-2 border-slate-100 pb-8 gap-6">
                 <div class="flex items-center gap-5">
-                    <div class="w-2.5 h-14 bg-orange-500 rounded-full"></div>
+                    <div class="w-2.5 h-14 bg-orange-50 rounded-full"></div>
                     <div>
                         <h1 class="text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRODUÇÃO COPE</h1>
                         <p class="text-slate-400 font-bold mt-2 tracking-widest text-xs">RELATÓRIO DE PRODUTIVIDADE | PADTEC</p>
@@ -283,24 +265,17 @@
                 </div>
                 <div class="flex flex-col items-end gap-3 no-print">
                     <div class="flex gap-3">
-                        <button onclick="switchPage('operacoes')" class="bg-slate-800 text-white px-6 py-3 rounded-lg font-black text-[10px] hover:bg-black transition shadow-xl btn-action">
-                            ← VOLTAR PARA OPERAÇÕES
-                        </button>
-                        <label class="cursor-pointer bg-orange-500 text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] hover:bg-orange-600 btn-action">
-                            IMPORTAR DADOS
-                            <input type="file" id="fileInputVol" class="hidden" accept=".xls,.xlsx,.csv">
-                        </label>
-                        <button onclick="downloadPDF()" class="bg-black text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] btn-action">
-                            EXPORTAR PDF
-                        </button>
+                        <button onclick="switchPage('operacoes')" class="bg-slate-800 text-white px-6 py-3 rounded-lg font-black text-[10px] hover:bg-black transition shadow-xl btn-action">← VOLTAR PARA OPERAÇÕES</button>
+                        <label class="cursor-pointer bg-orange-500 text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] hover:bg-orange-600 btn-action">IMPORTAR DADOS<input type="file" id="fileInputVol" class="hidden" accept=".xls,.xlsx,.csv"></label>
+                        <button onclick="downloadPDF()" class="bg-black text-white px-6 py-3 rounded-lg font-black transition shadow-xl text-[10px] btn-action">EXPORTAR PDF</button>
                     </div>
-                    <p id="data-referencia-display" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mr-1">Data Referência: --/--/---- a --/--/----</p>
+                    <p id="data-referencia-display" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Data Referência: --/--/----</p>
                 </div>
             </div>
 
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-                <div class="kpi-card md:col-span-2 p-8 rounded-2xl flex flex-col justify-center items-center relative text-center shadow-sm">
+                <div class="kpi-card md:col-span-2 p-8 rounded-2xl flex flex-col justify-center items-center relative text-center shadow-sm hover-lift-card">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Total de Tickets</p>
                     <div class="number-badge"><h2 id="kpi-total" class="text-[66px] font-black text-slate-800 leading-none">0</h2></div>
                     <div class="flex gap-6 mt-8 w-full justify-center">
@@ -309,36 +284,38 @@
                         <div class="text-center"><p id="stat-agregado-val" class="text-[33px] font-black text-slate-700 leading-none">0</p><p class="text-[9px] font-bold text-slate-400 uppercase mt-2">Agregado</p></div>
                     </div>
                 </div>
-                <div class="kpi-card md:col-span-3 p-8 rounded-2xl flex flex-col items-stretch bg-slate-50/20 shadow-sm border-l-4 border-l-orange-500 overflow-hidden">
+                
+                <div class="kpi-card md:col-span-3 p-8 rounded-2xl flex flex-col items-stretch bg-slate-50/20 shadow-sm border-l-4 border-l-orange-500 overflow-hidden hover-lift-card relative">
+                    <button onclick="downloadExcelES()" class="absolute top-4 right-14 btn-export-es no-print">EXPORTAR DADOS ES</button>
                     <div class="flex flex-col gap-3 flex-1">
                         <div class="flex items-end justify-between border-b-2 border-slate-100/50 pb-2">
-                            <div><p class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] leading-tight mb-2">TOTAL ESPÍRITO SANTO</p><div class="number-badge"><h2 id="kpi-es" class="text-[46px] font-black text-slate-800 leading-none">0</h2></div></div>
+                            <div><p class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-2 leading-tight">TOTAL ESPÍRITO SANTO</p><div class="number-badge"><h2 id="kpi-es" class="text-[46px] font-black text-slate-800 leading-none">0</h2></div></div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
                         <div class="flex flex-col md:flex-row gap-10 items-start">
-                            <div class="flex-1 w-full"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-sm"></span>CIDADES EM FOCO</p><div id="top-cities-es" class="flex flex-col gap-2 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-xs italic py-2">Importe dados...</p></div></div>
-                            <div class="flex-1 w-full md:pl-10 md:border-l-2 md:border-slate-100"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-slate-800 rounded-sm"></span>PRINCIPAIS CAUSAS ES</p><div id="causas-es-list-container" class="space-y-1.5 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-[10px] italic py-2">Importe dados...</p></div></div>
+                            <div class="flex-1 w-full min-w-0"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-sm"></span>CIDADES EM FOCO</p><div id="top-cities-es" class="flex flex-col gap-2 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-xs italic py-2">Importe dados...</p></div></div>
+                            <div class="flex-1 w-full min-w-0 md:pl-10 md:border-l-2 md:border-slate-100"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><span class="w-2 h-2 bg-slate-800 rounded-sm"></span>PRINCIPAIS CAUSAS ES</p><div id="causas-es-list-container" class="space-y-1.5 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-[10px] italic py-2">Importe dados...</p></div></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Dashboard Charts Area -->
+            <!-- Analysis Boxes -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card">
                     <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Causas Gerais</h3></div>
-                    <div id="causas-list-container" class="space-y-4 h-[300px] overflow-y-auto pr-3 custom-scrollbar"><p class="text-center text-slate-300 text-xs italic py-24">Aguardando dados...</p></div>
+                    <div id="causas-list-container" class="space-y-4 h-[300px] overflow-y-auto pr-3 custom-scrollbar"><p class="text-center text-slate-300 text-xs italic py-24">Aguardando...</p></div>
                 </div>
                 <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card">
                     <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Distribuição de Tags</h3></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-[300px]">
-                        <div class="bg-slate-50 border-2 border-slate-900 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden">
+                        <div class="bg-slate-50 border-2 border-slate-900 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-slate-100 transition-all">
                             <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">Operacionais</h4>
-                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-adm-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400 uppercase">ADM COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-desag-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400 uppercase">DESAGREGADO</p></div></div>
+                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-adm-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400">ADM COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-desag-val" class="text-[26px] font-black text-slate-800">0</p></div><p class="text-[10px] font-black text-slate-400">DESAGREGADO</p></div></div>
                         </div>
-                        <div class="bg-orange-50 border-2 border-orange-500 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden">
+                        <div class="bg-orange-50 border-2 border-orange-500 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-orange-100 transition-all">
                             <h4 class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] text-center">Salas de Crise</h4>
-                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-cope-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400 uppercase">Salas COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-noc-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400 uppercase">Salas NOC</p></div></div>
+                            <div class="flex justify-around items-center"><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-cope-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400">Salas COPE</p></div><div class="text-center"><div class="number-badge mb-2"><p id="tag-sala-noc-val" class="text-[26px] font-black text-orange-700">0</p></div><p class="text-[10px] font-black text-orange-400">Salas NOC</p></div></div>
                         </div>
                     </div>
                 </div>
@@ -350,96 +327,142 @@
             </div>
 
             <div class="mt-16 pt-10 border-t-2 border-slate-100 flex flex-row justify-between items-end opacity-70 pb-6">
-                <div class="space-y-2"><p class="text-[14px] font-black uppercase tracking-[0.4em] text-slate-900">PADTEC S.A.</p><p class="text-[10px] font-bold text-slate-400 uppercase">Campinas - São Paulo, Brasil</p></div>
-                <div class="text-right space-y-2 pr-2"><p class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">WWW.PADTEC.COM.BR</p></div>
+                <div class="space-y-2"><p class="text-[14px] font-black uppercase tracking-[0.4em] text-slate-900 leading-none">PADTEC S.A.</p><p class="text-[10px] font-bold text-slate-400 uppercase leading-none">Campinas - São Paulo, Brasil</p></div>
+                <div class="text-right"><p class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">WWW.PADTEC.COM.BR</p></div>
             </div>
         </div>
     </section>
 
     <footer class="bg-gray-900 text-gray-500 py-6 text-center text-xs no-print">
-        <div class="container mx-auto px-4">
-            &copy; 2026 - Central de Ferramentas COPE PADTEC | Processamento de Dados Unificado
-        </div>
+        <div class="container mx-auto px-4">&copy; 2026 - Central de Ferramentas COPE PADTEC | Painel Integrado</div>
     </footer>
 
     <script>
         // --- NAVEGAÇÃO ---
         function switchPage(page) {
             const body = document.getElementById('main-body');
-            document.getElementById('page-operacoes').classList.add('hidden');
-            document.getElementById('page-volumetria').classList.add('hidden');
-            
-            if (page === 'volumetria') {
-                document.getElementById('page-volumetria').classList.remove('hidden');
-                body.classList.add('volumetria-mode');
-            } else {
-                document.getElementById('page-operacoes').classList.remove('hidden');
-                body.classList.remove('volumetria-mode');
-            }
+            document.getElementById('page-operacoes').classList.toggle('hidden', page !== 'operacoes');
+            document.getElementById('page-volumetria').classList.toggle('hidden', page !== 'volumetria');
+            body.classList.toggle('volumetria-mode', page === 'volumetria');
             window.scrollTo(0, 0);
         }
 
-        // --- VARIÁVEIS GLOBAIS OPERAÇÕES ---
-        let processedTA = [];
-        let headersTA = [];
-        let processedCausa = [];
-        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
+        // --- VARIÁVEIS GLOBAIS ---
+        let processedTA = [], headersTA = [], processedCausa = [];
+        let volDataES = [], volSummaryES = {}; 
+        let charts = {};
+        const CIDADES_ES_ALVO = ["VIANA", "CACHOEIRO DE ITAPEMERIM", "GUARAPARI", "SAO MATEUS", "SANTA MARIA DE JETIBA", "ARACRUZ"];
         const DATE_STAMP_REGEX = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
+        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
 
         // --- LÓGICA TA ---
         document.getElementById('fileInputTA').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const file = e.target.files[0]; if (!file) return;
             document.getElementById('loadingTA').classList.remove('hidden');
             const reader = new FileReader();
             reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1, defval: "" });
-                handleTA(jsonData);
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                handleTA(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1, defval: "" }));
             };
             reader.readAsArrayBuffer(file);
         });
 
         function handleTA(data) {
             headersTA = Object.keys(data[0]);
-            let modCount = 0;
             processedTA = data.map(row => {
                 const newRow = { ...row, _mod: [] };
                 const hist = String(row['Histórico Comentários'] || "");
                 let blocks = hist.split(/\n\s*\n/).filter(b => b.trim().length > 0);
+                
                 let selected = "";
                 if (blocks.length > 0) {
+                    // Percorre de trás para frente ignorando mensagens indesejadas
                     for (let i = blocks.length - 1; i >= 0; i--) {
                         let b = blocks[i].trim();
-                        if (!b.includes(TARGET_TEXT_TA) && !b.toLowerCase().includes("notificação de ta") && !b.toLowerCase().includes("passagem automática")) {
-                            selected = b; break;
+                        let bLow = b.toLowerCase();
+                        
+                        const isAutomaticSuccess = b.includes(TARGET_TEXT_TA);
+                        const isAutomaticFail = bLow.includes("passagem automática com falha") || 
+                                              bLow.includes("nenhum município encontrado") || 
+                                              bLow.includes("não foi possível designar equipe responsável") ||
+                                              bLow.includes("fibrasil_ms");
+                        const isGeneralAuto = bLow.includes("notificação de ta");
+                        const isImage = bLow.includes("!#image.png#!"); // Regra 1: Remove mensagens com imagem
+                        const isTechDump = (b.includes("----------------") && (bLow.includes("position") || bLow.includes("tx-power") || bLow.includes("diag-avail-status")));
+                        
+                        // Critério para filtrar blocos puramente informativos de contatos (antes de tentar extrair a atividade)
+                        const isPureContactInfo = (bLow.includes("nome do técnico") || bLow.includes("supervisor ciente")) && !bLow.includes("descrição da atividade");
+
+                        if (!isAutomaticSuccess && !isAutomaticFail && !isGeneralAuto && !isImage && !isTechDump && !isPureContactInfo) {
+                            selected = b; 
+                            break;
                         }
                     }
-                    if (selected) {
-                        const dateMatch = selected.match(DATE_STAMP_REGEX);
-                        if (dateMatch) selected = selected.substring(dateMatch.index + dateMatch[0].length).trim();
-                        selected = selected.replace(/^ATUALIZAÇÃO\s+CCR(\s+TTK)?[:\s]*/i, "").trim();
-                        newRow['Histórico Comentários'] = selected;
-                        newRow._mod.push('Histórico Comentários');
+                }
+                
+                // --- REGRA DE FALLBACK: Se estiver vazio, pega a penúltima focando em previsões ---
+                if ((!selected || selected.trim() === "") && blocks.length > 1) {
+                    for (let j = blocks.length - 2; j >= 0; j--) {
+                        let prevB = blocks[j].trim();
+                        let prevBLow = prevB.toLowerCase();
+                        if (!prevBLow.includes("!#image.png#!") && (prevBLow.includes("previsão") || prevBLow.includes("previsto") || prevBLow.includes(" h"))) {
+                            selected = prevB;
+                            break;
+                        }
                     }
                 }
-                if (String(row['UF']).trim() === "") {
+
+                if (!selected || selected.trim() === "") {
+                    selected = "Aguardando atualização EPS";
+                } else {
+                    // --- REGRA 2: Extrair apenas o que vem após "Descrição da atividade:" ---
+                    let lowSelected = selected.toLowerCase();
+                    if (lowSelected.includes("descrição da atividade:")) {
+                        const marker = "descrição da atividade:";
+                        const index = lowSelected.indexOf(marker);
+                        selected = selected.substring(index + marker.length).trim();
+                    }
+
+                    // Limpeza padrão de cabeçalhos e prefixos
+                    const dateMatch = selected.match(DATE_STAMP_REGEX);
+                    if (dateMatch) selected = selected.substring(dateMatch.index + dateMatch[0].length).trim();
+                    selected = selected.replace(/^ATUALIZAÇÃO\s+CCR(\s+TTK)?[:\s]*/i, "").trim();
+                }
+
+                // --- REGRA 3: Formatação (Caixa Grande, Sem Espaços Extras) e Limite de 100 caracteres ---
+                selected = selected.replace(/\s+/g, ' ').trim().toUpperCase();
+                
+                if (selected.length > 100) {
+                    selected = selected.substring(0, 97) + "...";
+                }
+
+                newRow['Histórico Comentários'] = selected;
+                newRow._mod.push('Histórico Comentários');
+
+                if (!String(row['UF']).trim()) {
                     const match = String(row['Equipe Responsável']).match(/\/\s*([A-Z]{2})/i);
                     if (match) { newRow['UF'] = match[1].toUpperCase(); newRow._mod.push('UF'); }
                 }
-                if (newRow._mod.length > 0) modCount++;
                 return newRow;
             });
             renderTA();
-            document.getElementById('stats-ta').innerText = `${processedTA.length} registos lidos. ${modCount} linhas processadas com alterações.`;
+            document.getElementById('stats-ta').innerText = `${processedTA.length} registos lidos.`;
             document.getElementById('results-ta').classList.remove('hidden');
             document.getElementById('loadingTA').classList.add('hidden');
         }
 
         function renderTA() {
-            document.getElementById('headTA').innerHTML = `<tr>${headersTA.map(h => `<th>${h}</th>`).join('')}</tr>`;
-            document.getElementById('bodyTA').innerHTML = processedTA.slice(0, 30).map(row => `<tr>${headersTA.map(h => `<td class="${row._mod.includes(h) ? 'modified-cell' : ''}">${row[h]}</td>`).join('')}</tr>`).join('');
+            const head = document.getElementById('headTA');
+            const body = document.getElementById('bodyTA');
+            head.innerHTML = `<tr>${headersTA.map(h => `<th>${h}</th>`).join('')}</tr>`;
+            body.innerHTML = processedTA.slice(0, 30).map(row => {
+                return `<tr>${headersTA.map(h => {
+                    const isHist = h === 'Histórico Comentários';
+                    const cssClass = row._mod.includes(h) ? 'modified-cell' : '';
+                    const extraStyles = isHist ? 'col-historico' : '';
+                    return `<td class="${cssClass} ${extraStyles}">${row[h]}</td>`;
+                }).join('')}</tr>`;
+            }).join('');
         }
 
         function clearTA() { processedTA = []; document.getElementById('results-ta').classList.add('hidden'); document.getElementById('fileInputTA').value = ""; }
@@ -451,13 +474,11 @@
 
         // --- LÓGICA CAUSA COMUM ---
         document.getElementById('fileInputCausa').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const file = e.target.files[0]; if (!file) return;
             document.getElementById('loadingCausa').classList.remove('hidden');
             const reader = new FileReader();
             reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
                 handleCausa(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { range: 1 }));
             };
             reader.readAsArrayBuffer(file);
@@ -465,15 +486,13 @@
 
         function handleCausa(data) {
             const clean = data.map(row => {
-                const norm = {}; Object.keys(row).forEach(k => norm[k.trim().replace(/\s+/g, ' ')] = row[k]);
-                const tag = String(norm['Tag'] || '');
-                return { ...norm, Cidade: String(norm['Área Rede'] || '').replace(/^-+/, '').trim(), ContemTag: tag.toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: norm['Sub-Categoria'] || norm['Sub categoria'] || '' };
+                const n = {}; Object.keys(row).forEach(k => n[k.trim().replace(/\s+/g, ' ')] = row[k]);
+                return { ...n, Cidade: String(n['Área Rede'] || '').replace(/^-+/, '').trim(), ContemTag: String(n['Tag'] || '').toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: n['Sub-Categoria'] || n['Sub categoria'] || '' };
             });
             const counts = {}; clean.forEach(r => { if(r['Splitter Designado']) counts[r['Splitter Designado']] = (counts[r['Splitter Designado']] || 0) + 1; });
-            processedCausa = clean.filter(r => r['Splitter Designado'] && counts[r['Splitter Designado']] > 1);
-            processedCausa.sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
+            processedCausa = clean.filter(r => r['Splitter Designado'] && counts[r['Splitter Designado']] > 1).sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
             renderCausa();
-            document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados encontrados.`;
+            document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados.`;
             document.getElementById('results-causa').classList.remove('hidden');
             document.getElementById('loadingCausa').classList.add('hidden');
         }
@@ -482,18 +501,16 @@
             const body = document.getElementById('bodyCausa'); body.innerHTML = "";
             processedCausa.forEach((r, i) => {
                 const tr = document.createElement('tr'); if(r.ContemTag === 'Contém TAG') tr.classList.add('bg-green-50');
-                const values = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r.SubCat, r['Referência'], r['Tag'] || '', r.ContemTag];
-                values.forEach((v, idx) => {
+                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r.SubCat, r['Referência'], r['Tag'] || '', r.ContemTag];
+                vls.forEach((v, idx) => {
                     const td = document.createElement('td');
-                    if(idx === 6 && v === 'Contém TAG') td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold">Contém TAG</span>`;
-                    else if(idx === 3 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
+                    if (idx === 6 && v === 'Contém TAG') td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold">Contém TAG</span>`;
+                    else if (idx === 3 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
                     else td.textContent = v;
                     tr.appendChild(td);
                 });
                 body.appendChild(tr);
-                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) {
-                    const bt = document.createElement('tr'); bt.className = 'blank-row'; bt.innerHTML = '<td colspan="7"></td>'; body.appendChild(bt);
-                }
+                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="7"></td></tr>';
             });
         }
 
@@ -505,11 +522,8 @@
         }
 
         // --- LÓGICA VOLUMETRIA ---
-        let charts = {};
-        const CIDADES_ES_ALVO = ["VIANA", "CACHOEIRO DE ITAPEMERIM", "GUARAPARI", "SAO MATEUS", "SANTA MARIA DE JETIBA", "ARACRUZ"];
-
         document.getElementById('fileInputVol').addEventListener('change', (e) => {
-            const file = e.target.files[0];
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
@@ -523,18 +537,27 @@
         function processVolData(data) {
             const s = { total: 0, agr: 0, agrs: 0, adm: 0, des: 0, c: 0, n: 0, es: 0, esC: {}, d: [] };
             const cm = {}, esm = {}, rm = {}, tm = {};
+            volDataES = [];
+
             data.forEach(r => {
                 const ag = String(r['Agregação'] || '').trim().toLowerCase();
                 if(ag === 'agregado') { s.agr++; return; }
                 if(ag === "" || ag === "null") s.agrs++;
                 s.total++;
+                
                 const t = String(r['Tag'] || '').toUpperCase();
                 if(t.includes("ADM COPE")) s.adm++; if(t.includes("DESAGREGADO")) s.des++;
                 if(t.includes("SALA DE CRISE")) { if(/\bC\b/.test(t) || t.includes("CRISE C")) s.c++; else s.n++; }
+                
                 const ar = String(r['Área Rede'] || '').toUpperCase();
                 const c = String(r['Causa'] || 'N/A').trim().toUpperCase();
                 const esc = CIDADES_ES_ALVO.find(x => ar.includes(x));
-                if(esc) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[c] = (esm[c] || 0) + 1; }
+                
+                if(esc) {
+                    s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[c] = (esm[c] || 0) + 1;
+                    volDataES.push(r);
+                }
+                
                 const df = r['Data Fim'];
                 if(df) {
                     const p = String(df).split(' ')[0].split(/[-/]/);
@@ -545,6 +568,8 @@
                 let reg = String(r['Área Rede'] || 'N/A').replace(/-/g, '').trim().toUpperCase();
                 if(reg && reg !== '-') rm[reg] = (rm[reg] || 0) + 1;
             });
+            
+            volSummaryES = s.esC;
             updateVolUI(s, cm, esm, rm, tm);
         }
 
@@ -557,18 +582,16 @@
             document.getElementById('tag-desag-val').innerText = s.des;
             document.getElementById('tag-sala-cope-val').innerText = s.c;
             document.getElementById('tag-sala-noc-val').innerText = s.n;
-            if(s.d.length) document.getElementById('data-referencia-display').innerText = `Referência: ${new Date(Math.min(...s.d)).toLocaleDateString('pt-PT')} a ${new Date(Math.max(...s.d)).toLocaleDateString('pt-PT')}`;
+            if(s.d.length) document.getElementById('data-referencia-display').innerText = `Data Referência: ${new Date(Math.min(...s.d)).toLocaleDateString('pt-PT')} a ${new Date(Math.max(...s.d)).toLocaleDateString('pt-PT')}`;
+            
             const render = (id, arr, tot) => {
-                document.getElementById(id).innerHTML = arr.map(([k,v]) => `
-                    <div class="flex items-center gap-3 p-1 hover:bg-slate-50 transition-all border-l-4 border-slate-100 mb-1">
-                        <div class="min-w-[34px] bg-slate-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div>
-                        <div class="flex-1"><p class="text-[9px] font-black text-slate-600 uppercase mb-1">${k}</p>
-                        <div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-orange-500 h-full rounded" style="width:${(v/tot*100).toFixed(1)}%"></div></div></div>
-                    </div>`).join('');
+                document.getElementById(id).innerHTML = arr.map(([k,v]) => `<div class="flex items-center gap-3 p-1 border-l-4 border-slate-100 hover:border-orange-500 mb-1 transition-all"><div class="min-w-[34px] bg-slate-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div><div class="flex-1"><p class="text-[9px] font-black text-slate-600 uppercase mb-1 truncate">${k}</p><div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-orange-500 h-full rounded" style="width:${(v/tot*100).toFixed(1)}%"></div></div></div></div>`).join('');
             };
+            
             render('causas-list-container', Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,10), s.total);
             render('causas-es-list-container', Object.entries(esm).sort((a,b)=>b[1]-a[1]).slice(0,10), s.es);
-            document.getElementById('top-cities-es').innerHTML = Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="bg-white p-2 border border-slate-100 rounded shadow-sm flex items-center gap-2 mb-1"><div class="bg-slate-900 text-white min-w-[30px] text-center text-[9px] font-black py-0.5 rounded">${v}</div><span class="text-[9px] font-black uppercase text-slate-700">${k}</span></div>`).join('');
+            document.getElementById('top-cities-es').innerHTML = Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="bg-white p-2 border border-slate-100 rounded shadow-sm flex items-center gap-2 mb-1 hover:border-orange-500 transition-all"><div class="bg-slate-900 text-white min-w-[30px] text-center text-[9px] font-black py-0.5 rounded">${v}</div><span class="text-[9px] font-black uppercase text-slate-700 truncate">${k}</span></div>`).join('');
+            
             const rData = Object.entries(rm).sort((a,b)=>b[1]-a[1]).slice(0,5);
             const tData = Object.entries(tm).sort((a,b)=>{ const [d1,m1]=a[0].split('/').map(Number); const [d2,m2]=b[0].split('/').map(Number); return (m1*100+d1)-(m2*100+d2); });
             updateCharts({ reg: { l: rData.map(x=>x[0]), d: rData.map(x=>x[1]) }, tim: { l: tData.map(x=>x[0]), d: tData.map(x=>x[1]) } });
@@ -581,38 +604,26 @@
             charts.tim = new Chart(document.getElementById('timelineChart'), { type: 'line', data: { labels: p.tim.l, datasets: [{ data: p.tim.d, borderColor: '#F37021', backgroundColor: 'rgba(243, 112, 33, 0.05)', fill: true, tension: 0.4 }] }, options: opt });
         }
 
+        // --- EXPORTAR EXCEL ES ---
+        function downloadExcelES() {
+            if (volDataES.length === 0) { alert("Nenhum dado disponível."); return; }
+            const wsData = XLSX.utils.json_to_sheet(volDataES);
+            const summaryRows = Object.entries(volSummaryES).map(([city, total]) => ({ "Cidade": city, "Volume Total": total }));
+            const wsSummary = XLSX.utils.sheet_to_json(summaryRows);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, wsData, "Dados Completos ES");
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Resumo Cidades");
+            XLSX.writeFile(wb, "PRODUCAO_ES.xlsx");
+        }
+
         async function downloadPDF() {
             const el = document.getElementById('dashboard-content');
             const originalStyle = el.getAttribute('style') || "";
-            el.style.width = '1120px'; 
-            el.style.maxWidth = 'none';
+            el.style.width = '1120px'; el.style.maxWidth = 'none';
             el.classList.add('pdf-export-mode');
-
-            const opt = { 
-                margin: [10, 5, 10, 5], 
-                filename: 'Producao_COPE_Padtec.pdf', 
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    letterRendering: true,
-                    scrollX: 0,
-                    scrollY: 0
-                }, 
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            try {
-                await html2pdf().set(opt).from(el).save();
-            } catch (err) {
-                console.error("Erro ao gerar PDF:", err);
-            } finally {
-                el.setAttribute('style', originalStyle);
-                el.classList.remove('pdf-export-mode');
-            }
+            const opt = { margin: [10, 5, 10, 5], filename: 'Relatorio_Volumetria.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, letterRendering: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
+            try { await html2pdf().set(opt).from(el).save(); } finally { el.setAttribute('style', originalStyle); el.classList.remove('pdf-export-mode'); }
         }
     </script>
 </body>
 </html>
-
