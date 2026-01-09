@@ -347,6 +347,14 @@
             window.scrollTo(0, 0);
         }
 
+         // Verifica se a URL pede para iniciar na Volumetria
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('page') === 'volumetria') {
+                switchPage('volumetria');
+            }
+        });
+
         // --- VARIÁVEIS GLOBAIS ---
         let processedTA = [], headersTA = [], processedCausa = [];
         let volDataES = [], volSummaryES = {}; 
@@ -627,4 +635,5 @@
     </script>
 </body>
 </html>
+
 
