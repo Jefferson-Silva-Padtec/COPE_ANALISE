@@ -964,7 +964,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const ws = XLSX.utils.json_to_sheet(processedTA.map(({_mod, ...r}) => r));
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "TA");
             XLSX.writeFile(wb, "ARQUIVO_PARCIAL_LIMPO.xlsx");
-            window.open("https://copepadtec.streamlit.app/", "_blank");
+            window.open("https://parcialcopepadtec.streamlit.app/", "_blank");
         }
         function clearCausa() { processedCausa = []; document.getElementById('results-causa').classList.add('hidden'); document.getElementById('fileInputCausa').value = ""; }
         function downloadCausaExcel() { const ws = XLSX.utils.json_to_sheet(processedCausa); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Causa"); XLSX.writeFile(wb, "CAUSA_COMUM.xlsx"); }
@@ -1684,5 +1684,6 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
     </script>
 </body>
 </html> 
+
 
 
