@@ -722,6 +722,25 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('page-volumetria').classList.toggle('hidden', page !== 'volumetria');
             body.classList.toggle('volumetria-mode', page === 'volumetria');
             window.scrollTo(0, 0);
+
+            // Atualiza a URL sem recarregar a página
+            const url = new URL(window.location);
+            if (page === 'volumetria') {
+                url.searchParams.set('page', 'volumetria');
+            } else {
+                url.searchParams.delete('page');
+            }
+            window.history.pushState({}, '', url);
+        }
+
+        // Verifica se a URL pede para iniciar na Volumetria
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('page') === 'volumetria') {
+            // Executa imediatamente se o script estiver no final do body
+            const body = document.getElementById('main-body');
+            document.getElementById('page-operacoes').classList.add('hidden');
+            document.getElementById('page-volumetria').classList.remove('hidden');
+            body.classList.add('volumetria-mode');
         }
 
         // --- MODAL FUNCTIONS ---
@@ -1684,6 +1703,3 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
     </script>
 </body>
 </html> 
-
-
-
