@@ -219,6 +219,10 @@
             background-color: #ef4444;
             color: white;
         }
+        .btn-view-toggle.active {
+            background-color: #ef4444;
+            color: white;
+        }
 
         .pdf-export-mode { padding: 20px !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
         .pdf-export-mode .no-print { display: none !important; }
@@ -273,6 +277,11 @@
             </svg>
             Voltar
         </a>
+    </div>
+
+    <!-- Botão Admin -->
+    <div class="fixed top-4 right-4 z-50 no-print">
+        <button id="btnAdmin" ondblclick="toggleAdminMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-700 transition-colors">Admin</button>
     </div>
 
     <!-- PÁGINA 1: OPERAÇÕES -->
@@ -379,6 +388,7 @@
                         <label for="dateFilter" class="text-[10px] font-black text-slate-300 uppercase tracking-widest"><i class="far fa-calendar-alt mr-2"></i>Data Ref:</label>
                         <select id="dateFilter" onchange="filterByDate()" class="bg-transparent text-orange-500 text-[10px] font-black uppercase focus:outline-none cursor-pointer border-b border-orange-500/50 pb-0.5 hover:border-orange-500 transition-colors"><option value="all" class="text-slate-800">Geral</option></select>
                     </div>
+                    <div id="monthFilterContainer" class="flex gap-1 mt-1 justify-end flex-wrap max-w-[300px]"></div>
                 </div>
             </div>
 
@@ -399,11 +409,11 @@
                     <button onclick="downloadExcelES()" class="absolute top-4 right-14 btn-export-es no-print font-black">EXPORTAR DADOS ES</button>
                     <div class="flex flex-col gap-3 flex-1">
                         <div class="flex items-end justify-between border-b-2 border-slate-100/50 pb-2">
-                            <div><p class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-2 leading-tight font-black">TOTAL ESPÍRITO SANTO</p><div class="number-badge" ondblclick="openKpiModal('es')"><h2 id="kpi-es" class="text-[46px] font-black text-slate-800 leading-none">0</h2></div></div>
+                            <div><p class="text-[10px] font-black text-red-700 uppercase tracking-[0.2em] mb-2 leading-tight font-black">TOTAL ESPÍRITO SANTO</p><div class="number-badge" ondblclick="openKpiModal('es')"><h2 id="kpi-es" class="text-[46px] font-black text-slate-800 leading-none">0</h2></div></div>
                         </div>
                         <div class="flex flex-col md:flex-row gap-10 items-start">
                             <div class="flex-1 w-full min-w-0"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2 font-black"><span class="w-2 h-2 bg-orange-500 rounded-sm"></span>CIDADES EM FOCO</p><div id="top-cities-es" class="flex flex-col gap-2 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-xs italic py-2 uppercase font-black">Aguardando...</p></div></div>
-                            <div class="flex-1 w-full min-w-0 md:pl-10 md:border-l-2 md:border-slate-100"><p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2 font-black"><span class="w-2 h-2 bg-slate-800 rounded-sm"></span>PRINCIPAIS CAUSAS ES</p><div id="causas-es-list-container" class="space-y-1.5 h-[125px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-[10px] italic py-2 uppercase font-black">Aguardando...</p></div></div>
+                            <div class="flex-1 w-full min-w-0 md:pl-10 md:border-l-2 md:border-slate-100"><p class="text-[9px] font-black text-slate-700 uppercase tracking-widest mb-3 flex items-center gap-2 font-black"><span class="w-2 h-2 bg-slate-800 rounded-sm"></span>PRINCIPAIS CAUSAS ES</p><div id="causas-es-list-container" class="space-y-1.5 h-[105px] overflow-y-auto pr-2 custom-scrollbar"><p class="text-slate-300 text-[10px] italic py-2 uppercase font-black">Aguardando...</p></div></div>
                         </div>
                     </div>
                 </div>
@@ -420,11 +430,11 @@
                                 <div class="bg-red-100 border border-red-200 px-3 py-1 rounded-lg">
                                     <h3 class="font-black text-red-900 uppercase text-xs tracking-[0.2em]">VOLUME DE PENDENCIAS</h3>
                                 </div>
-                                <button id="viewToggleBtn" onclick="togglePendenciaView()" class="btn-view-toggle">Usuário</button>
+                                <button id="pendenciaViewControls" onclick="cyclePendenciaView()" class="btn-view-toggle hidden min-w-[80px]">Turnos</button>
                             </div>
-                            <div class="total-geral-box !border-slate-500 !bg-slate-100/50" ondblclick="openTotalPendenciasModal()">
-                                <p class="text-[10px] font-black text-slate-900 uppercase leading-none mb-1">Total Geral</p>
-                                <p id="total-pendencias-counter" class="text-2xl font-black text-slate-700 leading-none">0</p>
+                            <div class="flex flex-col items-end cursor-pointer" ondblclick="openTotalPendenciasModal()">
+                                <p class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] mb-2 leading-tight">Total Geral</p>
+                                <div class="number-badge !py-1 !px-3 !min-w-[60px] text-center"><p id="total-pendencias-counter" class="text-2xl font-black text-slate-800 leading-none">0</p></div>
                             </div>
                         </div>
                         <div id="analistas-list-container" class="space-y-4 flex-grow overflow-y-auto pr-3 custom-scrollbar">
@@ -508,8 +518,18 @@
                     <div id="ligacoes-content" class="hidden">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100 text-center">
-                                <p class="text-[10px] font-black text-slate-400 uppercase">Total Ligações</p>
-                                <p id="total-ligacoes" class="text-3xl font-black text-blue-800">0</p>
+                                <p class="text-[12px] font-black text-slate-400 uppercase">Total Ligações</p>
+                                <p id="total-ligacoes" class="text-3xl font-black text-blue-800 leading-none mb-2">0</p>
+                                <div class="flex justify-center gap-6 items-center border-t border-blue-100 pt-2 mt-1">
+                                    <div class="text-center">
+                                        <p class="text-[8px] font-black text-red-600 uppercase">Rejeitadas</p>
+                                        <p id="total-rejeitadas" class="text-sm font-black text-red-400 leading-none">0</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[8px] font-black text-green-600 uppercase">Sucesso</p>
+                                        <p id="total-sucesso" class="text-sm font-black text-green-400 leading-none">0</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100 text-center">
                                 <p class="text-[10px] font-black text-slate-400 uppercase">Tempo Total</p>
@@ -521,7 +541,7 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100"><h4 class="text-[10px] font-black text-slate-500 uppercase mb-3 border-b pb-2">Colaborador</h4><div id="lista-colaboradores-ligacoes" class="h-[170px] overflow-y-auto custom-scrollbar space-y-1 pr-2"></div></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100"><h4 class="text-[10px] font-black text-slate-500 uppercase mb-3 border-b pb-2">Ligaçõoes por Turno</h4><div id="lista-colaboradores-ligacoes" class="flex gap-2 h-[170px]"></div></div>
                             <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100">
                                 <h4 class="text-[10px] font-black text-slate-500 uppercase mb-3 border-b pb-2">Progressão Diária</h4>
                                 <div class="h-[200px] relative">
@@ -560,16 +580,23 @@
         // --- VARIÁVEIS GLOBAIS ---
         let processedTA = [], headersTA = [], processedCausa = [];
         let volDataES = [], volSummaryES = {}; 
+        let isAdminMode = false;
         let currentCausaPendenciaDetails = {}; 
         let currentAnalistaPendenciaDetails = {};
         let tagDetailsLists = { 'ADM COPE': [], 'DESAGREGADO': [], 'SALAS COPE': [], 'SALAS NOC': [] };
         let kpiData = { total: [], agregadores: [], agregado: [] };
         let masterPendenciasList = []; 
-        let pendenciasViewMode = 'causa'; 
+        let pendenciasViewMode = 'turnos'; 
         let charts = {};
         const CIDADES_ES_ALVO = ["VIANA", "CACHOEIRO DE ITAPEMERIM", "GUARAPARI", "SAO MATEUS", "SANTA MARIA DE JETIBA", "ARACRUZ"];
+        const MONTH_NAMES = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
         const DATE_STAMP_REGEX = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
 const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "BRUNO MELLO DA SILVA", "TAMIRIS AVELINA GONÇALVES", "RANDU MATOS MENEZES", "ELVIS MIRANDA", "CAIO HENRIQUE MOREIRA", "GABRIEL NOGUEIRA DE SOUZA", "NOC/JEFFERSON", "NOC/JOSEYLSON", "NOC/EDMAR"];        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
+        const SHIFT_DEFINITIONS = {
+            "T1": { time: "06H15 ÁS 15H15", members: ["TAMIRIS", "BRUNO", "JULIANA", "JOSEYLSON"] },
+            "T2": { time: "15H00 ÁS 23H43", members: ["ELVIS", "RANDU", "LUAN", "JEFFERSON"] },
+            "T3": { time: "23H30 ÁS 06h30", members: ["CAIO", "EDMAR", "GABRIEL"] }
+        };
         const CIDADES_ALCIDES = [
             "Arapiraca", "Arraial D'Ajuda", "Barreiras", "Eunapolis", "Guanambi", "Ilheus", "Itabuna", "Jequie", "Lagarto", 
             "Luis Eduardo Magalhaes", "Porto Seguro", "Santo Antonio de Jesus", "Teixeira de Freitas", "Trancoso", "Vitoria da Conquista", 
@@ -731,6 +758,20 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 url.searchParams.delete('page');
             }
             window.history.pushState({}, '', url);
+        }
+
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const btn = document.getElementById('btnAdmin');
+            const viewControls = document.getElementById('pendenciaViewControls');
+            if (isAdminMode) {
+                btn.classList.replace('bg-gray-800', 'bg-green-600');
+                if(viewControls) viewControls.classList.remove('hidden');
+            } else {
+                btn.classList.replace('bg-green-600', 'bg-gray-800');
+                if(viewControls) viewControls.classList.add('hidden');
+            }
+            filterByDate();
         }
 
         // Verifica se a URL pede para iniciar na Volumetria
@@ -963,9 +1004,14 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('fileInputLigacoesCope').click();
         }
 
-        function togglePendenciaView() {
-            pendenciasViewMode = pendenciasViewMode === 'causa' ? 'usuario' : 'causa';
-            document.getElementById('viewToggleBtn').innerText = pendenciasViewMode === 'causa' ? 'Usuário' : 'Causas';
+        function cyclePendenciaView() {
+            const modes = ['causa', 'usuario', 'turnos'];
+            const labels = { 'causa': 'Causas', 'usuario': 'Usuários', 'turnos': 'Turnos' };
+            let idx = modes.indexOf(pendenciasViewMode);
+            idx = (idx + 1) % modes.length;
+            pendenciasViewMode = modes[idx];
+            const btn = document.getElementById('pendenciaViewControls');
+            if (btn) btn.innerText = labels[pendenciasViewMode];
             renderPendenciasList();
         }
 
@@ -1084,6 +1130,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
         function processVolData(data) {
             globalVolData = [];
+            activeMonthFilter = null;
             const dateSet = new Set();
             
             data.forEach(row => {
@@ -1127,6 +1174,16 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     filterSelect.appendChild(opt);
                 });
             }
+
+            const monthsSet = new Set();
+            globalVolData.forEach(r => {
+                if (r._filterDate && r._filterDate !== "N/A") {
+                    const parts = r._filterDate.split('/');
+                    if (parts.length === 3) monthsSet.add(`${parts[1]}/${parts[2]}`);
+                }
+            });
+            renderMonthButtons(Array.from(monthsSet));
+
             runVolAnalysis(globalVolData);
         }
 
@@ -1140,6 +1197,54 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
         }
 
+        let activeMonthFilter = null;
+        function renderMonthButtons(months) {
+            const container = document.getElementById('monthFilterContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            if (months.length === 0) return;
+
+            months.sort((a, b) => {
+                const [m1, y1] = a.split('/').map(Number);
+                const [m2, y2] = b.split('/').map(Number);
+                return (y1 - y2) || (m1 - m2);
+            });
+
+            months.forEach(mStr => {
+                const [m, y] = mStr.split('/');
+                const monthName = MONTH_NAMES[parseInt(m) - 1];
+                const btn = document.createElement('button');
+                btn.className = "btn-view-toggle text-[9px] px-2 py-1";
+                btn.innerText = `${monthName}/${y}`;
+                btn.onclick = () => filterByMonth(mStr, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function filterByMonth(monthYear, btnElement) {
+            const container = document.getElementById('monthFilterContainer');
+            const buttons = container.querySelectorAll('button');
+            const isSame = activeMonthFilter === monthYear;
+            
+            activeMonthFilter = isSame ? null : monthYear;
+            buttons.forEach(b => b.classList.remove('active'));
+            if (!isSame) btnElement.classList.add('active');
+
+            const dateSelect = document.getElementById('dateFilter');
+            if(dateSelect) dateSelect.value = 'all';
+
+            if (activeMonthFilter) {
+                const filtered = globalVolData.filter(r => {
+                    if (!r._filterDate || r._filterDate === "N/A") return false;
+                    const parts = r._filterDate.split('/');
+                    return `${parts[1]}/${parts[2]}` === activeMonthFilter;
+                });
+                runVolAnalysis(filtered);
+            } else {
+                runVolAnalysis(globalVolData);
+            }
+        }
+
         function runVolAnalysis(data) {
             const s = { 
                 totalSet: new Set(), agrSet: new Set(), agrsSet: new Set(),
@@ -1148,7 +1253,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 es: 0, esC: {}, d: [] 
             };
             kpiData = { total: [], agregadores: [], agregado: [] };
-            const cm = {}, esm = {}, rm = {}, tm = {};
+            const cmSets = {}, esm = {}, rm = {}, tm = {};
             const categoryMapping = [
                 { id: "CHUVA", kw: ["CHUVA"] }, { id: "SEM ACESSO", kw: ["SEM ACESSO"] },
                 { id: "AREA DE RISCO", kw: ["AREA DE RISCO"] }, { id: "POSTE ENERGIZADO", kw: ["POSTE ENERGIZADO", "CIA DE ENERGIA", "EMPRESA DE ENERGIA"] },
@@ -1160,6 +1265,16 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             currentCausaPendenciaDetails = {}; currentAnalistaPendenciaDetails = {}; masterPendenciasList = [];
             tagDetailsLists = { 'ADM COPE': [], 'DESAGREGADO': [], 'SALAS COPE': [], 'SALAS NOC': [] };
             volDataES = [];
+
+            const TARGET_USERS_FOR_COUNT = [
+                "LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "BRUNO MELLO DA SILVA", 
+                "TAMIRIS AVELINA GONÇALVES", "RANDU MATOS MENEZES", "ELVIS MIRANDA", 
+                "NOC/JEFFERSON", "NOC/JOSEYLSON"
+            ];
+
+            const EXCLUDED_CAUSES = [
+                "ACESSO DE TERCEIROS", "ACIONAMENTO IMPROCEDENTE VIVO", "ALIVIO FISICO", "AR CONDICIONADO - BAIXA EFICIENCIA", "AR CONDICIONADO INOPERANTE", "AUSENCIA DE CONFIGURACAO", "AUTENTICACAO DUPLICADA", "BANCO DE BATERIAS - BAIXA EFICIENCIA", "BATERIA EM DESCARGA", "CAIXA NAO LOCALIZADA", "CAIXA SEM CONECTIVIDADE", "CLIMATIZACAO", "CONCESSIONARIA ELETRICA", "CONECTIVIDADE", "CONFIGURACAO DE PERIMETRO DA CAMERA", "CORDAO OPTICO DEFEITUOSO", "DISJUNTOR DESARMADO", "DISJUNTOR/FUSIVEL COM DEFEITO", "DIVERGENCIA DE CADASTRO", "DIVERGENCIA PROFILE", "ENDERECO INCORRETO", "ENDERECO NAO COBERTO", "ERRO CONSTRUCAO", "ERRO NA APLICACAO", "FALHA CONFIGURACAO", "FALHA DE GERENCIA DO ELEMENTO DE REDE (OLT, AGG E BNG)", "FALHA DO SERVIDOR DE GERENCIA (A M S - NOKIA, NCE - HUAWEI)", "FALHA ENERGIA", "FALHA FANS/FILTROS", "FALHA HARDWARE", "FALHA OPERACIONAL", "FALHA OPERADORA", "FALHA SOFTWARE", "FURTO", "INTEMPERIE", "LIMPEZA DE DROP", "LINK DOWN", "MANOBRA DE CTO", "MANOBRA DE PORTA", "NAO HA FALHA", "NORMALIZADO PELA CONCESSIONARIA", "ORDEM FAILED", "ORDEM HELD", "PLACA CONTROLADORA COM DEFEITO", "SFP", "SFP COM DEFEITO", "TRABALHOS PROGRAMADOS"
+            ];
 
             data.forEach(row => {
                 const keyAg = findKeyFuzzy(row, ['Agregação']);
@@ -1199,21 +1314,38 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const dataFimStr = row._filterDate || "-";
 
                 // Lógica de Contagem de Tickets (Total, Agregados, Agregadores)
-                s.totalSet.add(refVal);
-                kpiData.total.push(row);
+                // REGRA: Contabilizar apenas se "Histórico Comentários" conter "PLANTA EXTERNA"
+                // OU se houver ações dos usuários especificados
+                const histContent = String(row[keyHist] || "").toUpperCase();
+                const hasPlantaExterna = histContent.includes("PLANTA EXTERNA");
+                const hasTargetUser = TARGET_USERS_FOR_COUNT.some(u => histContent.includes(u));
+                
+                const causaValue = normalizeString(row[keyCausa]) || 'N/A';
+                const isExcluded = EXCLUDED_CAUSES.some(ex => causaValue.includes(ex));
+                const isValidTicket = (hasPlantaExterna || hasTargetUser) && !isExcluded;
+
+                if (isValidTicket) {
+                    s.totalSet.add(refVal);
+                    kpiData.total.push(row);
+                    if (!cmSets[causaValue]) cmSets[causaValue] = new Set();
+                    cmSets[causaValue].add(refVal);
+                }
 
                 if (agValue === 'AGREGADO') {
-                    s.agrSet.add(refVal);
-                    kpiData.agregado.push(row);
+                    if (isValidTicket) {
+                        s.agrSet.add(refVal);
+                        kpiData.agregado.push(row);
+                    }
                     return; // Exclui do processamento posterior
                 }
 
                 if (!agValue || agValue === "NULL" || agValue === 'AGREGADOR' || tagValue.includes('B2B') || tagValue.includes('AGG')) {
-                    s.agrsSet.add(refVal);
-                    kpiData.agregadores.push(row);
+                    if (isValidTicket) {
+                        s.agrsSet.add(refVal);
+                        kpiData.agregadores.push(row);
+                    }
                 }
                 const areaValue = normalizeString(row[keyArea]);
-                const causaValue = normalizeString(row[keyCausa]) || 'N/A';
                 let ufValue = String(row[keyUF] || "N/A");
 
                 if (ufValue === "N/A" || !ufValue.trim()) {
@@ -1331,10 +1463,12 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     }
                     if (d && !isNaN(d.getTime())) { s.d.push(d); const k = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; tm[k] = (tm[k] || 0) + 1; }
                 }
-                cm[causaValue] = (cm[causaValue] || 0) + 1;
                 let reg = areaValue.replace(/-/g, '').trim();
                 if (reg && reg !== '-') rm[reg] = (rm[reg] || 0) + 1;
             });
+
+            const cm = {};
+            Object.keys(cmSets).forEach(k => cm[k] = cmSets[k].size);
 
             // Atualiza contadores finais baseados nos Sets
             s.total = s.totalSet.size;
@@ -1346,12 +1480,54 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
         function renderPendenciasList() {
             const mode = pendenciasViewMode;
+            const container = document.getElementById('main-pendencias-list');
+            if(!container) return;
+
+            if (mode === 'turnos') {
+                container.classList.add('h-full');
+                const shiftStats = {};
+                Object.keys(SHIFT_DEFINITIONS).forEach(k => shiftStats[k] = { total: 0, causes: {} });
+
+                masterPendenciasList.forEach(p => {
+                    const nameUpper = normalizeString(p.analista);
+                    for (const [shift, def] of Object.entries(SHIFT_DEFINITIONS)) {
+                        if (def.members.some(m => nameUpper.includes(normalizeString(m)))) {
+                            shiftStats[shift].total++;
+                            const c = p.causa;
+                            shiftStats[shift].causes[c] = (shiftStats[shift].causes[c] || 0) + 1;
+                            break; 
+                        }
+                    }
+                });
+
+                container.innerHTML = `<div class="grid grid-cols-3 gap-2 h-full">
+                    ${Object.entries(SHIFT_DEFINITIONS).map(([shift, def]) => {
+                        const stats = shiftStats[shift];
+                        const topCauses = Object.entries(stats.causes).sort((a,b) => b[1]-a[1]).slice(0,5);
+                        return `<div class="bg-white border border-slate-200 rounded-lg p-3 shadow-sm hover:border-blue-500 transition-colors cursor-default flex flex-col justify-between flex-1">
+                            <div class="flex flex-col items-center border-b border-slate-100 pb-2">
+                                <div class="bg-slate-800 text-white px-8 py-1.5 rounded-lg shadow-md mb-1">
+                                    <h4 class="text-2xl font-black leading-none">${shift}</h4>
+                                </div>
+                                <p class="text-[12px] font-bold text-slate-500 uppercase">${def.time}</p>
+                            </div>
+                            <div class="space-y-1 flex-1 flex flex-col justify-center py-2">
+                                ${topCauses.map(([c,v]) => `<div class="flex justify-between items-center text-[10px] font-bold text-slate-500"><span class="truncate mr-2" title="${c}">${c}</span><span class="bg-slate-100 px-1.5 rounded text-slate-700">${v}</span></div>`).join('')}
+                            </div>
+                            <div class="flex justify-center items-center border-t border-slate-100 pt-2">
+                                <div class="bg-red-50 rounded px-4 py-1"><span class="text-3xl font-black text-red-700">${stats.total}</span></div>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>`;
+                return;
+            }
+            container.classList.remove('h-full');
+
             const dataMap = mode === 'causa' ? causasPendenciaMap : analistasPendenciaMap;
             const sorted = Object.entries(dataMap).sort((a,b) => b[1] - a[1]);
             const maxVal = Math.max(...Object.values(dataMap), 1);
             const totalSum = Object.values(dataMap).reduce((a, b) => a + b, 0);
-            const container = document.getElementById('main-pendencias-list');
-            if(!container) return;
             container.innerHTML = sorted.map(([k,v]) => {
                 const percent = totalSum > 0 ? ((v / totalSum) * 100).toFixed(1) + '%' : '0%';
                 return `<div class="analista-item flex items-center gap-3 p-2 border-l-4 border-red-100 hover:border-red-500 mb-1 transition-all rounded-r-lg group" ondblclick="openDetailsModal('${k}')">
@@ -1394,9 +1570,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const isCausa = id === 'causas-list-container';
                 container.innerHTML = arr.map(([k,v]) => `<div ${isCausa ? `ondblclick="openCausaModal('${k.replace(/'/g, "\\'")}')"` : ''} class="flex items-center gap-3 p-1 border-l-4 border-slate-100 hover:border-orange-500 mb-1 transition-all ${isCausa ? 'cursor-pointer hover:bg-slate-50' : ''}"><div class="min-w-[34px] bg-slate-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div><div class="flex-1"><p class="text-[9px] font-black text-slate-600 uppercase mb-1 truncate">${k}</p><div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-orange-500 h-full rounded" style="width:${tot > 0 ? (v/tot*100).toFixed(1) : 0}%"></div></div></div></div>`).join('');
             };
-            renderDefault('causas-list-container', Object.entries(cm).sort((a,b)=>b[1]-a[1]), s.total);
-            renderDefault('causas-es-list-container', Object.entries(esm).sort((a,b)=>b[1]-a[1]).slice(0,10), s.es);
-            document.getElementById('top-cities-es').innerHTML = Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="bg-white p-2 border border-slate-100 rounded shadow-sm flex items-center gap-2 mb-1 hover:border-orange-500 transition-all font-black uppercase text-[9px]"><div class="bg-slate-900 text-white min-w-[30px] text-center py-0.5 rounded">${v}</div>${k}</div>`).join('');
+            renderDefault('causas-list-container', Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 6), s.total);
+            renderDefault('causas-es-list-container', Object.entries(esm).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 3), s.es);
+            renderDefault('top-cities-es', Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 3), s.es);
             updateCharts(rm, tm, dailyTotalsMap);
             renderPendenciasChart();
         }
@@ -1503,6 +1679,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         function processLigacoesCope(data) {
             let totalCalls = 0;
             let totalSeconds = 0;
+            let totalRejected = 0;
+            let totalSuccess = 0;
             const daysSet = new Set();
             const collabMap = {};
             const dailyMap = {};
@@ -1510,6 +1688,16 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             let maxDate = null;
             const dailyRows = {}; // Armazena as linhas por data para o modal
 
+            const groups = {
+                "T1 - 06H15 ÁS 15H15": ["TAMIRIS", "BRUNO", "JULIANA", "JOSEYLSON"],
+                "T2 - 15H00 ÁS 23H43": ["ELVIS", "RANDU", "LUAN", "JEFFERSON"],
+                "T3 - 23H30 ÁS 06h30": ["CAIO", "EDMAR", "GABRIEL"]
+            };
+            const groupCounts = { 
+                "T1 - 06H15 ÁS 15H15": { total: 0, rejected: 0, success: 0 }, 
+                "T2 - 15H00 ÁS 23H43": { total: 0, rejected: 0, success: 0 }, 
+                "T3 - 23H30 ÁS 06h30": { total: 0, rejected: 0, success: 0 } 
+            };
             data.forEach(row => {
                 const keyCollab = findKeyFuzzy(row, ['Chamada de', 'Caller', 'Origem', 'From', 'Colaborador']);
                 
@@ -1526,10 +1714,38 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
                 if (!keyCollab && !keyDur && !keyDate) return;
 
+                // Lógica de Status (Rejeitadas vs Sucesso)
+                const keyStatus = findKeyFuzzy(row, ['Estado', 'Status', 'Disposition', 'State']);
+                let isRejected = false;
+                let isSuccess = false;
+
+                if (keyStatus) {
+                    const status = String(row[keyStatus]).toUpperCase().trim();
+                    
+                    if (status === 'BUSY' || status === 'VOICEMAIL') return;
+
+                    if (status === 'NO ANSWER') {
+                        totalRejected++;
+                        isRejected = true;
+                    } else if (status === 'ANSWER' || status === 'ANSWERED') {
+                        totalSuccess++;
+                        isSuccess = true;
+                    }
+                }
+
                 totalCalls++;
 
                 const collab = row[keyCollab] ? String(row[keyCollab]).trim().toUpperCase() : "NÃO IDENTIFICADO";
                 collabMap[collab] = (collabMap[collab] || 0) + 1;
+
+                for (const [gName, members] of Object.entries(groups)) {
+                    if (members.some(m => collab.includes(m))) {
+                        groupCounts[gName].total++;
+                        if (isRejected) groupCounts[gName].rejected++;
+                        if (isSuccess) groupCounts[gName].success++;
+                        break;
+                    }
+                }
 
                 const durRaw = row[keyDur];
                 let seconds = 0;
@@ -1616,14 +1832,27 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             window.ligacoesCopeData = dailyRows;
 
             document.getElementById('total-ligacoes').innerText = totalCalls;
+            document.getElementById('total-rejeitadas').innerText = totalRejected;
+            document.getElementById('total-sucesso').innerText = totalSuccess;
             const h = Math.floor(totalSeconds / 3600), m = Math.floor((totalSeconds % 3600) / 60), s = Math.floor(totalSeconds % 60);
             document.getElementById('total-tempo-ligacoes').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             
             // 1. Cálculo de Dias Analisados (Total de dias únicos identificados)
             document.getElementById('total-dias-ligacoes').innerText = daysSet.size;
 
-            const sortedCollabs = Object.entries(collabMap).sort((a,b) => b[1] - a[1]);
-            document.getElementById('lista-colaboradores-ligacoes').innerHTML = sortedCollabs.map(([k,v]) => `<div class="flex items-center gap-3 p-1 border-l-4 border-blue-100 hover:border-blue-500 mb-1 transition-all"><div class="min-w-[34px] bg-blue-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div><div class="flex-1"><p class="text-[9px] font-black text-slate-600 uppercase mb-1 truncate" title="${k}">${k}</p><div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-blue-500 h-full rounded" style="width:${totalCalls > 0 ? (v/totalCalls*100).toFixed(1) : 0}%"></div></div></div></div>`).join('');
+            document.getElementById('lista-colaboradores-ligacoes').innerHTML = Object.entries(groupCounts).map(([k,v]) => {
+                const members = groups[k].join(', ');
+                const [turma, horario] = k.split(' - ');
+                return `<div class="flex-1 flex flex-col items-center justify-center bg-slate-50 border border-blue-100 rounded-lg p-2 hover:border-blue-500 transition-all" title="${members}">
+                    <div class="w-full bg-blue-900 text-white text-center py-1.5 rounded text-[12px] font-black mb-2 shadow-sm cursor-default">${turma}</div>
+                    <p class="text-[9px] font-black text-slate-500 uppercase text-center leading-tight mb-2">${horario}</p>
+                    <p class="text-3xl font-black text-blue-800 mb-1">${v.total}</p>
+                    <div class="flex gap-3 w-full justify-center border-t border-slate-200 pt-1">
+                        <div class="text-center"><p class="text-[8px] font-black text-green-600 uppercase">SUC</p><p class="text-xs font-black text-green-500">${v.success}</p></div>
+                        <div class="text-center"><p class="text-[8px] font-black text-red-600 uppercase">REJ</p><p class="text-xs font-black text-red-400">${v.rejected}</p></div>
+                    </div>
+                </div>`;
+            }).join('');
 
             // 2. Progressão Diária (Apenas dias identificados)
             let sortedDays = [];
