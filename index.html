@@ -226,6 +226,14 @@
 
         .pdf-export-mode { padding: 20px !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
         .pdf-export-mode .no-print { display: none !important; }
+        
+        /* Ajustes de Gráficos para PDF */
+        .pdf-export-mode .chart-container { height: 200px !important; width: 100% !important; page-break-inside: avoid; }
+        /* Altura reduzida em ~15% (260px -> 220px) e ajustes de padding/margin para evitar overflow */
+        .pdf-export-mode .pdf-chart-height { height: 220px !important; page-break-inside: avoid; padding: 12px !important; overflow: hidden; }
+        .pdf-export-mode .pdf-chart-height .mb-8 { margin-bottom: 8px !important; }
+        .pdf-export-mode .pdf-chart-height-small { height: 140px !important; page-break-inside: avoid; }
+        .pdf-export-mode canvas { max-width: 100% !important; max-height: 100% !important; object-fit: contain; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" id="main-body">
@@ -397,7 +405,7 @@
                 <div class="kpi-card md:col-span-2 p-8 rounded-2xl flex flex-col justify-center items-center relative text-center shadow-sm hover-lift-card">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 font-black">Total de tickets verificados</p>
                     <div class="number-badge" ondblclick="openKpiModal('total')"><h2 id="kpi-total" class="text-[66px] font-black text-slate-800 leading-none">0</h2></div>
-                    <div class="flex gap-6 mt-8 w-full justify-center">
+                    <div id="kpi-breakdown" class="hidden flex gap-6 mt-8 w-full justify-center">
                         <div class="text-center cursor-pointer" ondblclick="openKpiModal('agregadores')"><p id="stat-agregadores-val" class="text-[33px] font-black text-slate-700 leading-none">0</p><p class="text-[9px] font-bold text-slate-400 uppercase mt-2 font-black">Agregadores</p></div>
                         <div class="h-8 w-px bg-slate-200"></div>
                         <div class="text-center cursor-pointer" ondblclick="openKpiModal('agregado')"><p id="stat-agregado-val" class="text-[33px] font-black text-slate-700 leading-none">0</p><p class="text-[9px] font-bold text-slate-400 uppercase mt-2 font-black">Agregado</p></div>
@@ -433,8 +441,8 @@
                                 <button id="pendenciaViewControls" onclick="cyclePendenciaView()" class="btn-view-toggle hidden min-w-[80px]">Turnos</button>
                             </div>
                             <div class="flex flex-col items-end cursor-pointer" ondblclick="openTotalPendenciasModal()">
-                                <p class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] mb-2 leading-tight">Total Geral</p>
-                                <div class="number-badge !py-1 !px-3 !min-w-[60px] text-center"><p id="total-pendencias-counter" class="text-2xl font-black text-slate-800 leading-none">0</p></div>
+                                <p class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] mb-2 leading-tight">Total Geral</p>
+                                <div class="border-2 border-slate-800 rounded-xl px-3 py-1 min-w-[60px] text-center"><p id="total-pendencias-counter" class="text-2xl font-black text-slate-800 leading-none">0</p></div>
                             </div>
                         </div>
                         <div id="analistas-list-container" class="space-y-4 flex-grow overflow-y-auto pr-3 custom-scrollbar">
@@ -464,10 +472,15 @@
                         </div>
                         <div class="bg-orange-50 border-2 border-orange-500 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-orange-100 transition-all font-black">
                             <h4 class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] text-center font-black">Salas de Crise</h4>
-                            <div class="flex justify-around items-center">
+                            <div class="flex justify-around items-start">
                                 <div class="text-center">
                                     <div class="number-badge mb-2" ondblclick="openTagDetailsModal('SALAS COPE')"><p id="tag-sala-cope-val" class="text-[26px] font-black text-orange-700">0</p></div>
                                     <p class="text-[10px] font-black text-orange-400 uppercase">Salas COPE</p>
+                                    <div class="mt-1 text-[8px] font-black text-orange-800 flex flex-col">
+                                        <span>AGG: <span id="sc-agg-val">0</span></span>
+                                        <span>B2B: <span id="sc-b2b-val">0</span></span>
+                                        <span>PON LOSS: <span id="sc-pon-val">0</span></span>
+                                    </div>
                                 </div>
                                 <div class="text-center">
                                     <div class="number-badge mb-2" ondblclick="openTagDetailsModal('SALAS NOC')"><p id="tag-sala-noc-val" class="text-[26px] font-black text-orange-700">0</p></div>
@@ -481,7 +494,7 @@
 
             <!-- Progressão de Pendências (Full Width) -->
             <div class="w-full mb-8">
-                <div class="p-8 border-2 border-red-200 rounded-2xl bg-red-50 shadow-sm hover-lift-card h-[400px] flex flex-col">
+                <div class="p-8 border-2 border-red-200 rounded-2xl bg-red-50 shadow-sm hover-lift-card h-[400px] flex flex-col pdf-chart-height">
                     <div class="flex justify-between items-center mb-8 border-b border-red-100 pb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-1.5 h-5 bg-red-600"></div>
@@ -544,7 +557,7 @@
                             <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100"><h4 class="text-[10px] font-black text-slate-500 uppercase mb-3 border-b pb-2">Ligaçõoes por Turno</h4><div id="lista-colaboradores-ligacoes" class="flex gap-2 h-[170px]"></div></div>
                             <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100">
                                 <h4 class="text-[10px] font-black text-slate-500 uppercase mb-3 border-b pb-2">Progressão Diária</h4>
-                                <div class="h-[200px] relative">
+                                <div class="h-[200px] relative pdf-chart-height-small">
                                     <canvas id="ligacoesCopeChart"></canvas>
                                 </div>
                             </div>
@@ -564,7 +577,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-10">
-                 <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card h-[400px] flex flex-col">
+                 <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card h-[400px] flex flex-col pdf-chart-height">
                     <h3 class="font-black text-slate-800 mb-8 text-center uppercase text-xs tracking-[0.2em] font-black">Progressão Diária de TTK's</h3>
                     <div class="flex-grow min-h-0"><canvas id="timelineChart"></canvas></div>
                 </div>
@@ -581,6 +594,7 @@
         let processedTA = [], headersTA = [], processedCausa = [];
         let volDataES = [], volSummaryES = {}; 
         let isAdminMode = false;
+        let defaultFilesLoaded = false;
         let currentCausaPendenciaDetails = {}; 
         let currentAnalistaPendenciaDetails = {};
         let tagDetailsLists = { 'ADM COPE': [], 'DESAGREGADO': [], 'SALAS COPE': [], 'SALAS NOC': [] };
@@ -754,6 +768,11 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const url = new URL(window.location);
             if (page === 'volumetria') {
                 url.searchParams.set('page', 'volumetria');
+                // Fix: Re-renderiza os dados ao entrar na aba para corrigir gráficos do Chart.js (canvas oculto)
+                if (globalVolData && globalVolData.length > 0) {
+                    setTimeout(() => runVolAnalysis(globalVolData), 50);
+                }
+                loadDefaultFiles();
             } else {
                 url.searchParams.delete('page');
             }
@@ -764,12 +783,15 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             isAdminMode = !isAdminMode;
             const btn = document.getElementById('btnAdmin');
             const viewControls = document.getElementById('pendenciaViewControls');
+            const kpiBreakdown = document.getElementById('kpi-breakdown');
             if (isAdminMode) {
                 btn.classList.replace('bg-gray-800', 'bg-green-600');
                 if(viewControls) viewControls.classList.remove('hidden');
+                if(kpiBreakdown) kpiBreakdown.classList.remove('hidden');
             } else {
                 btn.classList.replace('bg-green-600', 'bg-gray-800');
                 if(viewControls) viewControls.classList.add('hidden');
+                if(kpiBreakdown) kpiBreakdown.classList.add('hidden');
             }
             filterByDate();
         }
@@ -782,6 +804,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('page-operacoes').classList.add('hidden');
             document.getElementById('page-volumetria').classList.remove('hidden');
             body.classList.add('volumetria-mode');
+            loadDefaultFiles();
         }
 
         // --- MODAL FUNCTIONS ---
@@ -1250,6 +1273,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 totalSet: new Set(), agrSet: new Set(), agrsSet: new Set(),
                 total: 0, agr: 0, agrs: 0, 
                 admSet: new Set(), desSet: new Set(), scSet: new Set(), snSet: new Set(), 
+                scAgg: 0, scB2b: 0, scPon: 0,
                 es: 0, esC: {}, d: [] 
             };
             kpiData = { total: [], agregadores: [], agregado: [] };
@@ -1287,11 +1311,14 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const keyRef = findKeyFuzzy(row, ['Referência', 'TT']);
                 const keyUF = findKeyFuzzy(row, ['UF', 'Estado', 'Sigla']);
                 const keyIds = findKeyFuzzy(row, ['Nº IDs Serviço Ativos', 'IDs Serviço', 'Serviço Ativos']);
+                const keyEquipeFim = findKeyFuzzy(row, ['Equipe Data Fim']);
 
+                const equipeFimValue = normalizeString(row[keyEquipeFim]);
                 const refVal = String(row[keyRef] || "N/A");
                 const agValue = normalizeString(row[keyAg]);
                 const tagValueRaw = String(row[keyTag] || "");
                 const tagValue = normalizeString(tagValueRaw);
+                const areaValue = normalizeString(row[keyArea]);
                 
                 let dataInicioStr = "-";
                 if (keyDataInicio && row[keyDataInicio]) {
@@ -1322,7 +1349,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 
                 const causaValue = normalizeString(row[keyCausa]) || 'N/A';
                 const isExcluded = EXCLUDED_CAUSES.some(ex => causaValue.includes(ex));
-                const isValidTicket = (hasPlantaExterna || hasTargetUser) && !isExcluded;
+                const isPlantaInternaN2 = equipeFimValue.includes("PLANTA INTERNA N2");
+                const isEsCity = CIDADES_ES_ALVO.some(c => areaValue.includes(normalizeString(c)));
+                const isValidTicket = (hasPlantaExterna || hasTargetUser) && !isExcluded && !isPlantaInternaN2 && !isEsCity;
 
                 if (isValidTicket) {
                     s.totalSet.add(refVal);
@@ -1345,7 +1374,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                         kpiData.agregadores.push(row);
                     }
                 }
-                const areaValue = normalizeString(row[keyArea]);
+                // const areaValue = normalizeString(row[keyArea]);
                 let ufValue = String(row[keyUF] || "N/A");
 
                 if (ufValue === "N/A" || !ufValue.trim()) {
@@ -1391,11 +1420,18 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     if (!targetSet.has(tagValue)) {
                         targetSet.add(tagValue);
                         tagDetailsLists[targetList].push({ ref: refVal, tag: tagValueRaw });
+                        if (isC) {
+                            const isAgg = tagValue.includes("AGG");
+                            const isB2b = tagValue.includes("B2B");
+                            if (isAgg) s.scAgg++;
+                            if (isB2b) s.scB2b++;
+                            if (!isAgg && !isB2b) s.scPon++;
+                        }
                     }
                 }
 
                 const esc = CIDADES_ES_ALVO.find(x => areaValue.includes(normalizeString(x)));
-                if (esc) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[causaValue] = (esm[causaValue] || 0) + 1; volDataES.push(row); }
+                if (esc && agValue !== 'AGREGADO' && !equipeFimValue.includes("PLANTA INTERNA N2") && !causaValue.includes("TTK DUPLICADO") && !causaValue.includes("FALHA OPERADORA") && !causaValue.includes("ENDERECO NAO COBERTO") && !causaValue.includes("ALIVIO FISICO")) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[causaValue] = (esm[causaValue] || 0) + 1; volDataES.push(row); }
 
                 const histTxt = String(row[keyHist] || "");
                 if (histTxt) {
@@ -1538,7 +1574,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         function updateVolUI(s, cm, esm, rm, tm) {
-            document.getElementById('kpi-total').innerText = s.total;
+            document.getElementById('kpi-total').innerText = s.agrs;
             document.getElementById('kpi-es').innerText = s.es;
             document.getElementById('stat-agregadores-val').innerText = s.agrs;
             document.getElementById('stat-agregado-val').innerText = s.agr;
@@ -1546,6 +1582,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('tag-desag-val').innerText = s.desSet.size;
             document.getElementById('tag-sala-cope-val').innerText = s.scSet.size;
             document.getElementById('tag-sala-noc-val').innerText = s.snSet.size;
+            document.getElementById('sc-agg-val').innerText = s.scAgg;
+            document.getElementById('sc-b2b-val').innerText = s.scB2b;
+            document.getElementById('sc-pon-val').innerText = s.scPon;
             document.getElementById('total-pendencias-counter').innerText = masterPendenciasList.length;
             
             if(s.d.length) {
@@ -1613,7 +1652,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const ctxPend = chartPend.getContext('2d');
             const opt = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9, weight: '700' } } }, x: { ticks: { font: { size: 9, weight: '700' } } } } };
             
-            charts.pendProgress = new Chart(ctxPend, { type: 'line', data: { labels: filteredData.map(x=>x[0]), datasets: [{ data: filteredData.map(x=>x[1]), borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.4 }] }, options: opt });
+            charts.pendProgress = new Chart(ctxPend, { type: 'line', data: { labels: filteredData.map(x=>x[0].substring(0, 5)), datasets: [{ data: filteredData.map(x=>x[1]), borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.4 }] }, options: opt });
         }
 
         function updateCharts(rm, tm, dailyPendencias) {
@@ -1928,6 +1967,58 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             
             document.getElementById('detailsModal').classList.remove('hidden');
             setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
+        }
+
+        // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (VOLUMETRIA) ---
+        async function loadDefaultFiles() {
+            if (defaultFilesLoaded) return;
+            defaultFilesLoaded = true;
+
+            try {
+                const filename = 'Volumetria_Janeiro 2026.xls';
+                const response = await fetch(filename);
+                if (response.ok) {
+                    const data = await response.arrayBuffer();
+                    const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    
+                    // Lógica de detecção de cabeçalho (mesma do input manual)
+                    let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
+                    if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
+                    
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx });
+                    const validData = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+                    
+                    if (validData.length > 0) {
+                        processVolData(validData);
+                        console.log(`Volumetria: Arquivo padrão '${filename}' carregado com sucesso.`);
+                    }
+                }
+            } catch (e) {
+                console.log("Volumetria: Nenhum arquivo padrão carregado ou erro na leitura.", e);
+            }
+
+            // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LIGAÇÕES) ---
+            try {
+                const filenameLig = 'Ligações_Janeiro 2026.xlsx';
+                const responseLig = await fetch(filenameLig);
+                if (responseLig.ok) {
+                    const dataLig = await responseLig.arrayBuffer();
+                    const workbookLig = XLSX.read(new Uint8Array(dataLig), { type: 'array' });
+                    const firstSheetLig = workbookLig.Sheets[workbookLig.SheetNames[0]];
+                    const jsonDataLig = XLSX.utils.sheet_to_json(firstSheetLig, { defval: "" });
+                    processLigacoesCope(jsonDataLig);
+                    console.log(`Ligações: Arquivo padrão '${filenameLig}' carregado com sucesso.`);
+                }
+            } catch (e) {
+                console.log("Ligações: Nenhum arquivo padrão carregado ou erro na leitura.", e);
+            }
+        }
+    </script>
+</body>
+</html> 
+            }
         }
     </script>
 </body>
