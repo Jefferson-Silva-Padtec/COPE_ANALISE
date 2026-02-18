@@ -1138,8 +1138,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                 const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
                 let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
-                if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
-                const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx });
+                if (hIdx === -1) hIdx = 0;
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx, defval: "" });
                 processVolData(jsonData.filter(r => Object.values(r).some(v => v !== null && v !== "")));
                 showImportLigacoesModal();
             };
@@ -1974,29 +1974,39 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             if (defaultFilesLoaded) return;
             defaultFilesLoaded = true;
 
-            try {
-                const filename = 'Volumetria_Fevereiro 2026.xls';
-                const response = await fetch(filename);
-                if (response.ok) {
-                    const data = await response.arrayBuffer();
-                    const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                    
-                    // Lógica de detecção de cabeçalho (mesma do input manual)
-                    let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
-                    if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
-                    
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx });
-                    const validData = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
-                    
-                    if (validData.length > 0) {
-                        processVolData(validData);
-                        console.log(`Volumetria: Arquivo padrão '${filename}' carregado com sucesso.`);
+            const volFiles = ['Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls'];
+            let combinedData = [];
+
+            for (const filename of volFiles) {
+                try {
+                    const response = await fetch(filename);
+                    if (response.ok) {
+                        const data = await response.arrayBuffer();
+                        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                        
+                        // Lógica de detecção de cabeçalho (mesma do input manual)
+                        let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
+                        if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
+                        
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx, defval: "" });
+                        const validData = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+                        
+                        if (validData.length > 0) {
+                            combinedData = combinedData.concat(validData);
+                            console.log(`Volumetria: Arquivo '${filename}' carregado e mesclado.`);
+                        }
                     }
+                } catch (e) {
+                    console.log(`Volumetria: Erro ao carregar '${filename}'.`, e);
                 }
-            } catch (e) {
-                console.log("Volumetria: Nenhum arquivo padrão carregado ou erro na leitura.", e);
+            }
+
+            if (combinedData.length > 0) {
+                processVolData(combinedData);
+            } else {
+                console.log("Volumetria: Nenhum dado válido encontrado nos arquivos padrão.");
             }
 
             // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LIGAÇÕES) ---
@@ -2017,5 +2027,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
     </script>
 </body>
-</html>     
-
+</html> 
+            }
+        }
+    </script>
+</body>
+</html> 
