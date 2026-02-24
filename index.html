@@ -362,6 +362,7 @@
                                 <th>Cidade</th>
                                 <th>Splitter</th>
                                 <th>CI</th>
+                                <th>Data Inicio</th>
                                 <th>Sub Cat</th>
                                 <th>Ref</th>
                                 <th>Tag Ori</th>
@@ -1103,9 +1104,39 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const n = {}; Object.keys(row).forEach(k => n[k.trim().replace(/\s+/g, ' ')] = row[k]);
                 return { ...n, Cidade: String(n['Área Rede'] || '').replace(/^-+/,'').trim(), ContemTag: String(n['Tag'] || '').toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: n['Sub-Categoria'] || n['Sub categoria'] || '' };
             });
-            const counts = {};
-            clean.forEach(r => { if(r['Splitter Designado']) counts[r['Splitter Designado']] = (counts[r['Splitter Designado']] || 0) + 1; });
-            processedCausa = clean.filter(r => r['Splitter Designado'] && counts[r['Splitter Designado']] > 1).sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
+
+            const splitterCounts = {};
+            const ciCounts = {};
+            clean.forEach(r => { 
+                if(r['Splitter Designado']) splitterCounts[r['Splitter Designado']] = (splitterCounts[r['Splitter Designado']] || 0) + 1; 
+                if(r['Nome CI']) ciCounts[r['Nome CI']] = (ciCounts[r['Nome CI']] || 0) + 1;
+            });
+
+            let dups = clean.filter(r => (r['Splitter Designado'] && splitterCounts[r['Splitter Designado']] > 1) || (r['Nome CI'] && ciCounts[r['Nome CI']] > 1));
+
+            const parseDate = (val) => {
+                if (!val) return new Date(8640000000000000);
+                if (typeof val === 'number') return new Date(Math.round((val - 25569) * 86400 * 1000));
+                const parts = String(val).split(/[-/]/);
+                if (parts.length === 3) return parts[0].length === 4 ? new Date(parts[0], parts[1]-1, parts[2]) : new Date(parts[2], parts[1]-1, parts[0]);
+                return new Date(val);
+            };
+
+            const groups = {};
+            dups.forEach(r => { const key = r['Splitter Designado'] ? `SPL_${r['Splitter Designado']}` : `CI_${r['Nome CI']}`; if (!groups[key]) groups[key] = []; groups[key].push(r); });
+
+            Object.values(groups).forEach(group => {
+                const massivas = group.filter(r => String(r['Tag'] || '').toUpperCase().includes('MASSIVA'));
+                if (massivas.length > 0) {
+                    massivas.sort((a, b) => parseDate(a['Data Início'] || a['Data Inicio']) - parseDate(b['Data Início'] || b['Data Inicio']));
+                    const aggregator = massivas[0];
+                    group.forEach(r => r.Status = (r === aggregator) ? 'AGREGADOR' : 'AGREGAR');
+                } else {
+                    group.forEach(r => r.Status = 'AGREGAR');
+                }
+            });
+
+            processedCausa = dups.sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
             renderCausa();
             document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados.`;
             document.getElementById('results-causa').classList.remove('hidden');
@@ -1116,16 +1147,20 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const body = document.getElementById('bodyCausa'); body.innerHTML = "";
             processedCausa.forEach((r, i) => {
                 const tr = document.createElement('tr'); if(r.ContemTag === 'Contém TAG') tr.classList.add('bg-green-50');
-                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r.SubCat, r['Referência'], r['Tag'] || '', r.ContemTag];
+                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r['Data Início'] || r['Data Inicio'] || '', r.SubCat, r['Referência'], r['Tag'] || '', r.Status];
                 vls.forEach((v, idx) => {
                     const td = document.createElement('td');
-                    if (idx === 6 && v === 'Contém TAG') td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">Contém TAG</span>`;
-                    else if (idx === 3 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
+                    if (idx === 7) {
+                        if (v === 'AGREGADOR') td.innerHTML = `<span class="bg-orange-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGADOR</span>`;
+                        else if (v === 'AGREGAR') td.innerHTML = `<span class="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGAR</span>`;
+                        else td.textContent = v;
+                    }
+                    else if (idx === 4 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
                     else td.textContent = v;
                     tr.appendChild(td);
                 });
                 body.appendChild(tr);
-                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="7"></td></tr>';
+                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="8"></td></tr>';
             });
         }
 
@@ -1974,7 +2009,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             if (defaultFilesLoaded) return;
             defaultFilesLoaded = true;
 
-            const volFiles = ['Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls'];
+            const volFiles = ['Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls', 'Volumetria_Dezembro 2025.xls'];
             let combinedData = [];
 
             for (const filename of volFiles) {
@@ -2027,9 +2062,4 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
     </script>
 </body>
-</html> 
-            }
-        }
-    </script>
-</body>
-</html> 
+</html>
