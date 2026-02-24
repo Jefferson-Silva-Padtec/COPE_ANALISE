@@ -278,7 +278,7 @@
     </div>
 
     <!-- Botão Global de Voltar -->
-    <div class="fixed top-4 left-4 z-50 no-print">
+    <div id="global-back-btn" class="fixed top-4 left-4 z-50 no-print">
         <a href="https://jefferson-silva-padtec.github.io/COPE/" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg btn-action">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -287,9 +287,12 @@
         </a>
     </div>
 
-    <!-- Botão Admin -->
-    <div class="fixed top-4 right-4 z-50 no-print">
-        <button id="btnAdmin" ondblclick="toggleAdminMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-700 transition-colors">Admin</button>
+    <!-- Botões Topo Direito -->
+    <div class="fixed top-4 right-4 z-50 no-print flex gap-2">
+        <button id="share-btn" onclick="copyShareLink()" class="bg-gray-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-600 transition-colors hidden" title="Compartilhar Link Externo"><i class="fas fa-share-alt"></i></button>
+        <div id="admin-btn-container">
+            <button id="btnAdmin" ondblclick="toggleAdminMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-700 transition-colors">Admin</button>
+        </div>
     </div>
 
     <!-- PÁGINA 1: OPERAÇÕES -->
@@ -389,8 +392,8 @@
                 </div>
                 <div class="flex flex-col items-end gap-3">
                     <div class="flex gap-3 no-print">
-                        <button onclick="switchPage('operacoes')" class="bg-slate-800 text-white px-6 py-3 rounded-lg font-black text-[10px] hover:bg-black transition shadow-xl btn-action">← VOLTAR PARA OPERAÇÕES</button>
-                        <label class="cursor-pointer bg-orange-500 text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] hover:bg-orange-600 btn-action">IMPORTAR DADOS<input type="file" id="fileInputVol" class="hidden" accept=".xls,.xlsx,.csv"></label>
+                        <button id="volumetria-back-btn" onclick="switchPage('operacoes')" class="bg-slate-800 text-white px-6 py-3 rounded-lg font-black text-[10px] hover:bg-black transition shadow-xl btn-action">← VOLTAR PARA OPERAÇÕES</button>
+                        <label id="import-dados-btn" class="cursor-pointer bg-orange-500 text-white px-6 py-3 rounded-lg font-black transition flex items-center gap-2 shadow-xl text-[10px] hover:bg-orange-600 btn-action">IMPORTAR DADOS<input type="file" id="fileInputVol" class="hidden" accept=".xls,.xlsx,.csv"></label>
                         <button onclick="downloadPDF()" class="bg-black text-white px-6 py-3 rounded-lg font-black transition shadow-xl text-[10px] btn-action">EXPORTAR PDF</button>
                     </div>
                     <div class="flex items-center gap-2 bg-slate-100/10 px-3 py-2 rounded-lg border border-slate-100/20">
@@ -763,6 +766,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('page-operacoes').classList.toggle('hidden', page !== 'operacoes');
             document.getElementById('page-volumetria').classList.toggle('hidden', page !== 'volumetria');
             body.classList.toggle('volumetria-mode', page === 'volumetria');
+            document.getElementById('share-btn').classList.toggle('hidden', page !== 'volumetria');
             window.scrollTo(0, 0);
 
             // Atualiza a URL sem recarregar a página
@@ -805,6 +809,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('page-operacoes').classList.add('hidden');
             document.getElementById('page-volumetria').classList.remove('hidden');
             body.classList.add('volumetria-mode');
+            document.getElementById('share-btn').classList.remove('hidden');
             loadDefaultFiles();
         }
 
@@ -2060,6 +2065,30 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 console.log("Ligações: Nenhum arquivo padrão carregado ou erro na leitura.", e);
             }
         }
+
+        // --- COMPARTILHAMENTO EXTERNO ---
+        function copyShareLink() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', 'volumetria');
+            url.searchParams.set('share', 'true');
+            navigator.clipboard.writeText(url.toString()).then(() => {
+                alert('Link de compartilhamento copiado! (Modo visualização externa)');
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                prompt("Copie o link abaixo:", url.toString());
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('share') === 'true') {
+                const ids = ['global-back-btn', 'admin-btn-container', 'volumetria-back-btn', 'share-btn', 'import-dados-btn'];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+            }
+        });
     </script>
 </body>
 </html>
