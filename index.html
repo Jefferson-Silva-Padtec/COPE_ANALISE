@@ -234,6 +234,19 @@
         .pdf-export-mode .pdf-chart-height .mb-8 { margin-bottom: 8px !important; }
         .pdf-export-mode .pdf-chart-height-small { height: 140px !important; page-break-inside: avoid; }
         .pdf-export-mode canvas { max-width: 100% !important; max-height: 100% !important; object-fit: contain; }
+
+        @keyframes blink-red {
+            0%, 100% { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 4px #ef4444; }
+            50% { border-color: transparent; color: inherit; box-shadow: none; }
+        }
+        .duplicate-alert {
+            border: 2px solid #ef4444;
+            border-radius: 9999px;
+            padding: 2px 8px;
+            animation: blink-red 1s infinite;
+            font-weight: bold;
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" id="main-body">
@@ -369,7 +382,19 @@
                                 <th>Sub Cat</th>
                                 <th>Ref</th>
                                 <th>Tag Ori</th>
-                                <th>Status</th>
+                                <th>Agregação</th>
+                                <th>
+                                    <div class="flex items-center gap-1">
+                                        Status
+                                        <select id="statusFilter" onchange="renderCausa()" class="text-black text-[10px] p-1 rounded border border-gray-300">
+                                            <option value="">Todos</option>
+                                            <option value="REMOVER TAG ADM COPE">REMOVER TAG</option>
+                                            <option value="NÃO AGREGAR">NÃO AGREGAR</option>
+                                            <option value="AGREGADOR">AGREGADOR</option>
+                                            <option value="AGREGADO">AGREGADO</option>
+                                        </select>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="bodyCausa"></tbody>
@@ -397,8 +422,10 @@
                         <button onclick="downloadPDF()" class="bg-black text-white px-6 py-3 rounded-lg font-black transition shadow-xl text-[10px] btn-action">EXPORTAR PDF</button>
                     </div>
                     <div class="flex items-center gap-2 bg-slate-100/10 px-3 py-2 rounded-lg border border-slate-100/20">
-                        <label for="dateFilter" class="text-[10px] font-black text-slate-300 uppercase tracking-widest"><i class="far fa-calendar-alt mr-2"></i>Data Ref:</label>
-                        <select id="dateFilter" onchange="filterByDate()" class="bg-transparent text-orange-500 text-[10px] font-black uppercase focus:outline-none cursor-pointer border-b border-orange-500/50 pb-0.5 hover:border-orange-500 transition-colors"><option value="all" class="text-slate-800">Geral</option></select>
+                        <label class="text-[10px] font-black text-slate-300 uppercase tracking-widest"><i class="far fa-calendar-alt mr-2"></i>Período:</label>
+                        <input type="date" id="dateStart" onchange="filterByDateRange()" class="bg-transparent text-orange-500 text-[10px] font-black uppercase focus:outline-none cursor-pointer border-b border-orange-500/50 pb-0.5 hover:border-orange-500 transition-colors">
+                        <span class="text-slate-500 text-[10px] font-black">ATÉ</span>
+                        <input type="date" id="dateEnd" onchange="filterByDateRange()" class="bg-transparent text-orange-500 text-[10px] font-black uppercase focus:outline-none cursor-pointer border-b border-orange-500/50 pb-0.5 hover:border-orange-500 transition-colors">
                     </div>
                     <div id="monthFilterContainer" class="flex gap-1 mt-1 justify-end flex-wrap max-w-[300px]"></div>
                 </div>
@@ -798,7 +825,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 if(viewControls) viewControls.classList.add('hidden');
                 if(kpiBreakdown) kpiBreakdown.classList.add('hidden');
             }
-            filterByDate();
+            filterByDateRange();
         }
 
         // Verifica se a URL pede para iniciar na Volumetria
@@ -818,7 +845,15 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             let list = tagDetailsLists[tagName] || [];
             document.getElementById('modalAnalista').innerText = tagName;
             document.getElementById('modalSubTitle').innerText = "Lista detalhada de referências e tags registradas";
-            document.getElementById('btnExtrairModal').classList.add('hidden');
+            
+            const btnExport = document.getElementById('btnExtrairModal');
+            btnExport.classList.remove('hidden');
+            btnExport.onclick = function() {
+                const ws = XLSX.utils.json_to_sheet(list);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Tags");
+                XLSX.writeFile(wb, `EXPORT_TAG_${tagName.replace(/[^a-z0-9]/gi, '_')}.xlsx`);
+            };
             
             const content = document.getElementById('modalContent');
             if (list.length === 0) {
@@ -1107,17 +1142,40 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         function handleCausa(data) {
             const clean = data.map(row => {
                 const n = {}; Object.keys(row).forEach(k => n[k.trim().replace(/\s+/g, ' ')] = row[k]);
-                return { ...n, Cidade: String(n['Área Rede'] || '').replace(/^-+/,'').trim(), ContemTag: String(n['Tag'] || '').toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: n['Sub-Categoria'] || n['Sub categoria'] || '' };
+                const subCat = n['Sub-Categoria'] || n['Sub categoria'] || '';
+                const status = '';
+                
+                const keyAg = findKeyFuzzy(n, ['Agregação', 'Agregacao']);
+                const agregacao = keyAg ? n[keyAg] : '';
+                const agUpper = String(agregacao).toUpperCase().trim();
+                
+                const keyRef = findKeyFuzzy(n, ['Referência', 'TT']);
+                const refVal = String(n[keyRef] || '').trim();
+
+                const keyAssoc = findKeyFuzzy(n, ['Ticket Associados', 'Tickets Associados', 'Ticket Associado']);
+                const assocVal = keyAssoc ? n[keyAssoc] : '';
+
+                let parentRef = refVal; 
+                if (agUpper === 'AGREGADO') {
+                    const idx = String(assocVal).toUpperCase().indexOf('TT_');
+                    if (idx !== -1) parentRef = String(assocVal).substring(idx, idx + 16).trim();
+                }
+
+                return { ...n, Cidade: String(n['Área Rede'] || '').replace(/^-+/,'').trim(), ContemTag: String(n['Tag'] || '').toUpperCase().includes('DESAGREGADO') ? 'Contém TAG' : 'Sem TAG', SubCat: subCat, Status: status, _ref: refVal, _parentRef: parentRef, _agUpper: agUpper };
             });
 
-            const splitterCounts = {};
-            const ciCounts = {};
-            clean.forEach(r => { 
-                if(r['Splitter Designado']) splitterCounts[r['Splitter Designado']] = (splitterCounts[r['Splitter Designado']] || 0) + 1; 
-                if(r['Nome CI']) ciCounts[r['Nome CI']] = (ciCounts[r['Nome CI']] || 0) + 1;
+            // Filtro Regra: CAIXA LOTADA só deve aparecer se tiver a tag ADM COPE
+            const cleanFiltered = clean.filter(r => {
+                const subCatUpper = String(r.SubCat || '').toUpperCase();
+                const tagUpper = String(r['Tag'] || '').toUpperCase();
+                if (subCatUpper.includes('CAIXA LOTADA') && !tagUpper.includes('ADM COPE')) return false;
+                return true;
             });
 
-            let dups = clean.filter(r => (r['Splitter Designado'] && splitterCounts[r['Splitter Designado']] > 1) || (r['Nome CI'] && ciCounts[r['Nome CI']] > 1));
+            // Filtro: Remover cidades que aparecem apenas uma vez
+            const cityCounts = {};
+            cleanFiltered.forEach(r => { if(r.Cidade) cityCounts[r.Cidade] = (cityCounts[r.Cidade] || 0) + 1; });
+            const filteredClean = cleanFiltered.filter(r => r.Cidade && cityCounts[r.Cidade] > 1);
 
             const parseDate = (val) => {
                 if (!val) return new Date(8640000000000000);
@@ -1127,45 +1185,124 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 return new Date(val);
             };
 
-            const groups = {};
-            dups.forEach(r => { const key = r['Splitter Designado'] ? `SPL_${r['Splitter Designado']}` : `CI_${r['Nome CI']}`; if (!groups[key]) groups[key] = []; groups[key].push(r); });
+            const refMap = new Map();
+            filteredClean.forEach(r => { if(r._ref) refMap.set(r._ref, r); });
 
-            Object.values(groups).forEach(group => {
-                const massivas = group.filter(r => String(r['Tag'] || '').toUpperCase().includes('MASSIVA'));
-                if (massivas.length > 0) {
-                    massivas.sort((a, b) => parseDate(a['Data Início'] || a['Data Inicio']) - parseDate(b['Data Início'] || b['Data Inicio']));
-                    const aggregator = massivas[0];
-                    group.forEach(r => r.Status = (r === aggregator) ? 'AGREGADOR' : 'AGREGAR');
-                } else {
-                    group.forEach(r => r.Status = 'AGREGAR');
+            processedCausa = filteredClean.sort((a,b) => {
+                const isMassivaA = String(a['Tag'] || '').toUpperCase().includes('SUSPEITA MASSIVA');
+                const isMassivaB = String(b['Tag'] || '').toUpperCase().includes('SUSPEITA MASSIVA');
+                if (isMassivaA && !isMassivaB) return 1;
+                if (!isMassivaA && isMassivaB) return -1;
+
+                let repA = a;
+                let repB = b;
+                
+                if (a._agUpper === 'AGREGADO' && a._parentRef !== a._ref && refMap.has(a._parentRef)) repA = refMap.get(a._parentRef);
+                if (b._agUpper === 'AGREGADO' && b._parentRef !== b._ref && refMap.has(b._parentRef)) repB = refMap.get(b._parentRef);
+
+                const emptyA = !repA.Cidade;
+                const emptyB = !repB.Cidade;
+                if (emptyA && !emptyB) return 1;
+                if (!emptyA && emptyB) return -1;
+
+                const cityCompare = repA.Cidade.localeCompare(repB.Cidade);
+                if (cityCompare !== 0) return cityCompare;
+
+                const splitterCompare = String(repA['Splitter Designado'] || '').localeCompare(String(repB['Splitter Designado'] || ''));
+                if (splitterCompare !== 0) return splitterCompare;
+
+                if (repA === repB) {
+                    if (a._agUpper === 'AGREGADOR') return -1;
+                    if (b._agUpper === 'AGREGADOR') return 1;
+                    return 0;
                 }
-            });
 
-            processedCausa = dups.sort((a,b) => a.Cidade.localeCompare(b.Cidade) || String(a['Splitter Designado']).localeCompare(String(b['Splitter Designado'])));
+                return 0;
+            });
             renderCausa();
-            document.getElementById('stats-causa').innerText = `${processedCausa.length} duplicados.`;
+            document.getElementById('stats-causa').innerText = `${processedCausa.length} registros.`;
             document.getElementById('results-causa').classList.remove('hidden');
             document.getElementById('loadingCausa').classList.add('hidden');
         }
 
         function renderCausa() {
+            const filterVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : '';
             const body = document.getElementById('bodyCausa'); body.innerHTML = "";
-            processedCausa.forEach((r, i) => {
+            
+            const listToRender = processedCausa.filter(r => {
+                if (!filterVal) return true;
+                const tagOri = String(r['Tag'] || '').toUpperCase();
+                const subCatUpper = String(r.SubCat || '').toUpperCase();
+                const agUpper = r._agUpper;
+
+                let statusKey = '';
+                if (tagOri.includes('ADM COPE')) statusKey = 'REMOVER TAG ADM COPE';
+                else if (subCatUpper.includes('PORTA') && subCatUpper.includes('DEFEITO')) statusKey = 'NÃO AGREGAR';
+                else if (agUpper === 'AGREGADOR') statusKey = 'AGREGADOR';
+                else if (agUpper === 'AGREGADO') statusKey = 'AGREGADO';
+                
+                return statusKey === filterVal;
+            });
+            
+            const splitterCounts = {};
+            processedCausa.forEach(r => {
+                const sp = String(r['Splitter Designado'] || '').trim();
+                const ci = String(r.Cidade || '').trim();
+                if (sp && ci) {
+                    const key = ci + '|' + sp;
+                    splitterCounts[key] = (splitterCounts[key] || 0) + 1;
+                }
+            });
+
+            listToRender.forEach((r, i) => {
                 const tr = document.createElement('tr'); if(r.ContemTag === 'Contém TAG') tr.classList.add('bg-green-50');
-                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r['Data Início'] || r['Data Inicio'] || '', r.SubCat, r['Referência'], r['Tag'] || '', r.Status];
+                
+                const keyAg = findKeyFuzzy(r, ['Agregação', 'Agregacao']);
+                const agregacao = keyAg ? r[keyAg] : '';
+                const agUpper = String(agregacao).toUpperCase().trim();
+                const subCatUpper = String(r.SubCat || '').toUpperCase();
+
+                const keyAssoc = findKeyFuzzy(r, ['Ticket Associados', 'Tickets Associados', 'Ticket Associado']);
+                const assocVal = keyAssoc ? r[keyAssoc] : '';
+                
+                let statusDisplay = '';
+                const tagOri = String(r['Tag'] || '').toUpperCase();
+                
+                if (tagOri.includes('ADM COPE')) {
+                    statusDisplay = `<span class="bg-red-400 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">REMOVER TAG ADM COPE</span>`;
+                } else if (subCatUpper.includes('PORTA') && subCatUpper.includes('DEFEITO')) {
+                    statusDisplay = `<span class="bg-red-500 text-black px-2 py-1 rounded text-[10px] font-bold uppercase">NÃO AGREGAR</span>`;
+                } else if (agUpper === 'AGREGADOR') {
+                    statusDisplay = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGADOR</span>`;
+                } else if (agUpper === 'AGREGADO') {
+                    let displayAssoc = assocVal;
+                    const idx = String(assocVal).toUpperCase().indexOf('TT_');
+                    if (idx !== -1) {
+                        displayAssoc = String(assocVal).substring(idx + 3, idx + 3 + 13);
+                        displayAssoc = String(assocVal).substring(idx, idx + 3 + 13);
+                    }
+                    statusDisplay = `<span class="bg-yellow-400 text-black px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGADO AO ${displayAssoc}</span>`;
+                }
+
+                const spVal = String(r['Splitter Designado'] || '').trim();
+                const ciVal = String(r.Cidade || '').trim();
+                const isDup = spVal && ciVal && splitterCounts[ciVal + '|' + spVal] > 1;
+
+                const vls = [r.Cidade, r['Splitter Designado'], r['Nome CI'], r['Data Início'] || r['Data Inicio'] || '', r.SubCat, r['Referência'], r['Tag'] || '', agregacao, statusDisplay];
                 vls.forEach((v, idx) => {
                     const td = document.createElement('td');
-                    if (idx === 7) {
-                        if (v === 'AGREGADOR') td.innerHTML = `<span class="bg-orange-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGADOR</span>`;
-                        else if (v === 'AGREGAR') td.innerHTML = `<span class="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">AGREGAR</span>`;
-                        else td.textContent = v;
+                    if (idx === 8) {
+                        td.innerHTML = v;
+                        td.classList.add('whitespace-nowrap');
                     }
+                    else if (idx === 1 && isDup) td.innerHTML = `<span class="duplicate-alert">${v}</span>`;
                     else if (idx === 4 && String(v).toUpperCase().includes('PORTA CTO COM DEFEITO')) td.innerHTML = `<span class="text-red-600 line-through font-medium">${v}</span>`;
+                    else if (idx === 5 && agUpper === 'AGREGADOR') td.innerHTML = `<span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">${v}</span>`;
                     else td.textContent = v;
                     tr.appendChild(td);
                 });
                 body.appendChild(tr);
-                if(i < processedCausa.length - 1 && processedCausa[i].Cidade !== processedCausa[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="8"></td></tr>';
+                if(i < listToRender.length - 1 && listToRender[i].Cidade !== listToRender[i+1].Cidade) body.innerHTML += '<tr class="blank-row"><td colspan="9"></td></tr>';
             });
         }
 
@@ -1214,29 +1351,13 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                      }
                      if (d && !isNaN(d.getTime())) {
                          dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                         row._dateObj = d;
                      }
                 }
                 row._filterDate = dateStr;
                 if (dateStr !== "N/A") dateSet.add(dateStr);
                 globalVolData.push(row);
             });
-
-            const filterSelect = document.getElementById('dateFilter');
-            if (filterSelect) {
-                filterSelect.innerHTML = '<option value="all" class="text-slate-800">Geral</option>';
-                const sortedDates = Array.from(dateSet).sort((a, b) => {
-                    const [da, ma, ya] = a.split('/').map(Number);
-                    const [db, mb, yb] = b.split('/').map(Number);
-                    return new Date(ya, ma-1, da) - new Date(yb, mb-1, db);
-                });
-                sortedDates.forEach(d => {
-                    const opt = document.createElement('option');
-                    opt.value = d;
-                    opt.textContent = d;
-                    opt.className = "text-slate-800";
-                    filterSelect.appendChild(opt);
-                });
-            }
 
             const monthsSet = new Set();
             globalVolData.forEach(r => {
@@ -1250,14 +1371,25 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             runVolAnalysis(globalVolData);
         }
 
-        function filterByDate() {
-            const selected = document.getElementById('dateFilter').value;
-            if (selected === 'all') {
+        function filterByDateRange() {
+            const sVal = document.getElementById('dateStart').value;
+            const eVal = document.getElementById('dateEnd').value;
+            
+            if (!sVal && !eVal) {
                 runVolAnalysis(globalVolData);
-            } else {
-                const filtered = globalVolData.filter(r => r._filterDate === selected);
-                runVolAnalysis(filtered);
+                return;
             }
+
+            const start = sVal ? new Date(sVal + 'T00:00:00') : null;
+            const end = eVal ? new Date(eVal + 'T23:59:59') : null;
+
+            const filtered = globalVolData.filter(r => {
+                if (!r._dateObj) return false;
+                if (start && r._dateObj < start) return false;
+                if (end && r._dateObj > end) return false;
+                return true;
+            });
+            runVolAnalysis(filtered);
         }
 
         let activeMonthFilter = null;
@@ -1293,8 +1425,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             buttons.forEach(b => b.classList.remove('active'));
             if (!isSame) btnElement.classList.add('active');
 
-            const dateSelect = document.getElementById('dateFilter');
-            if(dateSelect) dateSelect.value = 'all';
+            document.getElementById('dateStart').value = '';
+            document.getElementById('dateEnd').value = '';
 
             if (activeMonthFilter) {
                 const filtered = globalVolData.filter(r => {
@@ -1391,7 +1523,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const isExcluded = EXCLUDED_CAUSES.some(ex => causaValue.includes(ex));
                 const isPlantaInternaN2 = equipeFimValue.includes("PLANTA INTERNA N2");
                 const isEsCity = CIDADES_ES_ALVO.some(c => areaValue.includes(normalizeString(c)));
-                const isValidTicket = (hasPlantaExterna || hasTargetUser) && !isExcluded && !isPlantaInternaN2 && !isEsCity;
+                const isAdmCope = tagValue.includes("ADM COPE");
+                const isValidTicket = (hasPlantaExterna || hasTargetUser) && !isExcluded && !isPlantaInternaN2 && !isEsCity && !isAdmCope;
 
                 if (isValidTicket) {
                     s.totalSet.add(refVal);
@@ -1630,12 +1763,6 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             if(s.d.length) {
                 const minDate = new Date(Math.min(...s.d)).toLocaleDateString('pt-BR');
                 const maxDate = new Date(Math.max(...s.d)).toLocaleDateString('pt-BR');
-                const rangeText = minDate === maxDate ? minDate : `${minDate} a ${maxDate}`;
-                const filterSelect = document.getElementById('dateFilter');
-                if (filterSelect) {
-                    const allOpt = filterSelect.querySelector('option[value="all"]');
-                    if (allOpt) allOpt.textContent = `Geral (${rangeText})`;
-                }
             }
 
             const dailyContainer = document.getElementById('daily-totals-container');
@@ -2092,4 +2219,3 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
     </script>
 </body>
 </html>
-
