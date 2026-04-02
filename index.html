@@ -2240,7 +2240,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             if (defaultFilesLoaded) return;
             defaultFilesLoaded = true;
 
-            const volFiles = ['Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls', 'Volumetria_Dezembro 2025.xls'];
+            const volFiles = ['Volumetria_Março 2026.xls', 'Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls', 'Volumetria_Dezembro 2025.xls'];
             let combinedData = [];
 
             for (const filename of volFiles) {
@@ -2276,7 +2276,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
 
             // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LIGAÇÕES) ---
-            const ligFiles = ['Ligações_Janeiro 2026.xlsx', 'Ligações_Fevereiro 2026.xlsx'];
+            const ligFiles = ['Ligações_Janeiro 2026.xlsx', 'Ligações_Fevereiro 2026.xlsx', 'Ligações_Março 2026.xlsx'];
             for (const filename of ligFiles) {
                 try {
                     const response = await fetch(filename);
