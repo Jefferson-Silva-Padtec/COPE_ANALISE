@@ -260,7 +260,7 @@
                     <p id="modalSubTitle" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detalhamento de Comentários e Pendências por Causa</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button id="btnExtrairModal" onclick="exportModalDataToExcel()" class="hidden bg-green-600 text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase hover:bg-green-700 transition shadow-lg">Extrair XLS</button>
+                    <button id="btnExtrairModal" onclick="exportModalDataToExcel()" class="hidden bg-green-600 text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase hover:bg-green-700 transition shadow-lg">Extrair </button>
                     <button onclick="closeModal()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
                         <i class="fas fa-times text-slate-500 text-xl"></i>
                     </button>
@@ -330,9 +330,9 @@
                             <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-800 uppercase tracking-tight">Limpador Notificação TA</h2>
-                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (Parcial.xls) do SIGO.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (Parcial.) do SIGO.</p>
                     </div>
-                    <input type="file" id="fileInputTA" accept=".xls,.xlsx,.csv" class="hidden">
+                    <input type="file" id="fileInputTA" accept=".,.x,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputTA').click()" class="btn-depth">Selecionar Arquivo</button>
                     <div id="loadingTA" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
@@ -343,9 +343,9 @@
                             <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h1m-5 10v-5a2 2 0 012-2h3m2 4l2 2m0 0l2-2m-2 2v-5a2 2 0 012-2h3"></path></svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-800 uppercase tracking-tight">Tickets Causa Comum</h2>
-                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (ARM-Splitter.xls) do SIGO.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic">Arquivo (ARM-Splitter.) do SIGO.</p>
                     </div>
-                    <input type="file" id="fileInputCausa" accept=".xls,.xlsx,.csv" class="hidden">
+                    <input type="file" id="fileInputCausa" accept=".,.x,.csv" class="hidden">
                     <button onclick="document.getElementById('fileInputCausa').click()" class="btn-depth">Selecionar Arquivo</button>
                     <div id="loadingCausa" class="hidden mt-6 flex flex-col items-center"><div class="loading-spinner"></div></div>
                 </div>
@@ -2240,7 +2240,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             if (defaultFilesLoaded) return;
             defaultFilesLoaded = true;
 
-            const volFiles = ['Volumetria_Maio 2026.xls', 'Volumetria_Abril 2026.xls', 'Volumetria_Março 2026.xls', 'Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls'];
+            const volFiles = ['Volumetria_Junho 2026.xls', 'Volumetria_Maio 2026.xls', 'Volumetria_Abril 2026.xls', 'Volumetria_Março 2026.xls', 'Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls'];
             let combinedData = [];
 
             for (const filename of volFiles) {
@@ -2276,7 +2276,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
 
             // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LIGAÇÕES) ---
-            const ligFiles = ['Ligações_Janeiro 2026.xlsx', 'Ligações_Fevereiro 2026.xlsx', 'Ligações_Março 2026.xlsx', 'Ligações_Abril 2026.xlsx', 'Ligações_Maio 2026.xlsx'];
+            const ligFiles = ['Ligações_Janeiro 2026.xlsx', 'Ligações_Fevereiro 2026.xlsx', 'Ligações_Março 2026.xlsx', 'Ligações_Abril 2026.xlsx', 'Ligações_Maio 2026.xlsx, 'Ligações_Junho 2026.xlsx'];
             for (const filename of ligFiles) {
                 try {
                     const response = await fetch(filename);
