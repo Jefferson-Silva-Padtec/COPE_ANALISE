@@ -1612,7 +1612,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 }
 
                 const esc = CIDADES_ES_ALVO.find(x => areaValue.includes(normalizeString(x)));
-                if (esc && agValue !== 'AGREGADO' && !equipeFimValue.includes("PLANTA INTERNA N2") && !causaValue.includes("TTK DUPLICADO") && !causaValue.includes("FALHA OPERADORA") && !causaValue.includes("ENDERECO NAO COBERTO") && !causaValue.includes("ALIVIO FISICO")) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[causaValue] = (esm[causaValue] || 0) + 1; volDataES.push(row); }
+                if (esc && agValue !== 'AGREGADO' && !equipeFimValue.includes("PLANTA INTERNA N2") && !causaValue.includes("TTK DUPLICADO") && !causaValue.includes("FALHA OPERADORA") && !causaValue.includes("ENDERECO NAO COBERTO") && !causaValue.includes("ALIVIO FISICO") && !tagValue.includes("DESAGREGADO")) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[causaValue] = (esm[causaValue] || 0) + 1; volDataES.push(row); }
 
                 const histTxt = String(row[keyHist] || "");
                 if (histTxt) {
@@ -1947,7 +1947,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const groups = {
                 "T1 - 06H15 ÁS 15H15": ["TAMIRIS", "BRUNO", "JULIANA", "JOSEYLSON"],
                 "T2 - 15H00 ÁS 23H43": ["ELVIS MIRANDA", "RANDU", "LUAN VIEIRA", "JEFFERSON"],
-                "T3 - 23H30 ÁS 06h30": ["CAIO", "EDMAR", "GABRIEL NOGUEIRA", "THULIO", "MICHELE"]
+                "T3 - 23H30 ÁS 06h30": ["CAIO", "EDMAR", "GABRIEL", "THULIO", "MICHELE"]
             };
             const groupCounts = { 
                 "T1 - 06H15 ÁS 15H15": { total: 0, rejected: 0, success: 0 }, 
