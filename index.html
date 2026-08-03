@@ -639,11 +639,11 @@
         const CIDADES_ES_ALVO = ["VIANA", "CACHOEIRO DE ITAPEMERIM", "GUARAPARI", "SAO MATEUS", "SANTA MARIA DE JETIBA", "ARACRUZ"];
         const MONTH_NAMES = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
         const DATE_STAMP_REGEX = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
-const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "BRUNO MELLO DA SILVA", "TAMIRIS AVELINA GONÇALVES", "RANDU MATOS MENEZES", "ELVIS MIRANDA", "CAIO HENRIQUE MOREIRA", "GABRIEL NOGUEIRA DE SOUZA", "NOC/JEFFERSON", "NOC/JOSEYLSON", "NOC/EDMAR"];        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
+const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "BRUNO MELLO DA SILVA", "TAMIRIS AVELINA GONÇALVES", "RANDU MATOS MENEZES", "ELVIS MIRANDA", "CAIO HENRIQUE MOREIRA", "GABRIEL NOGUEIRA DE SOUZA", "THULIO DE LIMA ARAUJO", "MICHELE DA CONCEIÇÃO ANDRADE", "NOC/JEFFERSON", "NOC/JOSEYLSON", "NOC/EDMAR"];        const TARGET_TEXT_TA = "Notificação de TA para Vivo realizada com sucesso.";
         const SHIFT_DEFINITIONS = {
             "T1": { time: "06H15 ÁS 15H15", members: ["TAMIRIS", "BRUNO", "JULIANA", "JOSEYLSON"] },
             "T2": { time: "15H00 ÁS 23H43", members: ["ELVIS", "RANDU", "LUAN", "JEFFERSON"] },
-            "T3": { time: "23H30 ÁS 06h30", members: ["CAIO", "EDMAR", "GABRIEL"] }
+            "T3": { time: "23H30 ÁS 06h30", members: ["CAIO", "EDMAR", "GABRIEL", "THULIO", "MICHELE"] }
         };
         const CIDADES_ALCIDES = [
             "Arapiraca", "Arraial D'Ajuda", "Barreiras", "Eunapolis", "Guanambi", "Ilheus", "Itabuna", "Jequie", "Lagarto", 
@@ -1947,7 +1947,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             const groups = {
                 "T1 - 06H15 ÁS 15H15": ["TAMIRIS", "BRUNO", "JULIANA", "JOSEYLSON"],
                 "T2 - 15H00 ÁS 23H43": ["ELVIS MIRANDA", "RANDU", "LUAN VIEIRA", "JEFFERSON"],
-                "T3 - 23H30 ÁS 06h30": ["CAIO", "EDMAR", "GABRIEL NOGUEIRA"]
+                "T3 - 23H30 ÁS 06h30": ["CAIO", "EDMAR", "GABRIEL NOGUEIRA", "THULIO", "MICHELE"]
             };
             const groupCounts = { 
                 "T1 - 06H15 ÁS 15H15": { total: 0, rejected: 0, success: 0 }, 
