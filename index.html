@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         :root {
             --padtec-orange: #F37021;
@@ -30,34 +30,142 @@
             --vivo-orange: #FF8C00;
         }
 
+        /* --- TEMA CLARO (Default / White & Clean) --- */
+        :root, [data-theme="claro"] {
+            --bg-body: #f3f4f6;
+            --bg-volumetria: #1a1a1a;
+            --volumetria-card-bg: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-secondary: #f8fafc;
+            --bg-card-hover: #ffffff;
+            --bg-header: #000000;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --border-subtle: #f3f4f6;
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+            --table-header-bg: #000000;
+            --table-header-text: #ffffff;
+            --table-td-border: #f3f4f6;
+            --table-row-hover: #fffaf0;
+            --modal-bg: #ffffff;
+            --modal-header-bg: #f8fafc;
+            --badge-bg: rgba(243, 112, 33, 0.12);
+            --badge-text: #1f2937;
+            --box-shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --theme-pill-bg: rgba(255, 255, 255, 0.9);
+            --theme-pill-border: rgba(0, 0, 0, 0.12);
+            --theme-pill-text: #64748b;
+        }
+
+        /* --- TEMA MÉDIO (Slate Navy / Dim / Low Eye Strain) --- */
+        [data-theme="medio"] {
+            --bg-body: #0f172a;
+            --bg-volumetria: #0b1120;
+            --volumetria-card-bg: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-secondary: #243044;
+            --bg-card-hover: #273549;
+            --bg-header: #0a0f1d;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --border-subtle: #273549;
+            --input-bg: #1e293b;
+            --input-border: #475569;
+            --table-header-bg: #0b1120;
+            --table-header-text: #f8fafc;
+            --table-td-border: #334155;
+            --table-row-hover: #25334a;
+            --modal-bg: #1e293b;
+            --modal-header-bg: #182234;
+            --badge-bg: rgba(243, 112, 33, 0.22);
+            --badge-text: #f8fafc;
+            --box-shadow-card: 0 15px 30px -5px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+            --theme-pill-bg: rgba(15, 23, 42, 0.85);
+            --theme-pill-border: rgba(255, 255, 255, 0.15);
+            --theme-pill-text: #94a3b8;
+        }
+
+        /* --- TEMA ESCURO (Dark / OLED Black / High Contrast) --- */
+        [data-theme="escuro"] {
+            --bg-body: #09090b;
+            --bg-volumetria: #050507;
+            --volumetria-card-bg: #141417;
+            --bg-card: #141417;
+            --bg-card-secondary: #1a1a20;
+            --bg-card-hover: #1c1c22;
+            --bg-header: #050507;
+            --text-primary: #ffffff;
+            --text-secondary: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --border-color: #27272a;
+            --border-subtle: #1f1f23;
+            --input-bg: #141417;
+            --input-border: #3f3f46;
+            --table-header-bg: #050507;
+            --table-header-text: #ffffff;
+            --table-td-border: #27272a;
+            --table-row-hover: #1e1e26;
+            --modal-bg: #141417;
+            --modal-header-bg: #0d0d10;
+            --badge-bg: rgba(243, 112, 33, 0.28);
+            --badge-text: #ffffff;
+            --box-shadow-card: 0 15px 30px -5px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.07);
+            --theme-pill-bg: rgba(9, 9, 11, 0.9);
+            --theme-pill-border: rgba(255, 255, 255, 0.18);
+            --theme-pill-text: #a1a1aa;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #111827;
-            transition: background-color 0.3s ease;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .volumetria-mode {
-            background-color: var(--padtec-black);
+            background-color: var(--bg-volumetria) !important;
             background-image: 
-                linear-gradient(135deg, #1a1a1a 25%, transparent 25%), 
-                linear-gradient(225deg, #1a1a1a 25%, transparent 25%), 
-                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
-                linear-gradient(315deg, #1a1a1a 25%, #262626 25%);
+                linear-gradient(135deg, rgba(26,26,26,0.5) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(26,26,26,0.5) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(26,26,26,0.5) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(26,26,26,0.5) 25%, rgba(38,38,38,0.5) 25%) !important;
             background-position: 10px 0, 10px 0, 0 0, 0 0;
             background-size: 20px 20px;
             background-attachment: fixed;
         }
 
+        [data-theme="medio"] .volumetria-mode {
+            background-color: #0b1120 !important;
+            background-image: 
+                linear-gradient(135deg, rgba(15,23,42,0.6) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(15,23,42,0.6) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(15,23,42,0.6) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(15,23,42,0.6) 25%, rgba(30,41,59,0.6) 25%) !important;
+        }
+
+        [data-theme="escuro"] .volumetria-mode {
+            background-color: #050507 !important;
+            background-image: 
+                linear-gradient(135deg, rgba(9,9,11,0.7) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(9,9,11,0.7) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(9,9,11,0.7) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(9,9,11,0.7) 25%, rgba(20,20,24,0.7) 25%) !important;
+        }
+
         .hover-lift-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid transparent;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            border: 1px solid var(--border-color) !important;
+            background-color: var(--bg-card);
         }
         .hover-lift-card:hover {
             transform: translateY(-8px);
-            border-color: var(--vivo-orange);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            background-color: #ffffff;
+            border-color: var(--vivo-orange) !important;
+            box-shadow: var(--box-shadow-card);
         }
 
         .btn-depth {
@@ -88,15 +196,36 @@
         .table-container {
             max-height: 550px;
             overflow: auto;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            background: white;
+            background: var(--bg-card);
         }
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { position: sticky; top: 0; background: #000; color: white; z-index: 10; padding: 12px 16px; text-align: left; font-size: 0.75rem; text-transform: uppercase; }
-        td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.8rem; }
+        th { 
+            position: sticky; 
+            top: 0; 
+            background: var(--table-header-bg); 
+            color: var(--table-header-text); 
+            z-index: 10; 
+            padding: 12px 16px; 
+            text-align: left; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+        }
+        td { 
+            padding: 12px 16px; 
+            border-bottom: 1px solid var(--table-td-border); 
+            font-size: 0.8rem; 
+            color: var(--text-primary);
+        }
         .modified-cell { background-color: #fef3c7; color: #92400e; font-weight: 600; }
-        .blank-row { background-color: #e5e7eb !important; height: 20px; }
+        [data-theme="medio"] .modified-cell,
+        [data-theme="escuro"] .modified-cell {
+            background-color: rgba(245, 158, 11, 0.25) !important;
+            color: #fbbf24 !important;
+        }
+
+        .blank-row { background-color: var(--border-subtle) !important; height: 20px; }
 
         .col-historico {
             max-width: 450px;
@@ -105,35 +234,45 @@
             word-break: break-word;
             line-height: 1.4;
             text-transform: uppercase;
-            color: #374151;
+            color: var(--text-secondary);
             font-weight: 600;
         }
 
         .letterhead-container {
-            background: #ffffff;
+            background: var(--volumetria-card-bg) !important;
             border-top: 8px solid var(--padtec-orange);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            color: #1a1a1a;
+            box-shadow: var(--box-shadow-card);
+            color: var(--text-primary) !important;
             max-width: 1280px;
             margin: 0 auto;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .chart-container { position: relative; height: 280px; width: 100%; }
         
         .kpi-card { 
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            border: 1px solid #f1f5f9; 
-            background: #ffffff; 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease; 
+            border: 1px solid var(--border-color) !important; 
+            background: var(--bg-card) !important; 
         }
         .kpi-card:hover { 
             transform: translateY(-8px); 
-            border-color: var(--padtec-orange); 
-            box-shadow: 0 15px 30px rgba(243, 112, 33, 0.1);
+            border-color: var(--padtec-orange) !important; 
+            box-shadow: 0 15px 30px rgba(243, 112, 33, 0.15);
         }
 
-        .number-badge { background-color: rgba(243, 112, 33, 0.12); padding: 0.4rem 1.2rem; border-radius: 1rem; display: inline-block; min-width: 70px; cursor: pointer; }
+        .number-badge { 
+            background-color: var(--badge-bg) !important; 
+            color: var(--badge-text) !important;
+            padding: 0.4rem 1.2rem; 
+            border-radius: 1rem; 
+            display: inline-block; 
+            min-width: 70px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+        }
         
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: var(--border-subtle); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--vivo-orange); border-radius: 10px; }
 
         .loading-spinner {
@@ -192,7 +331,7 @@
             font-weight: 900;
             color: #991b1b;
             padding: 6px 12px;
-            background: #ffffff;
+            background: var(--bg-card);
             border: 1px solid #fecaca;
             border-radius: 6px;
             display: block;
@@ -200,8 +339,8 @@
         }
 
         .analista-item { cursor: pointer; user-select: none; }
-        .analista-item:hover { background-color: #fffaf0; }
-        .detalhes-badge { font-size: 0.6rem; background-color: #f3f4f6; color: #9ca3af; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+        .analista-item:hover { background-color: var(--table-row-hover); }
+        .detalhes-badge { font-size: 0.6rem; background-color: var(--border-subtle); color: var(--text-muted); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
         .expand-toggle { cursor: pointer; transition: all 0.3s ease; padding: 4px 8px; border-radius: 6px; }
 
         .btn-view-toggle {
@@ -220,8 +359,9 @@
             color: white;
         }
         .btn-view-toggle.active {
-            background-color: #ef4444;
+            background-color: #8b5cf6; /* Roxo */
             color: white;
+            border-color: #7c3aed;
         }
 
         .pdf-export-mode { padding: 20px !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
@@ -229,7 +369,6 @@
         
         /* Ajustes de Gráficos para PDF */
         .pdf-export-mode .chart-container { height: 200px !important; width: 100% !important; page-break-inside: avoid; }
-        /* Altura reduzida em ~15% (260px -> 220px) e ajustes de padding/margin para evitar overflow */
         .pdf-export-mode .pdf-chart-height { height: 220px !important; page-break-inside: avoid; padding: 12px !important; overflow: hidden; }
         .pdf-export-mode .pdf-chart-height .mb-8 { margin-bottom: 8px !important; }
         .pdf-export-mode .pdf-chart-height-small { height: 140px !important; page-break-inside: avoid; }
@@ -247,9 +386,512 @@
             font-weight: bold;
             display: inline-block;
         }
+
+        /* --- THEME OVERRIDES & COMPONENT STYLING --- */
+        [data-theme="medio"] .bg-white,
+        [data-theme="escuro"] .bg-white {
+            background-color: var(--bg-card) !important;
+            color: var(--text-primary) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        [data-theme="medio"] .text-slate-800,
+        [data-theme="medio"] .text-slate-900,
+        [data-theme="medio"] .text-gray-800,
+        [data-theme="escuro"] .text-slate-800,
+        [data-theme="escuro"] .text-slate-900,
+        [data-theme="escuro"] .text-gray-800 {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="medio"] .text-slate-700,
+        [data-theme="medio"] .text-slate-600,
+        [data-theme="escuro"] .text-slate-700,
+        [data-theme="escuro"] .text-slate-600 {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="medio"] .text-slate-500,
+        [data-theme="medio"] .text-slate-400,
+        [data-theme="medio"] .text-gray-500,
+        [data-theme="escuro"] .text-slate-500,
+        [data-theme="escuro"] .text-slate-400,
+        [data-theme="escuro"] .text-gray-500 {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="medio"] .border-slate-100,
+        [data-theme="medio"] .border-slate-200,
+        [data-theme="medio"] .border-gray-100,
+        [data-theme="escuro"] .border-slate-100,
+        [data-theme="escuro"] .border-slate-200,
+        [data-theme="escuro"] .border-gray-100 {
+            border-color: var(--border-color) !important;
+        }
+
+        /* Caixa Volumetria COPE (Roxo) */
+        [data-theme="medio"] .bg-purple-50,
+        [data-theme="escuro"] .bg-purple-50 {
+            background-color: rgba(147, 51, 234, 0.12) !important;
+            border-color: rgba(168, 85, 247, 0.3) !important;
+        }
+        [data-theme="medio"] .border-purple-200,
+        [data-theme="escuro"] .border-purple-200 {
+            border-color: rgba(168, 85, 247, 0.3) !important;
+        }
+        [data-theme="medio"] .border-purple-100,
+        [data-theme="escuro"] .border-purple-100 {
+            border-color: rgba(168, 85, 247, 0.2) !important;
+        }
+        [data-theme="medio"] .text-purple-900,
+        [data-theme="escuro"] .text-purple-900 {
+            color: #d8b4fe !important;
+        }
+
+        /* Caixa Pendências (Vermelho) */
+        [data-theme="medio"] .bg-red-50,
+        [data-theme="escuro"] .bg-red-50 {
+            background-color: rgba(239, 68, 68, 0.12) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+        }
+        [data-theme="medio"] .border-red-200,
+        [data-theme="escuro"] .border-red-200 {
+            border-color: rgba(239, 68, 68, 0.3) !important;
+        }
+        [data-theme="medio"] .border-red-100,
+        [data-theme="escuro"] .border-red-100 {
+            border-color: rgba(239, 68, 68, 0.2) !important;
+        }
+        [data-theme="medio"] .text-red-900,
+        [data-theme="medio"] .text-red-800,
+        [data-theme="escuro"] .text-red-900,
+        [data-theme="escuro"] .text-red-800 {
+            color: #fca5a5 !important;
+        }
+        [data-theme="medio"] .bg-red-100,
+        [data-theme="escuro"] .bg-red-100 {
+            background-color: rgba(239, 68, 68, 0.2) !important;
+            border-color: rgba(239, 68, 68, 0.4) !important;
+        }
+
+        /* Caixa Ligações COPE (Azul) */
+        [data-theme="medio"] .bg-blue-50,
+        [data-theme="escuro"] .bg-blue-50 {
+            background-color: rgba(59, 130, 246, 0.12) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+        [data-theme="medio"] .border-blue-200,
+        [data-theme="escuro"] .border-blue-200 {
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+        [data-theme="medio"] .border-blue-100,
+        [data-theme="escuro"] .border-blue-100 {
+            border-color: rgba(59, 130, 246, 0.2) !important;
+        }
+        [data-theme="medio"] .text-blue-900,
+        [data-theme="medio"] .text-blue-800,
+        [data-theme="escuro"] .text-blue-900,
+        [data-theme="escuro"] .text-blue-800 {
+            color: #93c5fd !important;
+        }
+
+        /* Caixa Sagre (Verde) */
+        [data-theme="medio"] .bg-green-50,
+        [data-theme="escuro"] .bg-green-50 {
+            background-color: rgba(34, 197, 94, 0.12) !important;
+            border-color: rgba(34, 197, 94, 0.3) !important;
+        }
+        [data-theme="medio"] .text-green-800,
+        [data-theme="medio"] .text-green-900,
+        [data-theme="escuro"] .text-green-800,
+        [data-theme="escuro"] .text-green-900 {
+            color: #86efac !important;
+        }
+
+        /* Caixa Salas de Crise (Laranja) */
+        [data-theme="medio"] .bg-orange-50,
+        [data-theme="escuro"] .bg-orange-50 {
+            background-color: rgba(243, 112, 33, 0.15) !important;
+            border-color: rgba(243, 112, 33, 0.35) !important;
+        }
+        [data-theme="medio"] .text-orange-700,
+        [data-theme="medio"] .text-orange-900,
+        [data-theme="medio"] .text-orange-950,
+        [data-theme="escuro"] .text-orange-700,
+        [data-theme="escuro"] .text-orange-900,
+        [data-theme="escuro"] .text-orange-950 {
+            color: #fdba74 !important;
+        }
+        [data-theme="medio"] .text-emerald-800,
+        [data-theme="medio"] .text-emerald-900,
+        [data-theme="medio"] .text-emerald-950,
+        [data-theme="escuro"] .text-emerald-800,
+        [data-theme="escuro"] .text-emerald-900,
+        [data-theme="escuro"] .text-emerald-950 {
+            color: #86efac !important;
+        }
+        [data-theme="medio"] .border-emerald-100,
+        [data-theme="medio"] .border-emerald-200,
+        [data-theme="escuro"] .border-emerald-100,
+        [data-theme="escuro"] .border-emerald-200 {
+            border-color: rgba(16, 185, 129, 0.25) !important;
+        }
+        [data-theme="medio"] .border-orange-100,
+        [data-theme="medio"] .border-orange-200,
+        [data-theme="escuro"] .border-orange-100,
+        [data-theme="escuro"] .border-orange-200 {
+            border-color: rgba(243, 112, 33, 0.25) !important;
+        }
+
+        /* --- DISTRIBUIÇÃO DE TAGS: FUNDOS CINZAS EM TEMA MÉDIO E ESCURO --- */
+        [data-theme="medio"] #card-distribuicao-tags,
+        [data-theme="escuro"] #card-distribuicao-tags {
+            background-color: var(--bg-card) !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags .bg-gradient-to-br,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-gradient-to-br {
+            background-image: none !important;
+            background-color: #1e293b !important; /* Cinza slate escuro */
+            border-color: rgba(148, 163, 184, 0.2) !important;
+        }
+
+        [data-theme="escuro"] #card-distribuicao-tags .bg-gradient-to-br {
+            background-color: #18181b !important; /* Cinza zinc escuro */
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Caixas internas menores (pods / sub-cards) */
+        [data-theme="medio"] #card-distribuicao-tags .bg-white,
+        [data-theme="medio"] #card-distribuicao-tags .bg-white\/80,
+        [data-theme="medio"] #card-distribuicao-tags .bg-white\/90,
+        [data-theme="medio"] #card-distribuicao-tags .bg-white\/95,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/80,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/90,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/95 {
+            background-color: #0f172a !important; /* Cinza grafite interno */
+            border-color: rgba(148, 163, 184, 0.18) !important;
+        }
+
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/80,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/90,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-white\/95 {
+            background-color: #09090b !important; /* Cinza profundo interno */
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Mini-pods de AGG / B2B / PON e Acompanhar */
+        [data-theme="medio"] #card-distribuicao-tags .bg-orange-50\/90,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-orange-50\/90,
+        [data-theme="medio"] #card-distribuicao-tags .bg-orange-100\/80,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-orange-100\/80 {
+            background-color: #1e293b !important;
+            border-color: rgba(243, 112, 33, 0.25) !important;
+        }
+
+        [data-theme="escuro"] #card-distribuicao-tags .bg-orange-50\/90,
+        [data-theme="escuro"] #card-distribuicao-tags .bg-orange-100\/80 {
+            background-color: #141416 !important;
+            border-color: rgba(243, 112, 33, 0.25) !important;
+        }
+
+        /* Itens de Cidades Sagre no tema médio e escuro */
+        [data-theme="medio"] #sagre-cities-list > div,
+        [data-theme="escuro"] #sagre-cities-list > div {
+            background-color: #0f172a !important;
+            border-color: rgba(16, 185, 129, 0.25) !important;
+        }
+
+        [data-theme="escuro"] #sagre-cities-list > div {
+            background-color: #09090b !important;
+            border-color: rgba(16, 185, 129, 0.2) !important;
+        }
+
+        [data-theme="medio"] #sagre-cities-list > div:hover,
+        [data-theme="escuro"] #sagre-cities-list > div:hover {
+            background-color: #1e293b !important;
+            border-color: rgba(16, 185, 129, 0.4) !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags #tag-adm-val,
+        [data-theme="medio"] #card-distribuicao-tags #tag-desag-val,
+        [data-theme="escuro"] #card-distribuicao-tags #tag-adm-val,
+        [data-theme="escuro"] #card-distribuicao-tags #tag-desag-val {
+            color: #f8fafc !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags .text-orange-950,
+        [data-theme="escuro"] #card-distribuicao-tags .text-orange-950 {
+            color: #fed7aa !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags .text-orange-700,
+        [data-theme="escuro"] #card-distribuicao-tags .text-orange-700 {
+            color: #fdba74 !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags .text-orange-800,
+        [data-theme="escuro"] #card-distribuicao-tags .text-orange-800 {
+            color: #fdba74 !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags .text-orange-500,
+        [data-theme="escuro"] #card-distribuicao-tags .text-orange-500 {
+            color: #fb923c !important;
+        }
+
+        [data-theme="medio"] #card-distribuicao-tags #sc-agg-val,
+        [data-theme="medio"] #card-distribuicao-tags #sc-b2b-val,
+        [data-theme="medio"] #card-distribuicao-tags #sc-pon-val,
+        [data-theme="escuro"] #card-distribuicao-tags #sc-agg-val,
+        [data-theme="escuro"] #card-distribuicao-tags #sc-b2b-val,
+        [data-theme="escuro"] #card-distribuicao-tags #sc-pon-val {
+            color: #ffffff !important;
+        }
+
+        /* VOLUME DE PENDÊNCIAS: Valores numéricos de causas (chuva, sem acesso, etc.) em Azul Escuro */
+        [data-theme="medio"] #analistas-list-container .pendencia-badge-val,
+        [data-theme="escuro"] #analistas-list-container .pendencia-badge-val,
+        [data-theme="medio"] #main-pendencias-list .pendencia-badge-val,
+        [data-theme="escuro"] #main-pendencias-list .pendencia-badge-val {
+            background-color: #1e3a8a !important; /* Azul Escuro / Blue-900 */
+            color: #ffffff !important;
+            border: 1px solid rgba(59, 130, 246, 0.4) !important;
+        }
+
+        [data-theme="medio"] #analistas-list-container .pendencia-sub-val,
+        [data-theme="escuro"] #analistas-list-container .pendencia-sub-val,
+        [data-theme="medio"] #main-pendencias-list .pendencia-sub-val,
+        [data-theme="escuro"] #main-pendencias-list .pendencia-sub-val {
+            background-color: #172554 !important; /* Azul Escuro Profundo */
+            color: #93c5fd !important;
+            border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        }
+
+        /* Superfícies secundárias */
+        [data-theme="medio"] .bg-slate-50,
+        [data-theme="escuro"] .bg-slate-50 {
+            background-color: var(--bg-card-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        [data-theme="medio"] .bg-slate-50\/20,
+        [data-theme="escuro"] .bg-slate-50\/20 {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        /* Modais */
+        [data-theme="medio"] #modalBox,
+        [data-theme="medio"] #confirmModalBox,
+        [data-theme="escuro"] #modalBox,
+        [data-theme="escuro"] #confirmModalBox {
+            background-color: var(--modal-bg) !important;
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="medio"] #modalBox .bg-slate-50,
+        [data-theme="medio"] #confirmModalBox .bg-slate-50,
+        [data-theme="escuro"] #modalBox .bg-slate-50,
+        [data-theme="escuro"] #confirmModalBox .bg-slate-50 {
+            background-color: var(--modal-header-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        [data-theme="medio"] #modalContent,
+        [data-theme="escuro"] #modalContent {
+            background-color: var(--modal-bg) !important;
+            color: var(--text-primary) !important;
+        }
+
+        /* Theme Dropdown Styles */
+        .theme-dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            min-width: 175px;
+            border-radius: 14px;
+            padding: 6px;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+            transform-origin: top right;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="claro"] .theme-dropdown-menu {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: all 0.15s ease;
+        }
+
+        [data-theme="claro"] .theme-dropdown-item {
+            color: #475569;
+        }
+
+        .theme-dropdown-item:hover {
+            background: rgba(243, 112, 33, 0.15);
+            color: var(--padtec-orange) !important;
+        }
+
+        .theme-dropdown-item.active {
+            background: var(--padtec-orange) !important;
+            color: #ffffff !important;
+        }
+
+        /* Top 5 Regiões (Bolinhas Enfileiradas) */
+        .map-bubble-core {
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(243, 112, 33, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .map-bubble-pulse {
+            position: absolute;
+            border-radius: 9999px;
+            animation: bubble-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bubble-ping {
+            75%, 100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        [data-theme="medio"] #mapBubblesContainer > div,
+        [data-theme="escuro"] #mapBubblesContainer > div {
+            background-color: var(--bg-card-secondary) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-theme="medio"] #mapBubblesContainer > div:hover,
+        [data-theme="escuro"] #mapBubblesContainer > div:hover {
+            background-color: rgba(243, 112, 33, 0.12) !important;
+            border-color: rgba(243, 112, 33, 0.45) !important;
+        }
+
+        [data-theme="medio"] #mapBubblesContainer span.bg-white,
+        [data-theme="escuro"] #mapBubblesContainer span.bg-white {
+            background-color: #0f172a !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #94a3b8 !important;
+        }
+
+        [data-theme="escuro"] #mapBubblesContainer span.bg-white {
+            background-color: #09090b !important;
+        }
+
+        [data-theme="medio"] #mapBubblesContainer .text-slate-800,
+        [data-theme="escuro"] #mapBubblesContainer .text-slate-800 {
+            color: #f1f5f9 !important;
+        }
+
+        [data-theme="claro"] .map-bubble-label {
+            background: rgba(0, 0, 0, 0.88);
+            color: #ffffff;
+        }
+
+        /* Barra de Progresso de Carregamento Rápido */
+        #fastLoadingBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #F37021, #FF8C00, #fbbf24);
+            z-index: 99999;
+            transition: width 0.25s ease, opacity 0.4s ease;
+            box-shadow: 0 0 10px rgba(243, 112, 33, 0.8);
+        }
+
+        /* Contraste Aprimorado de Texto para Todos os Temas */
+        [data-theme="claro"] .text-slate-900,
+        [data-theme="claro"] .text-slate-800,
+        [data-theme="claro"] .text-gray-800 {
+            color: #0f172a !important;
+        }
+        [data-theme="claro"] .text-slate-700,
+        [data-theme="claro"] .text-slate-600 {
+            color: #334155 !important;
+        }
+        [data-theme="claro"] .text-slate-500,
+        [data-theme="claro"] .text-slate-400,
+        [data-theme="claro"] .text-gray-500 {
+            color: #64748b !important;
+        }
+
+        [data-theme="medio"] .text-slate-900,
+        [data-theme="medio"] .text-slate-800,
+        [data-theme="medio"] .text-gray-800 {
+            color: #f8fafc !important;
+        }
+        [data-theme="medio"] .text-slate-700,
+        [data-theme="medio"] .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        [data-theme="medio"] .text-slate-500,
+        [data-theme="medio"] .text-slate-400,
+        [data-theme="medio"] .text-gray-500,
+        [data-theme="medio"] .text-gray-400 {
+            color: #94a3b8 !important;
+        }
+        [data-theme="medio"] .text-slate-300 {
+            color: #64748b !important;
+        }
+
+        [data-theme="escuro"] .text-slate-900,
+        [data-theme="escuro"] .text-slate-800,
+        [data-theme="escuro"] .text-gray-800 {
+            color: #ffffff !important;
+        }
+        [data-theme="escuro"] .text-slate-700,
+        [data-theme="escuro"] .text-slate-600 {
+            color: #e4e4e7 !important;
+        }
+        [data-theme="escuro"] .text-slate-500,
+        [data-theme="escuro"] .text-slate-400,
+        [data-theme="escuro"] .text-gray-500,
+        [data-theme="escuro"] .text-gray-400 {
+            color: #a1a1aa !important;
+        }
+        [data-theme="escuro"] .text-slate-300 {
+            color: #71717a !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" id="main-body">
+
+    <!-- Barra de Progresso de Carregamento Rápido -->
+    <div id="fastLoadingBar"></div>
 
     <!-- Modal Detalhes de Pendências e Tags (Volumetria) -->
     <div id="detailsModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 p-4 transition-opacity duration-300">
@@ -301,7 +943,40 @@
     </div>
 
     <!-- Botões Topo Direito -->
-    <div class="fixed top-4 right-4 z-50 no-print flex gap-2">
+    <div class="fixed top-4 right-4 z-50 no-print flex items-center gap-2">
+        <!-- Botão Único de Tema com Menu Dropdown -->
+        <div class="relative" id="theme-dropdown-container">
+            <button id="btnTema" onclick="toggleThemeDropdown(event)" class="bg-gray-800 text-white px-3.5 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-700 transition-all flex items-center gap-2 border border-slate-700 hover:border-orange-500" title="Alterar Tema">
+                <i id="theme-active-icon" class="fas fa-sun text-yellow-400"></i>
+                <span id="theme-btn-label">Tema</span>
+                <i class="fas fa-chevron-down text-[9px] ml-0.5 text-slate-400 transition-transform duration-200" id="theme-chevron"></i>
+            </button>
+            
+            <!-- Menu Dropdown de Temas -->
+            <div id="themeDropdownMenu" class="hidden theme-dropdown-menu">
+                <div class="px-3 py-1 text-[9px] font-black uppercase text-slate-400 border-b border-slate-700/60 pb-1.5 mb-1 tracking-wider">
+                    Modo de Visualização
+                </div>
+                <button onclick="selectThemeOption('claro')" class="theme-dropdown-item" id="theme-opt-claro">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fas fa-sun text-yellow-400 w-4 text-center text-sm"></i> Claro
+                    </span>
+                    <i class="fas fa-check text-orange-500 text-xs hidden" id="theme-check-claro"></i>
+                </button>
+                <button onclick="selectThemeOption('medio')" class="theme-dropdown-item" id="theme-opt-medio">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fas fa-adjust text-blue-400 w-4 text-center text-sm"></i> Médio
+                    </span>
+                    <i class="fas fa-check text-orange-500 text-xs hidden" id="theme-check-medio"></i>
+                </button>
+                <button onclick="selectThemeOption('escuro')" class="theme-dropdown-item" id="theme-opt-escuro">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fas fa-moon text-indigo-300 w-4 text-center text-sm"></i> Escuro
+                    </span>
+                    <i class="fas fa-check text-orange-500 text-xs hidden" id="theme-check-escuro"></i>
+                </button>
+            </div>
+        </div>
         <button id="share-btn" onclick="copyShareLink()" class="bg-gray-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-600 transition-colors hidden" title="Compartilhar Link Externo"><i class="fas fa-share-alt"></i></button>
         <div id="admin-btn-container">
             <button id="btnAdmin" ondblclick="toggleAdminMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-lg hover:bg-gray-700 transition-colors">Admin</button>
@@ -411,8 +1086,8 @@
                 <div class="flex items-center gap-5">
                     <div class="w-2.5 h-14 bg-orange-50 rounded-full"></div>
                     <div>
-                        <h1 class="text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRODUÇÃO COPE</h1>
-                        <p class="text-slate-400 font-bold mt-2 tracking-widest text-xs uppercase font-black">Relatório de Produtividade | PADTEC</p>
+                        <h1 class="text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PADTEC</h1>
+                        <p class="text-slate-400 font-bold mt-2 tracking-widest text-xs uppercase font-black">Relatório de Produtividade | COPE</p>
                     </div>
                 </div>
                 <div class="flex flex-col items-end gap-3">
@@ -427,7 +1102,27 @@
                         <span class="text-slate-500 text-[10px] font-black">ATÉ</span>
                         <input type="date" id="dateEnd" onchange="filterByDateRange()" class="bg-transparent text-orange-500 text-[10px] font-black uppercase focus:outline-none cursor-pointer border-b border-orange-500/50 pb-0.5 hover:border-orange-500 transition-colors">
                     </div>
-                    <div id="monthFilterContainer" class="flex gap-1 mt-1 justify-end flex-wrap max-w-[300px]"></div>
+                    <div id="monthFilterContainer" class="flex gap-2 mt-1 justify-end overflow-x-auto custom-scrollbar pb-1"></div>
+                </div>
+            </div>
+
+            <!-- Nova Caixa: Volumetria COPE -->
+            <div class="w-full mb-8">
+                <div class="p-5 md:p-6 border-2 border-purple-200 rounded-2xl bg-purple-50 shadow-sm hover-lift-card h-[432px] flex flex-col pdf-chart-height">
+                    <div class="flex justify-between items-center mb-3 border-b border-purple-100 pb-2.5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-5 bg-purple-600"></div>
+                            <h3 class="font-black text-purple-900 uppercase text-xs tracking-[0.2em]">Volumetria COPE</h3>
+                        </div>
+                        <button id="btnToggleVolCopeLabels" onclick="toggleVolCopeLabels()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-purple-100/80 text-purple-800 hover:bg-purple-200 border border-purple-200 no-print cursor-pointer shadow-sm" title="Ocultar/Exibir totais nas bolinhas">
+                            <i id="iconToggleVolCopeLabels" class="fas fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="flex-grow flex flex-col overflow-hidden">
+                        <div class="flex-grow min-h-0 relative">
+                            <canvas id="volumetriaCopeChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -462,7 +1157,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- COLUNA ESQUERDA: VOLUME E PROGRESSÃO -->
                 <div class="space-y-8 flex flex-col">
-                    <div class="p-8 border-2 border-red-200 rounded-2xl bg-slate-50 shadow-sm hover-lift-card flex flex-col h-[500px]">
+                    <div class="p-8 border-2 border-red-200 rounded-2xl bg-slate-50 shadow-sm hover-lift-card flex flex-col h-[520px]">
                         <div class="flex justify-between items-start mb-6 border-b border-red-100 pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-1.5 h-5 bg-red-600"></div>
@@ -485,61 +1180,113 @@
                 </div>
 
                 <!-- COLUNA DIREITA: TAGS -->
-                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card flex flex-col h-[500px]">
-                    <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4 font-black"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Distribuição de Tags</h3></div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-[400px]">
-                        <div class="bg-slate-50 border-2 border-slate-900 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-slate-100 transition-all font-black">
-                            <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center font-black">Operacionais</h4>
-                            <div class="flex justify-around items-center">
-                                <div class="text-center">
-                                    <div class="number-badge mb-2" ondblclick="openTagDetailsModal('ADM COPE')"><p id="tag-adm-val" class="text-[26px] font-black text-slate-800">0</p></div>
-                                    <p class="text-[10px] font-black text-slate-400 uppercase">ADM COPE</p>
+                <div id="card-distribuicao-tags" class="p-6 md:p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card flex flex-col h-[520px] justify-between">
+                    <!-- Cabeçalho do Card -->
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-black">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-5 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-sm"></div>
+                            <div>
+                                <h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em] leading-tight">Distribuição de Tags</h3>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Painel Analítico de Classificações</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 px-2.5 py-1 rounded-full text-slate-500 text-[9px] font-black uppercase tracking-wider no-print">
+                            <i class="fas fa-tags text-orange-500 text-[10px]"></i>
+                            <span>Tags Ativas</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Cidades Sagre -->
+                    <div class="no-print bg-gradient-to-br from-emerald-50/60 via-slate-50/40 to-teal-50/30 border border-emerald-200/80 hover:border-emerald-300 rounded-xl p-3 shadow-xs transition-all flex flex-col">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="flex h-2 w-2 relative">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <h4 class="font-black text-emerald-900 uppercase text-[10.5px] tracking-[0.15em]">Cidades Sagre</h4>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-white/95 border border-emerald-200 px-2.5 py-0.5 rounded-full shadow-xs">
+                                <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider">Total:</span>
+                                <span id="tag-sagre-val" class="text-xs font-black text-emerald-800 leading-none">0</span>
+                            </div>
+                        </div>
+                        <div id="sagre-cities-list" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 h-[100px] overflow-y-auto custom-scrollbar p-0.5">
+                            <!-- Cidades Sagre serão injetadas aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Grid: Operacionais & Salas de Crise -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 h-[210px]">
+                        <!-- Card Operacionais -->
+                        <div class="bg-gradient-to-br from-slate-50 via-slate-50/60 to-blue-50/20 border border-slate-200/90 hover:border-slate-300 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all font-black">
+                            <div class="flex items-center justify-between border-b border-slate-200/70 pb-1.5 mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-1.5 h-3.5 bg-slate-800 rounded-full"></div>
+                                    <h4 class="text-[10px] font-black text-slate-800 uppercase tracking-widest">Operacionais</h4>
                                 </div>
-                                <div class="text-center">
-                                    <div class="number-badge mb-2" ondblclick="openTagDetailsModal('DESAGREGADO')"><p id="tag-desag-val" class="text-[26px] font-black text-slate-800">0</p></div>
-                                    <p class="text-[10px] font-black text-slate-400 uppercase">DESAGREGADO</p>
+                                <span class="text-[8px] font-black text-slate-400 uppercase tracking-wider bg-white/80 border border-slate-200/60 px-1.5 py-0.5 rounded">Status</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 flex-1 items-stretch">
+                                <div class="bg-white border border-slate-200/80 hover:border-blue-400 rounded-lg p-3 flex flex-col justify-center items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
+                                     ondblclick="openTagDetailsModal('ADM COPE')"
+                                     title="Clique 2x para abrir detalhes">
+                                    <span class="text-[9.5px] font-black text-slate-400 group-hover:text-blue-600 uppercase tracking-wider text-center transition-colors">ADM COPE</span>
+                                    <p id="tag-adm-val" class="text-[32px] font-black text-slate-800 group-hover:text-blue-600 transition-colors leading-none my-2">0</p>
+                                </div>
+                                <div class="bg-white border border-slate-200/80 hover:border-blue-400 rounded-lg p-3 flex flex-col justify-center items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
+                                     ondblclick="openTagDetailsModal('DESAGREGADO')"
+                                     title="Clique 2x para abrir detalhes">
+                                    <span class="text-[9.5px] font-black text-slate-400 group-hover:text-blue-600 uppercase tracking-wider text-center transition-colors">DESAGREGADO</span>
+                                    <p id="tag-desag-val" class="text-[32px] font-black text-slate-800 group-hover:text-blue-600 transition-colors leading-none my-2">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-orange-50 border-2 border-orange-500 rounded-xl p-4 flex flex-col justify-center gap-4 shadow-md overflow-hidden hover:bg-orange-100 transition-all font-black">
-                            <h4 class="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] text-center font-black">Salas de Crise</h4>
-                            <div class="flex justify-around items-start">
-                                <div class="text-center">
-                                    <div class="number-badge mb-2" ondblclick="openTagDetailsModal('SALAS COPE')"><p id="tag-sala-cope-val" class="text-[26px] font-black text-orange-700">0</p></div>
-                                    <p class="text-[10px] font-black text-orange-400 uppercase">Salas COPE</p>
-                                    <div class="mt-1 text-[8px] font-black text-orange-800 flex flex-col">
-                                        <span>AGG: <span id="sc-agg-val">0</span></span>
-                                        <span>B2B: <span id="sc-b2b-val">0</span></span>
-                                        <span>PON LOSS: <span id="sc-pon-val">0</span></span>
+
+                        <!-- Card Salas de Crise -->
+                        <div class="bg-gradient-to-br from-orange-50/70 via-orange-50/30 to-amber-50/40 border border-orange-200/90 hover:border-orange-300 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all font-black">
+                            <div class="flex items-center justify-between border-b border-orange-200/70 pb-1.5 mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-1.5 h-3.5 bg-gradient-to-b from-orange-500 to-amber-600 rounded-full"></div>
+                                    <h4 class="text-[10px] font-black text-orange-950 uppercase tracking-widest">Salas de Crise</h4>
+                                </div>
+                                <span class="text-[8px] font-black text-orange-600 uppercase tracking-wider bg-orange-100/80 border border-orange-200/60 px-1.5 py-0.5 rounded">Críticos</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 flex-1 items-stretch">
+                                <!-- Pod Salas COPE -->
+                                <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-2.5 flex flex-col justify-between items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none h-full"
+                                     ondblclick="openTagDetailsModal('SALAS COPE')"
+                                     title="Clique 2x para abrir detalhes">
+                                    <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas COPE</span>
+                                    <div class="my-auto pt-2 pb-1 flex items-center justify-center">
+                                        <p id="tag-sala-cope-val" class="text-[32px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none">0</p>
+                                    </div>
+                                    <!-- Contadores AGG, B2B e PON LOSS abaixo do valor principal com valores pequenos acima dos rótulos -->
+                                    <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1 px-0.5 flex items-center justify-around text-center gap-0.5 mt-auto">
+                                        <div class="flex flex-col items-center flex-1" title="AGG">
+                                            <span id="sc-agg-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                            <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">AGG</span>
+                                        </div>
+                                        <span class="text-orange-200 font-light text-[10px]">|</span>
+                                        <div class="flex flex-col items-center flex-1" title="B2B">
+                                            <span id="sc-b2b-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                            <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">B2B</span>
+                                        </div>
+                                        <span class="text-orange-200 font-light text-[10px]">|</span>
+                                        <div class="flex flex-col items-center flex-1" title="PON">
+                                            <span id="sc-pon-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                            <span class="text-[7px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">PON</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <div class="number-badge mb-2" ondblclick="openTagDetailsModal('SALAS NOC')"><p id="tag-sala-noc-val" class="text-[26px] font-black text-orange-700">0</p></div>
-                                    <p class="text-[10px] font-black text-orange-400 uppercase">Salas NOC</p>
+                                <!-- Pod Salas NOC -->
+                                <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-3 flex flex-col justify-center items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
+                                     ondblclick="openTagDetailsModal('SALAS NOC')"
+                                     title="Clique 2x para abrir detalhes">
+                                    <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas NOC</span>
+                                    <p id="tag-sala-noc-val" class="text-[32px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none my-2">0</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progressão de Pendências (Full Width) -->
-            <div class="w-full mb-8">
-                <div class="p-8 border-2 border-red-200 rounded-2xl bg-red-50 shadow-sm hover-lift-card h-[400px] flex flex-col pdf-chart-height">
-                    <div class="flex justify-between items-center mb-8 border-b border-red-100 pb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-1.5 h-5 bg-red-600"></div>
-                            <h3 class="font-black text-red-900 uppercase text-xs tracking-[0.2em]">Progressão de Pendências</h3>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <input type="date" id="pendStart" onchange="renderPendenciasChart()" class="bg-white border border-red-200 text-red-900 text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-red-500 uppercase">
-                            <span class="text-red-300 text-[10px] font-black">ATÉ</span>
-                            <input type="date" id="pendEnd" onchange="renderPendenciasChart()" class="bg-white border border-red-200 text-red-900 text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-red-500 uppercase">
-                        </div>
-                    </div>
-                    <div class="flex-grow flex flex-col overflow-hidden">
-                        <div class="flex-grow min-h-0">
-                            <canvas id="pendenciasProgressChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -605,7 +1352,48 @@
                     <div class="flex items-center gap-3 mb-8 border-b border-slate-50 pb-4 font-black"><div class="w-1.5 h-5 bg-orange-500"></div><h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">Principais Causas Gerais</h3></div>
                     <div id="causas-list-container" class="space-y-4 h-[300px] overflow-y-auto pr-3 custom-scrollbar"><p class="text-center text-slate-300 text-xs italic py-24 uppercase font-black">Aguardando...</p></div>
                 </div>
-                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card"><h3 class="font-black text-slate-800 mb-8 text-center uppercase text-xs tracking-[0.2em] font-black">Top 5 Regiões</h3><div class="chart-container"><canvas id="regioesChart"></canvas></div></div>
+                <!-- Card Top 5 Regiões com Bolinhas Enfileiradas -->
+                <div class="p-8 border border-slate-100 rounded-2xl bg-white shadow-sm hover-lift-card flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-50 pb-3 font-black">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-5 bg-orange-500 rounded-full shadow-sm"></div>
+                            <div>
+                                <h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em] leading-tight">Top 5 Regiões</h3>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Demanda e Concentração Regional</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-black uppercase px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 tracking-wider no-print">Top 5</span>
+                    </div>
+                    
+                    <!-- Container das Bolinhas Enfileiradas -->
+                    <div id="mapBubblesContainer" class="flex flex-wrap md:flex-nowrap items-stretch justify-between gap-3 h-[280px] p-1">
+                        <div class="w-full flex items-center justify-center h-full">
+                            <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">Aguardando dados...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progressão de Pendências (Full Width) -->
+            <div class="w-full mb-8">
+                <div class="p-8 border-2 border-red-200 rounded-2xl bg-red-50 shadow-sm hover-lift-card h-[400px] flex flex-col pdf-chart-height">
+                    <div class="flex justify-between items-center mb-8 border-b border-red-100 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-5 bg-red-600"></div>
+                            <h3 class="font-black text-red-900 uppercase text-xs tracking-[0.2em]">Progressão de Pendências</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="pendStart" onchange="renderPendenciasChart()" class="bg-white border border-red-200 text-red-900 text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-red-500 uppercase">
+                            <span class="text-red-300 text-[10px] font-black">ATÉ</span>
+                            <input type="date" id="pendEnd" onchange="renderPendenciasChart()" class="bg-white border border-red-200 text-red-900 text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-red-500 uppercase">
+                        </div>
+                    </div>
+                    <div class="flex-grow flex flex-col overflow-hidden">
+                        <div class="flex-grow min-h-0">
+                            <canvas id="pendenciasProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 gap-10">
@@ -622,6 +1410,127 @@
     </footer>
 
     <script>
+        // --- SISTEMA DE TEMAS (CLARO, MÉDIO, ESCURO) ---
+        function getSavedTheme() {
+            try {
+                return localStorage.getItem('cope_theme') || 'claro';
+            } catch(e) {
+                return 'claro';
+            }
+        }
+
+        function getChartColorsForTheme(theme) {
+            if (theme === 'escuro') {
+                return {
+                    textColor: '#a1a1aa',
+                    gridColor: 'rgba(255, 255, 255, 0.07)',
+                    titleColor: '#ffffff',
+                    barColor: '#38bdf8'
+                };
+            } else if (theme === 'medio') {
+                return {
+                    textColor: '#cbd5e1',
+                    gridColor: 'rgba(255, 255, 255, 0.09)',
+                    titleColor: '#f8fafc',
+                    barColor: '#60a5fa'
+                };
+            } else {
+                return {
+                    textColor: '#475569',
+                    gridColor: 'rgba(0, 0, 0, 0.06)',
+                    titleColor: '#111827',
+                    barColor: '#1e293b'
+                };
+            }
+        }
+
+        function toggleThemeDropdown(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('themeDropdownMenu');
+            const chevron = document.getElementById('theme-chevron');
+            if (!menu) return;
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            if (chevron) {
+                chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        function closeThemeDropdown() {
+            const menu = document.getElementById('themeDropdownMenu');
+            const chevron = document.getElementById('theme-chevron');
+            if (menu) menu.classList.add('hidden');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+
+        function selectThemeOption(themeName) {
+            setTheme(themeName);
+            closeThemeDropdown();
+        }
+
+        function setTheme(themeName, shouldSave = true) {
+            if (!['claro', 'medio', 'escuro'].includes(themeName)) themeName = 'claro';
+            
+            document.documentElement.setAttribute('data-theme', themeName);
+            if (document.body) document.body.setAttribute('data-theme', themeName);
+            
+            if (shouldSave) {
+                try { localStorage.setItem('cope_theme', themeName); } catch(e) {}
+            }
+            
+            // Atualiza ícone e rótulo no botão de tema principal
+            const activeIcon = document.getElementById('theme-active-icon');
+            const themeLabel = document.getElementById('theme-btn-label');
+            if (activeIcon) {
+                if (themeName === 'escuro') {
+                    activeIcon.className = 'fas fa-moon text-indigo-300';
+                    if (themeLabel) themeLabel.innerText = 'Escuro';
+                } else if (themeName === 'medio') {
+                    activeIcon.className = 'fas fa-adjust text-blue-400';
+                    if (themeLabel) themeLabel.innerText = 'Médio';
+                } else {
+                    activeIcon.className = 'fas fa-sun text-yellow-400';
+                    if (themeLabel) themeLabel.innerText = 'Claro';
+                }
+            }
+
+            // Atualiza itens ativos e ícones de check no dropdown
+            ['claro', 'medio', 'escuro'].forEach(t => {
+                const opt = document.getElementById(`theme-opt-${t}`);
+                const check = document.getElementById(`theme-check-${t}`);
+                if (opt) opt.classList.toggle('active', t === themeName);
+                if (check) check.classList.toggle('hidden', t !== themeName);
+            });
+            
+            // Atualiza defaults do Chart.js
+            const chartTheme = getChartColorsForTheme(themeName);
+            if (window.Chart) {
+                Chart.defaults.color = chartTheme.textColor;
+                Chart.defaults.borderColor = chartTheme.gridColor;
+            }
+            
+            // Re-renderiza gráficos e mapa se já houver dados carregados
+            if (typeof globalVolData !== 'undefined' && globalVolData && globalVolData.length > 0) {
+                runVolAnalysis(globalVolData);
+            } else if (typeof renderPendenciasChart === 'function') {
+                renderPendenciasChart();
+            }
+            
+            // Re-renderiza ligações se houver dataset ativo
+            if (typeof activeLigacoesKey !== 'undefined' && activeLigacoesKey && ligacoesDatasets[activeLigacoesKey]) {
+                processLigacoesCope(ligacoesDatasets[activeLigacoesKey], true);
+            }
+        }
+
+        // Aplica o tema salvo imediatamente
+        (function() {
+            const initialTheme = getSavedTheme();
+            document.documentElement.setAttribute('data-theme', initialTheme);
+        })();
+
         // --- VARIÁVEIS GLOBAIS ---
         let processedTA = [], headersTA = [], processedCausa = [];
         let volDataES = [], volSummaryES = {}; 
@@ -905,72 +1814,42 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const val = normalizeString(row[keyCausa] || 'N/A');
                 return val === causaName;
             });
-
-            if (list.length === 0) return;
-
-            document.getElementById('modalAnalista').innerText = causaName;
-            document.getElementById('modalSubTitle').innerText = `Detalhamento por Causa - ${list.length} registros`;
-
-            const btnExport = document.getElementById('btnExtrairModal');
-            btnExport.classList.remove('hidden');
-            btnExport.onclick = function() {
-                const ws = XLSX.utils.json_to_sheet(list.map(({_filterDate, ...rest}) => rest));
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Dados");
-                XLSX.writeFile(wb, `EXPORT_CAUSA_${causaName.replace(/[^a-z0-9]/gi, '_')}.xlsx`);
-            };
-
-            const content = document.getElementById('modalContent');
-            let headers = Object.keys(list[0]).filter(k => k !== '_filterDate');
-            
-            const headerHtml = headers.map(h => `<th class="p-3 whitespace-nowrap">${h}</th>`).join('');
-            const displayList = list.slice(0, 100);
-            const bodyHtml = displayList.map(row => `<tr>${headers.map(h => `<td class="p-3 whitespace-nowrap border-b border-slate-100">${row[h] || ''}</td>`).join('')}</tr>`).join('');
-            
-            content.innerHTML = `<div class="overflow-auto max-h-[60vh]"><table class="w-full text-left border-collapse text-[10px]"><thead><tr class="bg-slate-900 text-white font-black sticky top-0">${headerHtml}</tr></thead><tbody class="font-medium text-slate-600">${bodyHtml}</tbody></table></div>${list.length > 100 ? '<p class="text-xs text-center mt-2 text-slate-400 font-bold uppercase">Exibindo os primeiros 100 registros. Exporte para ver tudo.</p>' : ''}`;
-            document.getElementById('detailsModal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
+            openGenericDataModal(list, causaName, `Detalhamento por Causa - ${list.length} registros`, `EXPORT_CAUSA_${causaName.replace(/[^a-z0-9]/gi, '_')}`);
         }
 
         function openKpiModal(type) {
-            let list = kpiData[type];
-            if (type === 'es') list = volDataES;
-            if (!list || list.length === 0) return;
-            
+            let list = [];
+            let title = "";
+            let exportFileName = "";
+
             const titleMap = { total: 'Total de tickets verificados', agregadores: 'Agregadores', agregado: 'Agregado', es: 'Total Espírito Santo', acoes: 'Ações Analistas' };
-            document.getElementById('modalAnalista').innerText = titleMap[type] || type.toUpperCase();
-            document.getElementById('modalSubTitle').innerText = `Listagem completa - ${list.length} registros`;
-            
-            const btnExport = document.getElementById('btnExtrairModal');
-            btnExport.classList.remove('hidden');
-            btnExport.onclick = function() {
-                const ws = XLSX.utils.json_to_sheet(list);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Dados");
-                XLSX.writeFile(wb, `EXPORT_${type.toUpperCase()}.xlsx`);
-            };
 
-            const content = document.getElementById('modalContent');
-            let headers = Object.keys(list[0]);
-
-            // Reordenar colunas: Área Rede -> Referência -> Causa
-            const findH = (keywords) => headers.find(h => keywords.some(k => normalizeString(h).includes(normalizeString(k))));
-            const keyArea = findH(['Área Rede', 'Região', 'AREA REDE']);
-            const keyRef = findH(['Referência', 'TT', 'REFERENCIA']);
-            const keyCausa = findH(['Causa', 'CAUSA']);
-
-            if (keyArea && keyRef && keyCausa) {
-                headers = headers.filter(h => h !== keyArea && h !== keyRef && h !== keyCausa);
-                headers.unshift(keyArea, keyRef, keyCausa);
+            if (type === 'es') {
+                list = volDataES;
+                title = titleMap[type];
+                exportFileName = `EXPORT_${type.toUpperCase()}`;
+            } else {
+                list = kpiData[type];
+                title = titleMap[type] || type.toUpperCase();
+                exportFileName = `EXPORT_${type.toUpperCase()}`;
             }
 
-            const headerHtml = headers.map(h => `<th class="p-3 whitespace-nowrap">${h}</th>`).join('');
-            const displayList = list.slice(0, 100); 
-            const bodyHtml = displayList.map(row => `<tr>${headers.map(h => `<td class="p-3 whitespace-nowrap border-b border-slate-100">${row[h] || ''}</td>`).join('')}</tr>`).join('');
-            
-            content.innerHTML = `<div class="overflow-auto max-h-[60vh]"><table class="w-full text-left border-collapse text-[10px]"><thead><tr class="bg-slate-900 text-white font-black sticky top-0">${headerHtml}</tr></thead><tbody class="font-medium text-slate-600">${bodyHtml}</tbody></table></div>${list.length > 100 ? '<p class="text-xs text-center mt-2 text-slate-400 font-bold uppercase">Exibindo os primeiros 100 registros. Exporte para ver tudo.</p>' : ''}`;
-            document.getElementById('detailsModal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
+            openGenericDataModal(list, title, `Listagem completa - ${list.length} registros`, exportFileName);
+        }
+
+        function openAgregadosModal() {
+            let list = kpiData.agregado;
+            if (!list || list.length === 0) {
+                list = (globalVolData || []).filter(row => {
+                    const keyAg = findKeyFuzzy(row, ['Agregação', 'Agregacao', 'Agregação / Agregador']);
+                    return keyAg && normalizeString(row[keyAg]) === 'AGREGADO';
+                });
+            }
+            if (!list || list.length === 0) {
+                alert("Nenhum ticket com Agregação 'Agregado' encontrado.");
+                return;
+            }
+            openGenericDataModal(list, "TICKETS AGREGADOS", `Identificados pela coluna "Agregação" com valor "Agregado" (${list.length} registros)`, "EXPORT_TICKETS_AGREGADOS");
         }
 
         function openAcoesModal() {
@@ -1051,6 +1930,58 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
             document.getElementById('detailsModal').classList.remove('hidden');
             setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
+        }
+
+        function openGenericDataModal(data, title, subtitle = "", exportFileName = "EXPORT_DATA") {
+            if (!data || data.length === 0) {
+                // Optionally show a toast message
+                return;
+            }
+
+            document.getElementById('modalAnalista').innerText = title;
+            document.getElementById('modalSubTitle').innerText = subtitle;
+            
+            const btnExport = document.getElementById('btnExtrairModal');
+            btnExport.classList.remove('hidden');
+            btnExport.onclick = function() {
+                const ws = XLSX.utils.json_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Dados");
+                XLSX.writeFile(wb, `${exportFileName}.xlsx`);
+            };
+
+            const content = document.getElementById('modalContent');
+            let headers = Object.keys(data[0]);
+
+            // Reorder columns: Area Rede -> Referência -> Causa
+            const findH = (keywords) => headers.find(h => keywords.some(k => normalizeString(h).includes(normalizeString(k))));
+            const keyArea = findH(['Área Rede', 'Região', 'AREA REDE']);
+            const keyRef = findH(['Referência', 'TT', 'REFERENCIA']);
+            const keyCausa = findH(['Causa', 'CAUSA']);
+
+            if (keyArea && keyRef && keyCausa) {
+                headers = headers.filter(h => h !== keyArea && h !== keyRef && h !== keyCausa);
+                headers.unshift(keyArea, keyRef, keyCausa);
+            }
+
+            const headerHtml = headers.map(h => `<th class="p-3 whitespace-nowrap">${h}</th>`).join('');
+            const displayList = data.slice(0, 100); 
+            const bodyHtml = displayList.map(row => `<tr>${headers.map(h => `<td class="p-3 whitespace-nowrap border-b border-slate-100">${row[h] || ''}</td>`).join('')}</tr>`).join('');
+            
+            content.innerHTML = `<div class="overflow-auto max-h-[60vh]"><table class="w-full text-left border-collapse text-[10px]"><thead><tr class="bg-slate-900 text-white font-black sticky top-0">${headerHtml}</tr></thead><tbody class="font-medium text-slate-600">${bodyHtml}</tbody></table></div>${data.length > 100 ? '<p class="text-xs text-center mt-2 text-slate-400 font-bold uppercase">Exibindo os primeiros 100 registros. Exporte para ver tudo.</p>' : ''}`;
+            document.getElementById('detailsModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
+        }
+
+        function openSagreCityModal(cityName) {
+            const sagreTickets = globalVolData.filter(row => {
+                const keyTag = findKeyFuzzy(row, ['Tag']);
+                const keyArea = findKeyFuzzy(row, ['Área Rede', 'Região']);
+                const tagValue = normalizeString(row[keyTag]);
+                const areaValue = normalizeString(row[keyArea]);
+                return (tagValue.includes("CIDADES SAGRE") || tagValue.includes("SAGRE")) && !tagValue.includes("DESAGREGADO") && areaValue === normalizeString(cityName);
+            });
+            openGenericDataModal(sagreTickets, `Tickets SAGRE em ${cityName}`, `${sagreTickets.length} registros`, `EXPORT_SAGRE_${cityName.replace(/[^a-z0-9]/gi, '_')}`);
         }
 
         function closeModal() {
@@ -1309,7 +2240,153 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             });
         }
 
-        // --- LÓGICA VOLUMETRIA ---
+        // --- LÓGICA VOLUMETRIA E CONTROLE DE MESES (LAZY LOADING) ---
+        const DEFAULT_MONTH_CONFIGS = [
+            { key: '01/2026', name: 'JANEIRO', label: 'Janeiro/2026', month: 1, year: 2026, volFile: 'Volumetria_Janeiro 2026.xls', ligFile: 'Ligações_Janeiro 2026.xlsx', ligKey: 'JANEIRO 2026' },
+            { key: '02/2026', name: 'FEVEREIRO', label: 'Fevereiro/2026', month: 2, year: 2026, volFile: 'Volumetria_Fevereiro 2026.xls', ligFile: 'Ligações_Fevereiro 2026.xlsx', ligKey: 'FEVEREIRO 2026' },
+            { key: '03/2026', name: 'MARÇO', label: 'Março/2026', month: 3, year: 2026, volFile: 'Volumetria_Março 2026.xls', ligFile: 'Ligações_Março 2026.xlsx', ligKey: 'MARÇO 2026' },
+            { key: '04/2026', name: 'ABRIL', label: 'Abril/2026', month: 4, year: 2026, volFile: 'Volumetria_Abril 2026.xls', ligFile: 'Ligações_Abril 2026.xlsx', ligKey: 'ABRIL 2026' },
+            { key: '05/2026', name: 'MAIO', label: 'Maio/2026', month: 5, year: 2026, volFile: 'Volumetria_Maio 2026.xls', ligFile: 'Ligações_Maio 2026.xlsx', ligKey: 'MAIO 2026' },
+            { key: '06/2026', name: 'JUNHO', label: 'Junho/2026', month: 6, year: 2026, volFile: 'Volumetria_Junho 2026.xls', ligFile: 'Ligações_Junho 2026.xlsx', ligKey: 'JUNHO 2026' },
+            { key: '07/2026', name: 'JULHO', label: 'Julho/2026', month: 7, year: 2026, volFile: 'Volumetria_Julho 2026.xls', ligFile: 'Ligações_Julho 2026.xls', ligKey: 'JULHO 2026' }
+        ];
+
+        const loadedVolByMonth = new Map();
+        const loadedLigByMonth = new Map();
+        let isFetchingMonth = false;
+        let activeMonthFilter = null;
+        let causasPendenciaMap = {};
+        let analistasPendenciaMap = {};
+        let dailyTotalsMap = {};
+        let globalVolData = [];
+
+        function normalizeVolRow(row) {
+            const keyData = findKeyFuzzy(row, ['Data Fim']);
+            let dateStr = "N/A";
+            if (keyData && row[keyData]) {
+                 const val = row[keyData];
+                 let d;
+                 if (typeof val === 'number') {
+                     d = new Date(Math.round((val - 25569) * 86400 * 1000));
+                 } else {
+                     const p = String(val).split(' ')[0].split(/[-/]/);
+                     if (p.length === 3) {
+                         d = p[0].length === 4 ? new Date(p[0], p[1]-1, p[2]) : new Date(p[2], p[1]-1, p[0]);
+                     } else {
+                         d = new Date(val);
+                     }
+                 }
+                 if (d && !isNaN(d.getTime())) {
+                     dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                     row._dateObj = d;
+                 }
+            }
+            row._filterDate = dateStr;
+            return row;
+        }
+
+        function rebuildGlobalVolData() {
+            globalVolData = [];
+            loadedVolByMonth.forEach(rows => {
+                globalVolData.push(...rows);
+            });
+        }
+
+        async function ensureMonthLoaded(monthKey) {
+            if (loadedVolByMonth.has(monthKey)) {
+                return loadedVolByMonth.get(monthKey);
+            }
+            const res = await ensureMonthsLoaded([monthKey]);
+            return res[0] || [];
+        }
+
+        async function ensureMonthsLoaded(monthKeys) {
+            const missing = monthKeys.filter(k => !loadedVolByMonth.has(k));
+            if (missing.length === 0) return [];
+
+            updateLoadingProgress(15);
+            const results = [];
+            const total = missing.length;
+            let loadedCount = 0;
+
+            for (const key of missing) {
+                const cfg = DEFAULT_MONTH_CONFIGS.find(c => c.key === key);
+                if (!cfg) continue;
+
+                try {
+                    const [vData, lData] = await Promise.all([
+                        fetchAndParseVolFile(cfg.volFile),
+                        fetchAndParseLigFile(cfg.ligFile)
+                    ]);
+
+                    const normalizedVol = (vData || []).map(row => normalizeVolRow(row));
+                    loadedVolByMonth.set(key, normalizedVol);
+                    results.push(normalizedVol);
+
+                    if (lData && lData.data) {
+                        loadedLigByMonth.set(key, lData);
+                        addLigacoesDataset(lData.name, lData.data);
+                    }
+                } catch (e) {
+                    console.error(`Erro ao carregar dados do mês ${key}:`, e);
+                }
+
+                loadedCount++;
+                updateLoadingProgress(Math.min(95, Math.round((loadedCount / total) * 100)));
+            }
+
+            rebuildGlobalVolData();
+            updateLoadingProgress(100);
+            return results;
+        }
+
+        function getMonthKeysForDateRange(startDate, endDate) {
+            const start = startDate ? new Date(startDate) : new Date(2026, 0, 1);
+            const end = endDate ? new Date(endDate) : new Date(2026, 11, 31);
+            
+            const keys = new Set();
+            const curr = new Date(start.getFullYear(), start.getMonth(), 1);
+            const limit = new Date(end.getFullYear(), end.getMonth(), 1);
+            
+            while (curr <= limit) {
+                const m = String(curr.getMonth() + 1).padStart(2, '0');
+                const y = curr.getFullYear();
+                keys.add(`${m}/${y}`);
+                curr.setMonth(curr.getMonth() + 1);
+            }
+            
+            return Array.from(keys);
+        }
+
+        function updateMonthButtonsSelectionForRange(sVal, eVal) {
+            const container = document.getElementById('monthFilterContainer');
+            if (!container) return;
+            
+            let matchedMonthKey = null;
+            if (sVal && eVal) {
+                const [sy, sm, sd] = sVal.split('-').map(Number);
+                const [ey, em, ed] = eVal.split('-').map(Number);
+                if (sy === ey && sm === em && sd === 1) {
+                    const lastDayOfMonth = new Date(sy, sm, 0).getDate();
+                    if (ed === lastDayOfMonth) {
+                        matchedMonthKey = `${String(sm).padStart(2, '0')}/${sy}`;
+                    }
+                }
+            }
+            
+            activeMonthFilter = matchedMonthKey;
+            const buttons = container.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if (matchedMonthKey && btn.dataset.monthKey === matchedMonthKey) {
+                    btn.classList.add('active');
+                } else if (!matchedMonthKey && !sVal && !eVal && btn.innerText === 'TODOS') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
         document.getElementById('fileInputVol').addEventListener('change', (e) => {
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
@@ -1320,152 +2397,293 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
                 if (hIdx === -1) hIdx = 0;
                 const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx, defval: "" });
-                processVolData(jsonData.filter(r => Object.values(r).some(v => v !== null && v !== "")));
+                const filtered = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+                
+                const normalized = filtered.map(row => normalizeVolRow(row));
+                const importedByMonth = new Map();
+                normalized.forEach(r => {
+                    if (r._filterDate && r._filterDate !== "N/A") {
+                        const parts = r._filterDate.split('/');
+                        if (parts.length === 3) {
+                            const mKey = `${parts[1]}/${parts[2]}`;
+                            if (!importedByMonth.has(mKey)) importedByMonth.set(mKey, []);
+                            importedByMonth.get(mKey).push(r);
+                        }
+                    }
+                });
+
+                if (importedByMonth.size > 0) {
+                    importedByMonth.forEach((rows, mKey) => {
+                        loadedVolByMonth.set(mKey, rows);
+                    });
+                    activeMonthFilter = Array.from(importedByMonth.keys()).pop();
+                } else {
+                    loadedVolByMonth.set('custom', normalized);
+                    activeMonthFilter = null;
+                }
+
+                rebuildGlobalVolData();
+                renderMonthButtons();
+                if (activeMonthFilter) {
+                    applyMonthFilter(activeMonthFilter);
+                } else {
+                    runVolAnalysis(globalVolData);
+                }
                 showImportLigacoesModal();
             };
             reader.readAsArrayBuffer(file);
         });
 
-        let causasPendenciaMap = {};
-        let analistasPendenciaMap = {};
-        let dailyTotalsMap = {};
-        let globalVolData = [];
-
-        function processVolData(data) {
-            globalVolData = [];
-            activeMonthFilter = null;
-            const dateSet = new Set();
-            
-            data.forEach(row => {
-                const keyData = findKeyFuzzy(row, ['Data Fim']);
-                let dateStr = "N/A";
-                if (keyData && row[keyData]) {
-                     const val = row[keyData];
-                     let d;
-                     if (typeof val === 'number') {
-                         d = new Date(Math.round((val - 25569) * 86400 * 1000));
-                     } else {
-                         const p = String(val).split(' ')[0].split(/[-/]/);
-                         if (p.length === 3) {
-                             d = p[0].length === 4 ? new Date(p[0], p[1]-1, p[2]) : new Date(p[2], p[1]-1, p[0]);
-                         } else {
-                             d = new Date(val);
-                         }
-                     }
-                     if (d && !isNaN(d.getTime())) {
-                         dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-                         row._dateObj = d;
-                     }
-                }
-                row._filterDate = dateStr;
-                if (dateStr !== "N/A") dateSet.add(dateStr);
-                globalVolData.push(row);
-            });
-
+        function processVolData(data, isInitialLatestLoad = false) {
+            const normalized = data.map(r => normalizeVolRow(r));
             const monthsSet = new Set();
-            globalVolData.forEach(r => {
+            normalized.forEach(r => {
                 if (r._filterDate && r._filterDate !== "N/A") {
                     const parts = r._filterDate.split('/');
                     if (parts.length === 3) monthsSet.add(`${parts[1]}/${parts[2]}`);
                 }
             });
-            renderMonthButtons(Array.from(monthsSet));
 
-            runVolAnalysis(globalVolData);
+            monthsSet.forEach(mKey => {
+                const rows = normalized.filter(r => r._filterDate && r._filterDate.endsWith(mKey));
+                loadedVolByMonth.set(mKey, rows);
+            });
+
+            const allMonths = Array.from(monthsSet).sort((a, b) => {
+                const [m1, y1] = a.split('/').map(Number);
+                const [m2, y2] = b.split('/').map(Number);
+                return (y1 - y2) || (m1 - m2);
+            });
+
+            if (isInitialLatestLoad && allMonths.length > 0) {
+                activeMonthFilter = allMonths[allMonths.length - 1];
+            }
+
+            rebuildGlobalVolData();
+            renderMonthButtons();
+
+            if (activeMonthFilter) {
+                applyMonthFilter(activeMonthFilter);
+            } else {
+                runVolAnalysis(globalVolData);
+            }
         }
 
-        function filterByDateRange() {
+        async function filterByDateRange() {
+            if (isFetchingMonth) return;
             const sVal = document.getElementById('dateStart').value;
             const eVal = document.getElementById('dateEnd').value;
             
             if (!sVal && !eVal) {
-                runVolAnalysis(globalVolData);
+                await filterByMonth(null);
                 return;
             }
 
             const start = sVal ? new Date(sVal + 'T00:00:00') : null;
             const end = eVal ? new Date(eVal + 'T23:59:59') : null;
 
-            const filtered = globalVolData.filter(r => {
+            const requiredMonthKeys = getMonthKeysForDateRange(start, end);
+            const missingMonthKeys = requiredMonthKeys.filter(k => !loadedVolByMonth.has(k) && DEFAULT_MONTH_CONFIGS.some(c => c.key === k));
+
+            if (missingMonthKeys.length > 0) {
+                isFetchingMonth = true;
+                try {
+                    await ensureMonthsLoaded(missingMonthKeys);
+                } finally {
+                    isFetchingMonth = false;
+                }
+            }
+
+            rebuildGlobalVolData();
+
+            const filteredVol = globalVolData.filter(r => {
                 if (!r._dateObj) return false;
                 if (start && r._dateObj < start) return false;
                 if (end && r._dateObj > end) return false;
                 return true;
             });
-            runVolAnalysis(filtered);
+
+            let allLig = [];
+            Object.values(ligacoesDatasets).forEach(dataset => allLig.push(...dataset));
+            const filteredLig = allLig.filter(r => {
+                if (!r._dateObj) return false;
+                if (start && r._dateObj < start) return false;
+                if (end && r._dateObj > end) return false;
+                return true;
+            });
+
+            updateMonthButtonsSelectionForRange(sVal, eVal);
+
+            if (document.getElementById('pendStart')) document.getElementById('pendStart').value = sVal;
+            if (document.getElementById('pendEnd')) document.getElementById('pendEnd').value = eVal;
+
+            runVolAnalysis(filteredVol);
+            if (filteredLig.length > 0) {
+                processLigacoesCope(filteredLig, true);
+            }
+            renderPendenciasChart(filteredVol);
         }
 
-        let activeMonthFilter = null;
-        function renderMonthButtons(months) {
+        function renderMonthButtons(months = null) {
             const container = document.getElementById('monthFilterContainer');
             if (!container) return;
             container.innerHTML = '';
-            if (months.length === 0) return;
 
-            months.sort((a, b) => {
-                const [m1, y1] = a.split('/').map(Number);
-                const [m2, y2] = b.split('/').map(Number);
+            // Botão TODOS
+            const btnTodos = document.createElement('button');
+            btnTodos.className = "btn-view-toggle text-[9px] px-3 py-1.5" + (!activeMonthFilter ? " active" : "");
+            btnTodos.innerText = "TODOS";
+            btnTodos.onclick = () => filterByMonth(null, btnTodos);
+            container.appendChild(btnTodos);
+
+            const monthConfigsMap = new Map();
+            DEFAULT_MONTH_CONFIGS.forEach(c => {
+                monthConfigsMap.set(c.key, { key: c.key, label: c.label || `${c.name}/${c.year}` });
+            });
+
+            loadedVolByMonth.forEach((_, key) => {
+                if (!monthConfigsMap.has(key) && key !== 'custom') {
+                    const [m, y] = key.split('/');
+                    const monthName = MONTH_NAMES[parseInt(m, 10) - 1] || m;
+                    monthConfigsMap.set(key, { key, label: `${monthName}/${y}` });
+                }
+            });
+
+            const sortedMonths = Array.from(monthConfigsMap.values()).sort((a, b) => {
+                const [m1, y1] = a.key.split('/').map(Number);
+                const [m2, y2] = b.key.split('/').map(Number);
                 return (y1 - y2) || (m1 - m2);
             });
 
-            months.forEach(mStr => {
-                const [m, y] = mStr.split('/');
-                const monthName = MONTH_NAMES[parseInt(m) - 1];
+            sortedMonths.forEach(mObj => {
                 const btn = document.createElement('button');
-                btn.className = "btn-view-toggle text-[9px] px-2 py-1";
-                btn.innerText = `${monthName}/${y}`;
-                btn.onclick = () => filterByMonth(mStr, btn);
+                const isActive = activeMonthFilter === mObj.key;
+                btn.dataset.monthKey = mObj.key;
+                btn.className = "btn-view-toggle text-[9px] px-3 py-1.5" + (isActive ? " active" : "");
+                btn.innerText = mObj.label;
+                btn.onclick = () => filterByMonth(mObj.key, btn);
                 container.appendChild(btn);
             });
         }
 
-        function filterByMonth(monthYear, btnElement) {
+        async function filterByMonth(monthYear, btnElement = null) {
+            if (isFetchingMonth) return;
             const container = document.getElementById('monthFilterContainer');
-            const buttons = container.querySelectorAll('button');
-            const isSame = activeMonthFilter === monthYear;
-            
-            activeMonthFilter = isSame ? null : monthYear;
-            buttons.forEach(b => b.classList.remove('active'));
-            if (!isSame) btnElement.classList.add('active');
+            const isSame = activeMonthFilter === monthYear && btnElement !== null && monthYear !== null;
 
-            document.getElementById('dateStart').value = '';
-            document.getElementById('dateEnd').value = '';
+            activeMonthFilter = isSame ? null : monthYear;
 
             if (activeMonthFilter) {
-                const filtered = globalVolData.filter(r => {
-                    if (!r._filterDate || r._filterDate === "N/A") return false;
-                    const parts = r._filterDate.split('/');
-                    return `${parts[1]}/${parts[2]}` === activeMonthFilter;
-                });
-                runVolAnalysis(filtered);
+                if (!loadedVolByMonth.has(activeMonthFilter)) {
+                    isFetchingMonth = true;
+                    try {
+                        await ensureMonthLoaded(activeMonthFilter);
+                    } finally {
+                        isFetchingMonth = false;
+                    }
+                }
             } else {
-                runVolAnalysis(globalVolData);
+                const allKeys = DEFAULT_MONTH_CONFIGS.map(c => c.key);
+                const missingKeys = allKeys.filter(k => !loadedVolByMonth.has(k));
+                if (missingKeys.length > 0) {
+                    isFetchingMonth = true;
+                    try {
+                        await ensureMonthsLoaded(missingKeys);
+                    } finally {
+                        isFetchingMonth = false;
+                    }
+                }
             }
+
+            rebuildGlobalVolData();
+
+            if (container) {
+                const buttons = container.querySelectorAll('button');
+                buttons.forEach(b => {
+                    if (activeMonthFilter) {
+                        b.classList.toggle('active', b.dataset.monthKey === activeMonthFilter);
+                    } else {
+                        b.classList.toggle('active', b.innerText === 'TODOS');
+                    }
+                });
+            }
+
+            applyMonthFilter(activeMonthFilter);
+        }
+
+        function applyMonthFilter(monthYear) {
+            let dataToProcess = globalVolData;
+            let ligacoesToProcess = [];
+            Object.values(ligacoesDatasets).forEach(dataset => ligacoesToProcess.push(...dataset));
+
+            const formatDateForInput = (date) => {
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            };
+
+            if (monthYear) {
+                const [month, year] = monthYear.split('/').map(Number);
+                const firstDay = new Date(year, month - 1, 1);
+                const lastDay = new Date(year, month, 0, 23, 59, 59);
+
+                const firstDayStr = formatDateForInput(firstDay);
+                const lastDayStr = formatDateForInput(lastDay);
+
+                if (document.getElementById('dateStart')) document.getElementById('dateStart').value = firstDayStr;
+                if (document.getElementById('dateEnd')) document.getElementById('dateEnd').value = lastDayStr;
+                if (document.getElementById('pendStart')) document.getElementById('pendStart').value = firstDayStr;
+                if (document.getElementById('pendEnd')) document.getElementById('pendEnd').value = lastDayStr;
+
+                dataToProcess = globalVolData.filter(r => r._dateObj && r._dateObj >= firstDay && r._dateObj <= lastDay);
+                ligacoesToProcess = ligacoesToProcess.filter(r => r._dateObj && r._dateObj >= firstDay && r._dateObj <= lastDay);
+
+                const monthName = MONTH_NAMES[month - 1];
+                const ligKey = `${monthName} ${year}`.toUpperCase();
+                if (typeof switchLigacoes === 'function') {
+                    switchLigacoes(ligKey);
+                }
+            } else {
+                if (document.getElementById('dateStart')) document.getElementById('dateStart').value = '';
+                if (document.getElementById('dateEnd')) document.getElementById('dateEnd').value = '';
+                if (document.getElementById('pendStart')) document.getElementById('pendStart').value = '';
+                if (document.getElementById('pendEnd')) document.getElementById('pendEnd').value = '';
+            }
+            
+            runVolAnalysis(dataToProcess);
+            if (ligacoesToProcess.length > 0) {
+                processLigacoesCope(ligacoesToProcess, true);
+            }
+            renderPendenciasChart();
         }
 
         function runVolAnalysis(data) {
             const s = { 
                 totalSet: new Set(), agrSet: new Set(), agrsSet: new Set(),
                 total: 0, agr: 0, agrs: 0, 
-                admSet: new Set(), desSet: new Set(), scSet: new Set(), snSet: new Set(), 
+                admSet: new Set(), desSet: new Set(), scSet: new Set(), snSet: new Set(), Sagreet: new Set(),
                 scAgg: 0, scB2b: 0, scPon: 0,
-                es: 0, esC: {}, d: [] 
+                es: 0, esC: {}, d: []
             };
             kpiData = { total: [], agregadores: [], agregado: [] };
-            const cmSets = {}, esm = {}, rm = {}, tm = {};
+            const cmSets = {}, esm = {}, rm = {}, tm = {}, esTimelineMap = {};
             const categoryMapping = [
                 { id: "CHUVA", kw: ["CHUVA"] }, { id: "SEM ACESSO", kw: ["SEM ACESSO"] },
-                { id: "AREA DE RISCO", kw: ["AREA DE RISCO"] }, { id: "POSTE ENERGIZADO", kw: ["POSTE ENERGIZADO", "CIA DE ENERGIA", "EMPRESA DE ENERGIA"] },
+                { id: "AREA DE RISCO", kw: ["AREA DE RISCO"] }, { id: "POSTE ENERGIZADO", kw: ["POSTE ENERGIZADO", "CIA DE ENERGIA", "EMPRESA DE ENERGIA", "ENERGIA"] },
                 { id: "TROCA DE POSTE", kw: ["TROCA DE POSTE"] }
             ];
-            const includeKeywords = ["SEM ACESSO", "AREA DE RISCO", "POSTE ENERGIZADO", "CHUVA NO LOCAL", "CHUVA", "EMPRESA DE ENERGIA NO LOCAL", "CIA DE ENERGIA", "TROCA DE POSTE", "SERA LIBERA AS", "SERA TRATADO DIA", "PENDENCIA ALTORIZADA", "PENDENTE ATE"];
+            const includeKeywords = ["SEM ACESSO", "AREA DE RISCO", "POSTE ENERGIZADO", "CHUVA NO LOCAL", "CHUVA", "EMPRESA DE ENERGIA NO LOCAL", "CIA DE ENERGIA", "TROCA DE POSTE", "SERA LIBERA AS", "SERA TRATADO DIA", "PENDENCIA ALTORIZADA", "PENDENTE ATE"]; // Corrigido: PENDENCIA AUTORIZADA
             
             causasPendenciaMap = {}; analistasPendenciaMap = {}; dailyTotalsMap = {};
             currentCausaPendenciaDetails = {}; currentAnalistaPendenciaDetails = {}; masterPendenciasList = [];
             tagDetailsLists = { 'ADM COPE': [], 'DESAGREGADO': [], 'SALAS COPE': [], 'SALAS NOC': [] };
-            volDataES = [];
+            volDataES = []; let sagreCities = {};
+            const sagreTimelineMap = {};
+            const agregadosTimelineMap = {};
 
             const TARGET_USERS_FOR_COUNT = [
+                // Adicionado para garantir a contagem correta
                 "LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "BRUNO MELLO DA SILVA", 
                 "TAMIRIS AVELINA GONÇALVES", "RANDU MATOS MENEZES", "ELVIS MIRANDA", 
                 "NOC/JEFFERSON", "NOC/JOSEYLSON"
@@ -1475,8 +2693,10 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 "ACESSO DE TERCEIROS", "ACIONAMENTO IMPROCEDENTE VIVO", "ALIVIO FISICO", "AR CONDICIONADO - BAIXA EFICIENCIA", "AR CONDICIONADO INOPERANTE", "AUSENCIA DE CONFIGURACAO", "AUTENTICACAO DUPLICADA", "BANCO DE BATERIAS - BAIXA EFICIENCIA", "BATERIA EM DESCARGA", "CAIXA NAO LOCALIZADA", "CAIXA SEM CONECTIVIDADE", "CLIMATIZACAO", "CONCESSIONARIA ELETRICA", "CONECTIVIDADE", "CONFIGURACAO DE PERIMETRO DA CAMERA", "CORDAO OPTICO DEFEITUOSO", "DISJUNTOR DESARMADO", "DISJUNTOR/FUSIVEL COM DEFEITO", "DIVERGENCIA DE CADASTRO", "DIVERGENCIA PROFILE", "ENDERECO INCORRETO", "ENDERECO NAO COBERTO", "ERRO CONSTRUCAO", "ERRO NA APLICACAO", "FALHA CONFIGURACAO", "FALHA DE GERENCIA DO ELEMENTO DE REDE (OLT, AGG E BNG)", "FALHA DO SERVIDOR DE GERENCIA (A M S - NOKIA, NCE - HUAWEI)", "FALHA ENERGIA", "FALHA FANS/FILTROS", "FALHA HARDWARE", "FALHA OPERACIONAL", "FALHA OPERADORA", "FALHA SOFTWARE", "FURTO", "INTEMPERIE", "LIMPEZA DE DROP", "LINK DOWN", "MANOBRA DE CTO", "MANOBRA DE PORTA", "NAO HA FALHA", "NORMALIZADO PELA CONCESSIONARIA", "ORDEM FAILED", "ORDEM HELD", "PLACA CONTROLADORA COM DEFEITO", "SFP", "SFP COM DEFEITO", "TRABALHOS PROGRAMADOS"
             ];
 
+            const salasCriseTimelineMap = {};
+
             data.forEach(row => {
-                const keyAg = findKeyFuzzy(row, ['Agregação']);
+                const keyAg = findKeyFuzzy(row, ['Agregação', 'Agregações', 'Agregacao', 'Agregacoes', 'Agregação / Agregador']);
                 const keyTag = findKeyFuzzy(row, ['Tag']);
                 const keyArea = findKeyFuzzy(row, ['Área Rede', 'Região']);
                 const keyCausa = findKeyFuzzy(row, ['Causa']);
@@ -1485,7 +2705,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const keyDataInicio = findKeyFuzzy(row, ['Data Inicio', 'Data Início']);
                 const keyRef = findKeyFuzzy(row, ['Referência', 'TT']);
                 const keyUF = findKeyFuzzy(row, ['UF', 'Estado', 'Sigla']);
-                const keyIds = findKeyFuzzy(row, ['Nº IDs Serviço Ativos', 'IDs Serviço', 'Serviço Ativos']);
+                const keyIds = findKeyFuzzy(row, ['Nº IDs Serviço Ativos', 'IDs Serviço', 'Serviço Ativos', 'Nº IDs Serviço (com Agregados)']);
                 const keyEquipeFim = findKeyFuzzy(row, ['Equipe Data Fim']);
 
                 const keyUser = findKeyFuzzy(row, ['Usuário Envolvido', 'Usuario', 'Envolvido']);
@@ -1545,6 +2765,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     if (isValidTicket) {
                         s.agrSet.add(refVal);
                         kpiData.agregado.push(row);
+                        if (row._filterDate && row._filterDate !== "N/A") {
+                            agregadosTimelineMap[row._filterDate] = (agregadosTimelineMap[row._filterDate] || 0) + 1;
+                        }
                     }
                     return; // Exclui do processamento posterior
                 }
@@ -1592,6 +2815,14 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 if (tagValue.includes("DESAGREGADO")) {
                     if(!s.desSet.has(refVal)) { s.desSet.add(refVal); tagDetailsLists['DESAGREGADO'].push({ ref: refVal, tag: tagValueRaw }); }
                 }
+                if (tagValue.includes("SALA DE CRISE") && row._filterDate && row._filterDate !== "N/A") {
+                    // Garante que o Set para o dia exista
+                    if (!salasCriseTimelineMap[row._filterDate]) {
+                        salasCriseTimelineMap[row._filterDate] = new Set();
+                    }
+                    salasCriseTimelineMap[row._filterDate].add(tagValue); // Adiciona a tag inteira para contar duplicatas exatas
+                }
+
                 if (tagValue.includes("SALA DE CRISE")) { 
                     const isC = /\bC\b/.test(tagValue) || tagValue.includes("CRISE C");
                     const targetSet = isC ? s.scSet : s.snSet;
@@ -1610,9 +2841,25 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                         }
                     }
                 }
+                const isSagre = (tagValue.includes("CIDADES SAGRE") || tagValue.includes("SAGRE")) && !tagValue.includes("DESAGREGADO");
+                if (isSagre) {
+                    if(!s.Sagreet.has(refVal)) { s.Sagreet.add(refVal); }
+                    sagreCities[areaValue] = (sagreCities[areaValue] || 0) + 1;
+                    if (row._filterDate && row._filterDate !== "N/A") {
+                        sagreTimelineMap[row._filterDate] = (sagreTimelineMap[row._filterDate] || 0) + 1;
+                    }
+                }
 
                 const esc = CIDADES_ES_ALVO.find(x => areaValue.includes(normalizeString(x)));
-                if (esc && agValue !== 'AGREGADO' && !equipeFimValue.includes("PLANTA INTERNA N2") && !causaValue.includes("TTK DUPLICADO") && !causaValue.includes("FALHA OPERADORA") && !causaValue.includes("ENDERECO NAO COBERTO") && !causaValue.includes("ALIVIO FISICO") && !tagValue.includes("DESAGREGADO")) { s.es++; s.esC[esc] = (s.esC[esc] || 0) + 1; esm[causaValue] = (esm[causaValue] || 0) + 1; volDataES.push(row); }
+                if (esc && agValue !== 'AGREGADO' && !equipeFimValue.includes("PLANTA INTERNA N2") && !causaValue.includes("TTK DUPLICADO") && !causaValue.includes("FALHA OPERADORA") && !causaValue.includes("ENDERECO NAO COBERTO") && !causaValue.includes("ALIVIO FISICO") && !tagValue.includes("DESAGREGADO")) { 
+                    s.es++; 
+                    s.esC[esc] = (s.esC[esc] || 0) + 1; 
+                    esm[causaValue] = (esm[causaValue] || 0) + 1; 
+                    volDataES.push(row); 
+                    if (row._filterDate && row._filterDate !== "N/A") {
+                        esTimelineMap[row._filterDate] = (esTimelineMap[row._filterDate] || 0) + 1;
+                    }
+                }
 
                 const histTxt = String(row[keyHist] || "");
                 if (histTxt) {
@@ -1660,8 +2907,13 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                             else if (EPS_VIRTEX.some(c => areaCheck.includes(normalizeString(c)))) eps = "VIRTEX";
 
                             masterPendenciasList.push({ ref: refVal, analista: analystInBlock, causa: detectedCausa, uf: ufValue, ids: idsVal, area: areaValue, tag: tagValueRaw, dataInicio: dataInicioStr, dataFim: dataFimStr, msg: block.trim(), coordenador: coord, eps: eps });
-                            const dateMatch = block.match(/\d{2}-\d{2}-\d{4}/);
-                            if (dateMatch) { const dk = dateMatch[0].replace(/-/g, '/'); dailyTotalsMap[dk] = (dailyTotalsMap[dk] || 0) + 1; }
+                            const dateMatch = block.match(/\d{2}[-/]\d{2}[-/]\d{4}/);
+                            if (dateMatch) { 
+                                const dk = dateMatch[0].replace(/-/g, '/'); 
+                                dailyTotalsMap[dk] = (dailyTotalsMap[dk] || 0) + 1; 
+                            } else if (row._filterDate && row._filterDate !== "N/A") {
+                                dailyTotalsMap[row._filterDate] = (dailyTotalsMap[row._filterDate] || 0) + 1;
+                            }
                         }
                     });
                 }
@@ -1692,7 +2944,13 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             s.agr = s.agrSet.size;
             s.agrs = s.agrsSet.size;
 
-            updateVolUI(s, cm, esm, rm, tm);
+            // Converte os Sets de salas de crise em contagens numéricas
+            const salasCriseCounts = {};
+            for (const date in salasCriseTimelineMap) {
+                salasCriseCounts[date] = salasCriseTimelineMap[date].size;
+            }
+
+            updateVolUI(s, cm, esm, rm, tm, esTimelineMap, salasCriseTimelineMap, sagreCities, sagreTimelineMap, agregadosTimelineMap);
         }
 
         function renderPendenciasList() {
@@ -1729,7 +2987,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                                 <p class="text-[12px] font-bold text-slate-500 uppercase">${def.time}</p>
                             </div>
                             <div class="space-y-1 flex-1 flex flex-col justify-center py-2">
-                                ${topCauses.map(([c,v]) => `<div class="flex justify-between items-center text-[10px] font-bold text-slate-500"><span class="truncate mr-2" title="${c}">${c}</span><span class="bg-slate-100 px-1.5 rounded text-slate-700">${v}</span></div>`).join('')}
+                                ${topCauses.map(([c,v]) => `<div class="flex justify-between items-center text-[10px] font-bold text-slate-500"><span class="truncate mr-2" title="${c}">${c}</span><span class="pendencia-sub-val bg-slate-100 px-1.5 rounded text-slate-700 font-black">${v}</span></div>`).join('')}
                             </div>
                             <div class="flex justify-center items-center border-t border-slate-100 pt-2">
                                 <div class="bg-red-50 rounded px-4 py-1"><span class="text-3xl font-black text-red-700">${stats.total}</span></div>
@@ -1748,13 +3006,13 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             container.innerHTML = sorted.map(([k,v]) => {
                 const percent = totalSum > 0 ? ((v / totalSum) * 100).toFixed(1) + '%' : '0%';
                 return `<div class="analista-item flex items-center gap-3 p-2 border-l-4 border-red-100 hover:border-red-500 mb-1 transition-all rounded-r-lg group" ondblclick="openDetailsModal('${k}')">
-                <div class="min-w-[34px] bg-red-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div>
+                <div class="pendencia-badge-val min-w-[34px] bg-red-900 text-white text-center py-0.5 rounded text-[10px] font-black">${v}</div>
                 <div class="flex-1"><div class="flex justify-between items-end mb-1 font-black"><p class="text-[9px] font-black text-red-800 uppercase truncate">${k}</p><span class="detalhes-badge uppercase !bg-red-200 !text-red-800 group-hover:!bg-red-600 group-hover:!text-white">${percent}</span></div>
                 <div class="w-full bg-slate-100 h-1 rounded-full"><div class="bg-red-600 h-full rounded" style="width:${(v/maxVal*100).toFixed(1)}%"></div></div></div></div>`;
             }).join('');
         }
 
-        function updateVolUI(s, cm, esm, rm, tm) {
+        function updateVolUI(s, cm, esm, rm, tm, esTimelineMap, salasCriseTimelineMapUnprocessed, sagreCities, sagreTimelineMap = {}, agregadosTimelineMap = {}) {
             const kpiTotalEl = document.getElementById('kpi-total');
             const acoesBtnEl = document.getElementById('acoes-btn');
 
@@ -1769,6 +3027,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('kpi-es').innerText = s.es;
             document.getElementById('stat-agregadores-val').innerText = s.agrs;
             document.getElementById('stat-agregado-val').innerText = s.agr;
+            const elAgregadoLinear = document.getElementById('stat-agregado-linear-val');
+            if (elAgregadoLinear) elAgregadoLinear.innerText = s.agr;
             document.getElementById('tag-adm-val').innerText = s.admSet.size;
             document.getElementById('tag-desag-val').innerText = s.desSet.size;
             document.getElementById('tag-sala-cope-val').innerText = s.scSet.size;
@@ -1776,6 +3036,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             document.getElementById('sc-agg-val').innerText = s.scAgg;
             document.getElementById('sc-b2b-val').innerText = s.scB2b;
             document.getElementById('sc-pon-val').innerText = s.scPon;
+            document.getElementById('tag-sagre-val').innerText = s.Sagreet.size;
             document.getElementById('total-pendencias-counter').innerText = masterPendenciasList.length;
             
             if(s.d.length) {
@@ -1796,12 +3057,33 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             };
             renderDefault('causas-list-container', Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 6), s.total);
             renderDefault('causas-es-list-container', Object.entries(esm).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 3), s.es);
-            renderDefault('top-cities-es', Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 3), s.es);
-            updateCharts(rm, tm, dailyTotalsMap);
+            renderDefault('top-cities-es', Object.entries(s.esC).sort((a,b)=>b[1]-a[1]).slice(0, isAdminMode ? undefined : 3), s.es); // This seems to be a list of cities, not a chart
+            
+            const sagreContainer = document.getElementById('sagre-cities-list');
+            if (sagreContainer) {
+                const sortedSagreCities = Object.entries(sagreCities).sort((a, b) => b[1] - a[1]);
+                if (sortedSagreCities.length === 0) {
+                    sagreContainer.innerHTML = `<div class="col-span-full flex items-center justify-center h-full text-center py-4"><span class="text-[10px] font-bold text-emerald-700/60 uppercase tracking-wider italic">Nenhuma cidade Sagre registrada</span></div>`;
+                } else {
+                    sagreContainer.innerHTML = sortedSagreCities.map(([city, count]) => `
+                        <div class="flex items-center justify-between bg-white hover:bg-emerald-50/90 p-1 px-2 rounded-lg border border-emerald-100 hover:border-emerald-300 shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none" ondblclick="openSagreCityModal('${city.replace(/'/g, "\\'")}')" title="Duplo clique para ver tickets de ${city}">
+                            <span class="font-bold text-slate-700 group-hover:text-emerald-950 text-[9.5px] uppercase truncate pr-1 tracking-tight">${city}</span>
+                            <span class="bg-emerald-600 group-hover:bg-emerald-700 text-white font-black text-[8.5px] px-1.5 py-0.2 rounded-md shadow-xs flex-shrink-0 transition-colors">${count}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            const salasCriseCounts = {};
+            for (const date in salasCriseTimelineMapUnprocessed) {
+                salasCriseCounts[date] = salasCriseTimelineMapUnprocessed[date].size;
+            }
+
             renderPendenciasChart();
+            updateCharts(rm, tm, esTimelineMap, salasCriseCounts, sagreTimelineMap, dailyTotalsMap, agregadosTimelineMap);
         }
 
-        function renderPendenciasChart() {
+        function renderPendenciasChart(filteredVolData = null) {
             const chartPend = document.getElementById('pendenciasProgressChart');
             if (!chartPend) return;
             
@@ -1810,10 +3092,29 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 delete charts.pendProgress;
             }
 
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'claro';
+            const chartColors = getChartColorsForTheme(currentTheme);
+
             const startVal = document.getElementById('pendStart').value;
             const endVal = document.getElementById('pendEnd').value;
             
-            let filteredData = Object.entries(dailyTotalsMap);
+            let dataToUse = filteredVolData || globalVolData;
+            let tempDailyMap = {};
+
+            if (filteredVolData) {
+                // Recalcula o dailyTotalsMap apenas para os dados filtrados
+                masterPendenciasList.forEach(p => {
+                    const dateMatch = p.msg.match(/\d{2}-\d{2}-\d{4}/);
+                    if (dateMatch) {
+                        const dk = dateMatch[0].replace(/-/g, '/');
+                        if (dataToUse.some(row => row._filterDate === dk && row['Referência'] === p.ref)) {
+                            tempDailyMap[dk] = (tempDailyMap[dk] || 0) + 1;
+                        }
+                    }
+                });
+            }
+
+            let filteredData = Object.entries(filteredVolData ? tempDailyMap : dailyTotalsMap);
             
             if (startVal || endVal) {
                 const startDate = startVal ? new Date(startVal) : null;
@@ -1835,20 +3136,419 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             });
 
             const ctxPend = chartPend.getContext('2d');
-            const opt = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9, weight: '700' } } }, x: { ticks: { font: { size: 9, weight: '700' } } } } };
+            const opt = { 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } }, 
+                scales: { 
+                    y: { 
+                        grid: { color: chartColors.gridColor }, 
+                        ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' } } 
+                    }, 
+                    x: { 
+                        grid: { color: chartColors.gridColor }, 
+                        ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' } } 
+                    } 
+                } 
+            };
             
-            charts.pendProgress = new Chart(ctxPend, { type: 'line', data: { labels: filteredData.map(x=>x[0].substring(0, 5)), datasets: [{ data: filteredData.map(x=>x[1]), borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.4 }] }, options: opt });
+            charts.pendProgress = new Chart(ctxPend, { type: 'line', data: { labels: filteredData.map(x=>x[0].substring(0, 5)), datasets: [{ data: filteredData.map(x=>x[1]), borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.12)', fill: true, tension: 0.4 }] }, options: opt });
         }
 
-        function updateCharts(rm, tm, dailyPendencias) {
-            const chartReg = document.getElementById('regioesChart'), chartTim = document.getElementById('timelineChart');
-            if (chartReg && chartTim) {
-                const ctxReg = chartReg.getContext('2d'), ctxTim = chartTim.getContext('2d');
-                if(charts.reg) charts.reg.destroy(); if(charts.tim) charts.tim.destroy();
-                const rData = Object.entries(rm).sort((a,b)=>b[1]-a[1]).slice(0,5), tData = Object.entries(tm).sort((a,b)=>{ const [d1,m1]=a[0].split('/').map(Number), [d2,m2]=b[0].split('/').map(Number); return (m1*100+d1)-(m2*100+d2); });
-                const opt = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9, weight: '700' } } }, x: { ticks: { font: { size: 9, weight: '700' } } } } };
-                charts.reg = new Chart(ctxReg, { type: 'bar', data: { labels: rData.map(x=>x[0]), datasets: [{ data: rData.map(x=>x[1]), backgroundColor: '#1e293b', barThickness: 12 }] }, options: { ...opt, indexAxis: 'y' } });
-                charts.tim = new Chart(ctxTim, { type: 'line', data: { labels: tData.map(x=>x[0]), datasets: [{ data: tData.map(x=>x[1]), borderColor: '#F37021', backgroundColor: 'rgba(243, 112, 33, 0.05)', fill: true, tension: 0.4 }] }, options: opt });
+        let showVolCopeLabels = true;
+        function toggleVolCopeLabels() {
+            showVolCopeLabels = !showVolCopeLabels;
+            const icon = document.getElementById('iconToggleVolCopeLabels');
+            const btn = document.getElementById('btnToggleVolCopeLabels');
+            if (icon && btn) {
+                if (showVolCopeLabels) {
+                    icon.className = "fas fa-eye text-xs";
+                    btn.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-purple-100/80 text-purple-800 hover:bg-purple-200 border border-purple-200 no-print cursor-pointer shadow-sm";
+                    btn.setAttribute("title", "Ocultar totais nas bolinhas");
+                } else {
+                    icon.className = "fas fa-eye-slash text-xs";
+                    btn.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-slate-200 text-slate-500 hover:bg-slate-300 border border-slate-300 no-print cursor-pointer shadow-sm";
+                    btn.setAttribute("title", "Exibir totais nas bolinhas");
+                }
+            }
+            if (charts.volCope) {
+                charts.volCope.update();
+            }
+        }
+
+        function cyclePendenciaView() {
+            const modes = ['causa', 'analista', 'turnos'];
+            const nextIdx = (modes.indexOf(pendenciasViewMode) + 1) % modes.length;
+            pendenciasViewMode = modes[nextIdx];
+            const btn = document.getElementById('pendenciaViewControls');
+            if (btn) {
+                btn.innerText = pendenciasViewMode === 'causa' ? 'Causas' : (pendenciasViewMode === 'analista' ? 'Analistas' : 'Turnos');
+            }
+            renderPendenciasList();
+        }
+
+        function renderRegioesMap(rData) {
+            const container = document.getElementById('mapBubblesContainer');
+            if (!container) return;
+            if (!rData || rData.length === 0) {
+                container.innerHTML = `<div class="w-full flex items-center justify-center h-full"><span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">Aguardando dados...</span></div>`;
+                return;
+            }
+
+            const maxVal = Math.max(...rData.map(r => r[1]), 1);
+            const totalSum = rData.reduce((acc, curr) => acc + curr[1], 0);
+            const colors = ['#F37021', '#ef4444', '#3b82f6', '#8b5cf6', '#10b981'];
+
+            container.innerHTML = rData.map(([name, count], idx) => {
+                const sizeRatio = count / maxVal;
+                const size = Math.round(48 + sizeRatio * 20); // 48px to 68px
+                const color = colors[idx % colors.length];
+                const percent = totalSum > 0 ? Math.round((count / totalSum) * 100) : 0;
+
+                return `
+                <div class="flex-1 min-w-[80px] h-full flex flex-col items-center justify-between p-3.5 rounded-2xl bg-slate-50/80 border border-slate-100 hover:border-orange-300 hover:bg-orange-50/30 shadow-xs hover:shadow-md transition-all group cursor-default select-none">
+                    <span class="text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full bg-white border border-slate-200/80 text-slate-500 group-hover:text-orange-600 group-hover:border-orange-300 transition-colors shadow-2xs">
+                        #${idx + 1}
+                    </span>
+                    
+                    <div class="relative flex items-center justify-center my-auto" style="width: ${size + 16}px; height: ${size + 16}px;">
+                        <div class="map-bubble-pulse" style="width: ${size + 8}px; height: ${size + 8}px; background-color: ${color}; opacity: 0.35;"></div>
+                        <div class="map-bubble-core relative shadow-lg group-hover:scale-110 transition-transform flex items-center justify-center font-black text-white" 
+                             style="width: ${size}px; height: ${size}px; background: radial-gradient(circle at 35% 35%, ${color}, #0f172a 135%); font-size: ${size > 56 ? '17px' : (size > 48 ? '15px' : '13px')};">
+                            ${count}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center w-full">
+                        <p class="font-black text-slate-800 text-[10.5px] uppercase truncate tracking-tight group-hover:text-orange-600 transition-colors" title="${name}">
+                            ${name}
+                        </p>
+                        <span class="text-[8.5px] font-bold text-slate-400 block mt-0.5">
+                            ${percent}% do Top 5
+                        </span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateCharts(rm, tm, esTimelineMap = {}, salasCriseTimelineMap = {}, sagreTimelineMap = {}, pendenciasDailyMap = {}, agregadosTimelineMap = {}) {
+            const chartTim = document.getElementById('timelineChart'),
+                  chartVolCope = document.getElementById('volumetriaCopeChart');
+
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'claro';
+            const chartColors = getChartColorsForTheme(currentTheme);
+
+            const rData = Object.entries(rm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            const tData = Object.entries(tm).sort((a,b)=>{ const [d1,m1]=a[0].split('/').map(Number), [d2,m2]=b[0].split('/').map(Number); return (m1*100+d1)-(m2*100+d2); });
+            
+            // Renderiza as bolinhas enfileiradas para o Top 5 Regiões
+            renderRegioesMap(rData);
+
+            if (chartTim) {
+                const ctxTim = chartTim.getContext('2d');
+                if(charts.tim) charts.tim.destroy();
+                const opt = { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        y: { grid: { color: chartColors.gridColor }, ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' } } }, 
+                        x: { grid: { color: chartColors.gridColor }, ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' } } } 
+                    } 
+                };
+                charts.tim = new Chart(ctxTim, { type: 'line', data: { labels: tData.map(x=>x[0]), datasets: [{ data: tData.map(x=>x[1]), borderColor: '#F37021', backgroundColor: 'rgba(243, 112, 33, 0.08)', fill: true, tension: 0.4 }] }, options: opt });
+            }
+
+            if (chartVolCope) {
+                if(charts.volCope) charts.volCope.destroy();
+                
+                const ligacoesData = charts.ligacoesCope ? charts.ligacoesCope.data.datasets[0].data : [];
+                const ligacoesLabels = charts.ligacoesCope ? charts.ligacoesCope.data.labels : [];
+                
+                // Obtenção direta e confiável dos dados de Pendências
+                let pendenciasLabels = [];
+                let pendenciasData = [];
+                const sourcePendMap = (pendenciasDailyMap && Object.keys(pendenciasDailyMap).length > 0) ? pendenciasDailyMap : dailyTotalsMap;
+                
+                if (sourcePendMap && Object.keys(sourcePendMap).length > 0) {
+                    const pendenciasSorted = Object.entries(sourcePendMap).sort((a, b) => {
+                        const [d1, m1, y1] = a[0].split('/').map(Number);
+                        const [d2, m2, y2] = b[0].split('/').map(Number);
+                        return new Date(y1, m1 - 1, d1) - new Date(y2, m2 - 1, d2);
+                    });
+                    pendenciasLabels = pendenciasSorted.map(item => item[0].substring(0, 5));
+                    pendenciasData = pendenciasSorted.map(item => item[1]);
+                } else if (charts.pendProgress && charts.pendProgress.data && charts.pendProgress.data.labels) {
+                    pendenciasLabels = charts.pendProgress.data.labels;
+                    pendenciasData = charts.pendProgress.data.datasets[0].data;
+                }
+                
+                const salasCriseSorted = Object.entries(salasCriseTimelineMap).sort((a, b) => {
+                    const [d1, m1, y1] = a[0].split('/').map(Number);
+                    const [d2, m2, y2] = b[0].split('/').map(Number);
+                    return new Date(y1, m1 - 1, d1) - new Date(y2, m2 - 1, d2);
+                });
+                const salasCriseLabels = salasCriseSorted.map(item => item[0]);
+                const salasCriseData = salasCriseSorted.map(item => item[1]);
+                
+                // Unificação de Espírito Santo + Sagre em "Gestão de TTK Sagre/Espirito Santo"
+                const gestaoSagreEsMap = {};
+                for (const date in esTimelineMap) {
+                    gestaoSagreEsMap[date] = (gestaoSagreEsMap[date] || 0) + esTimelineMap[date];
+                }
+                for (const date in sagreTimelineMap) {
+                    gestaoSagreEsMap[date] = (gestaoSagreEsMap[date] || 0) + sagreTimelineMap[date];
+                }
+
+                const gestaoSagreEsSorted = Object.entries(gestaoSagreEsMap).sort((a, b) => {
+                    const [d1, m1, y1] = a[0].split('/').map(Number);
+                    const [d2, m2, y2] = b[0].split('/').map(Number);
+                    return new Date(y1, m1 - 1, d1) - new Date(y2, m2 - 1, d2);
+                });
+                const gestaoSagreEsLabels = gestaoSagreEsSorted.map(item => item[0]);
+                const gestaoSagreEsData = gestaoSagreEsSorted.map(item => item[1]);
+
+                // Agregados por dia (Coluna Agregações)
+                const agregadosSorted = Object.entries(agregadosTimelineMap).sort((a, b) => {
+                    const [d1, m1, y1] = a[0].split('/').map(Number);
+                    const [d2, m2, y2] = b[0].split('/').map(Number);
+                    return new Date(y1 || 2026, (m1 || 1) - 1, d1 || 1) - new Date(y2 || 2026, (m2 || 1) - 1, d2 || 1);
+                });
+                const agregadosLabels = agregadosSorted.map(item => item[0]);
+                const agregadosData = agregadosSorted.map(item => item[1]);
+
+                const normalizeLabel = (label) => {
+                    if (typeof label === 'string' && label.length > 5) {
+                        return label.substring(0, 5);
+                    }
+                    return label;
+                };
+
+                const allLabelsSet = new Set([
+                    ...pendenciasLabels.map(normalizeLabel), 
+                    ...ligacoesLabels.map(normalizeLabel), 
+                    ...gestaoSagreEsLabels.map(normalizeLabel), 
+                    ...salasCriseLabels.map(normalizeLabel),
+                    ...agregadosLabels.map(normalizeLabel)
+                ]);
+                const allLabels = Array.from(allLabelsSet).sort((a, b) => {
+                    const parseDate = (str) => {
+                        const parts = str.split('/');
+                        // Assumindo formato DD/MM
+                        return new Date(2000, parseInt(parts[1]) - 1, parseInt(parts[0]));
+                    };
+                    return parseDate(a) - parseDate(b);
+                });
+
+                const mapDataToLabels = (labels, data, allLabels) => {
+                    const map = new Map();
+                    labels.forEach((l, i) => {
+                        const normalized = normalizeLabel(l);
+                        map.set(normalized, (map.get(normalized) || 0) + data[i]);
+                    });
+                    return allLabels.map(l => map.get(l) || 0);
+                };
+
+                const finalLigacoesData = mapDataToLabels(ligacoesLabels, ligacoesData, allLabels);
+                const finalPendenciasData = mapDataToLabels(pendenciasLabels, pendenciasData, allLabels);
+                const finalGestaoSagreEsData = mapDataToLabels(gestaoSagreEsLabels, gestaoSagreEsData, allLabels);
+                const finalSalasCriseData = mapDataToLabels(salasCriseLabels, salasCriseData, allLabels);
+                const finalAgregadosData = mapDataToLabels(agregadosLabels, agregadosData, allLabels);
+
+                const ctxVolCope = chartVolCope.getContext('2d');
+                const pointBg = (currentTheme === 'escuro' ? '#141417' : (currentTheme === 'medio' ? '#1e293b' : '#ffffff'));
+                const haloColor = (currentTheme === 'escuro' || currentTheme === 'medio') ? '#0f172a' : '#ffffff';
+
+                // Plugin para renderizar os totais visíveis nas bolinhas do gráfico Volumetria COPE
+                const volCopeLabelsPlugin = {
+                    id: 'volCopeLabelsPlugin',
+                    afterDatasetsDraw(chart) {
+                        if (!showVolCopeLabels) return;
+                        const { ctx } = chart;
+                        ctx.save();
+                        ctx.font = 'bold 9.5px Inter, system-ui, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        const pointsByIndex = {};
+
+                        chart.data.datasets.forEach((dataset, datasetIndex) => {
+                            const meta = chart.getDatasetMeta(datasetIndex);
+                            if (meta.hidden || !chart.isDatasetVisible(datasetIndex)) return;
+
+                            meta.data.forEach((element, index) => {
+                                if (!element) return;
+                                const val = dataset.data[index];
+                                if (val === null || val === undefined) return;
+
+                                const x = typeof element.x === 'number' ? element.x : (element.getCenterPoint ? element.getCenterPoint().x : null);
+                                const y = typeof element.y === 'number' ? element.y : (element.getCenterPoint ? element.getCenterPoint().y : null);
+                                if (x === null || y === null || isNaN(x) || isNaN(y)) return;
+
+                                if (!pointsByIndex[index]) pointsByIndex[index] = [];
+                                pointsByIndex[index].push({
+                                    datasetIndex,
+                                    val,
+                                    x,
+                                    y,
+                                    color: dataset.borderColor || '#333'
+                                });
+                            });
+                        });
+
+                        Object.values(pointsByIndex).forEach(pointsAtDate => {
+                            // Ordena por posição vertical (de cima para baixo na tela)
+                            pointsAtDate.sort((a, b) => a.y - b.y);
+
+                            let lastY = -999;
+                            pointsAtDate.forEach((pt) => {
+                                let targetY = pt.y - 8;
+                                if (Math.abs(targetY - lastY) < 11) {
+                                    targetY = lastY - 11;
+                                }
+                                if (chart.chartArea && targetY < chart.chartArea.top + 8) {
+                                    targetY = pt.y + 10;
+                                }
+                                lastY = targetY;
+
+                                const text = String(pt.val);
+
+                                // Contorno (halo) para contraste garantido sobre linhas e fundos
+                                ctx.strokeStyle = haloColor;
+                                ctx.lineWidth = 2.5;
+                                ctx.lineJoin = 'round';
+                                ctx.strokeText(text, pt.x, targetY);
+
+                                // Texto com a cor correspondente da série
+                                ctx.fillStyle = pt.color;
+                                ctx.fillText(text, pt.x, targetY);
+                            });
+                        });
+
+                        ctx.restore();
+                    }
+                };
+
+                const optVol = { 
+                    maintainAspectRatio: false, 
+                    layout: {
+                        padding: { top: 18, right: 14, left: 6, bottom: 6 }
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'top', 
+                            onClick: (e, legendItem, legend) => {
+                                const index = legendItem.datasetIndex;
+                                const ci = legend.chart;
+                                if (ci.isDatasetVisible(index)) {
+                                    ci.hide(index);
+                                    legendItem.hidden = true;
+                                } else {
+                                    ci.show(index);
+                                    legendItem.hidden = false;
+                                }
+                                ci.update();
+                            },
+                            labels: { 
+                                color: chartColors.textColor, 
+                                font: { weight: 'bold' },
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                padding: 10
+                            } 
+                        } 
+                    }, 
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            grace: '10%',
+                            grid: { color: chartColors.gridColor }, 
+                            ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' }, precision: 0 } 
+                        }, 
+                        x: { 
+                            grid: { color: chartColors.gridColor }, 
+                            ticks: { color: chartColors.textColor, font: { size: 9, weight: '700' } } 
+                        } 
+                    } 
+                };
+                charts.volCope = new Chart(ctxVolCope, { 
+                    type: 'line', 
+                    data: { 
+                        labels: allLabels, 
+                        datasets: [
+                            { 
+                                label: 'Pendências', 
+                                data: finalPendenciasData, 
+                                borderColor: '#dc2626', 
+                                backgroundColor: 'transparent', 
+                                fill: false, 
+                                tension: 0.2, 
+                                borderWidth: 1.0,
+                                pointRadius: 2.5,
+                                pointHoverRadius: 5,
+                                pointBackgroundColor: '#dc2626',
+                                pointBorderColor: '#dc2626',
+                                pointBorderWidth: 1.0
+                            },
+                            { 
+                                label: 'Gestão de TTK Sagre/Espirito Santo', 
+                                data: finalGestaoSagreEsData, 
+                                borderColor: '#10b981', 
+                                backgroundColor: 'rgba(16, 185, 129, 0.08)', 
+                                fill: true, 
+                                tension: 0.2, 
+                                borderWidth: 1.0,
+                                pointRadius: 2.5,
+                                pointHoverRadius: 5,
+                                pointBackgroundColor: '#10b981',
+                                pointBorderColor: '#10b981',
+                                pointBorderWidth: 1.0
+                            },
+                            { 
+                                label: 'Ligações', 
+                                data: finalLigacoesData, 
+                                borderColor: '#2563eb', 
+                                backgroundColor: 'rgba(37, 99, 235, 0.08)', 
+                                fill: true, 
+                                tension: 0.2, 
+                                borderWidth: 1.0,
+                                pointRadius: 2.5,
+                                pointHoverRadius: 5,
+                                pointBackgroundColor: '#2563eb',
+                                pointBorderColor: '#2563eb',
+                                pointBorderWidth: 1.0
+                            },
+                            { 
+                                label: 'Salas de crise COPE/NOC', 
+                                data: finalSalasCriseData, 
+                                borderColor: '#F37021', 
+                                backgroundColor: 'rgba(243, 112, 33, 0.08)', 
+                                fill: true, 
+                                tension: 0.2, 
+                                borderWidth: 1.0,
+                                pointRadius: 2.5,
+                                pointHoverRadius: 5,
+                                pointBackgroundColor: '#F37021',
+                                pointBorderColor: '#F37021',
+                                pointBorderWidth: 1.0
+                            },
+                            { 
+                                label: 'Tickets Agregados', 
+                                data: finalAgregadosData, 
+                                borderColor: '#723cde', 
+                                backgroundColor: 'rgba(114, 60, 222, 0.08)', 
+                                fill: true, 
+                                tension: 0.2, 
+                                borderWidth: 1.0,
+                                pointRadius: 2.5,
+                                pointHoverRadius: 5,
+                                pointBackgroundColor: '#723cde',
+                                pointBorderColor: '#723cde',
+                                pointBorderWidth: 1.0
+                            }
+                        ] 
+                    }, 
+                    options: optVol,
+                    plugins: [volCopeLabelsPlugin]
+                });
             }
         }
 
@@ -1884,33 +3584,47 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
         }
 
-        function switchLigacoes(key) {
+        function renderLigacoesNavButtons() {
+            const container = document.getElementById('ligacoes-files-nav');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const allLigKeys = [];
+            DEFAULT_MONTH_CONFIGS.forEach(c => {
+                if (!allLigKeys.includes(c.ligKey)) allLigKeys.push(c.ligKey);
+            });
+            Object.keys(ligacoesDatasets).forEach(k => {
+                if (!allLigKeys.includes(k)) allLigKeys.push(k);
+            });
+
+            allLigKeys.forEach(name => {
+                const btn = document.createElement('button');
+                btn.innerText = name;
+                const isActive = activeLigacoesKey === name;
+                btn.className = "px-3 py-1 rounded-md text-[9px] font-black uppercase border transition-all " + 
+                    (isActive ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-white text-blue-600 border-blue-200 hover:bg-blue-50");
+                btn.onclick = () => switchLigacoes(name);
+                container.appendChild(btn);
+            });
+        }
+
+        async function switchLigacoes(key) {
+            if (!key) return;
+            if (!ligacoesDatasets[key]) {
+                const cfg = DEFAULT_MONTH_CONFIGS.find(c => c.ligKey === key || c.name.toUpperCase().includes(key.toUpperCase()));
+                if (cfg) {
+                    await ensureMonthLoaded(cfg.key);
+                }
+            }
             if (!ligacoesDatasets[key]) return;
             activeLigacoesKey = key;
-            const container = document.getElementById('ligacoes-files-nav');
-            Array.from(container.children).forEach(btn => {
-                if (btn.innerText === key) {
-                    btn.className = "px-3 py-1 rounded-md text-[9px] font-black uppercase border transition-all bg-blue-600 text-white border-blue-600 shadow-md";
-                } else {
-                    btn.className = "px-3 py-1 rounded-md text-[9px] font-black uppercase border transition-all bg-white text-blue-600 border-blue-200 hover:bg-blue-50";
-                }
-            });
+            renderLigacoesNavButtons();
             processLigacoesCope(ligacoesDatasets[key]);
         }
 
         function addLigacoesDataset(name, data) {
             ligacoesDatasets[name] = data;
-            const container = document.getElementById('ligacoes-files-nav');
-            let btn = Array.from(container.children).find(b => b.innerText === name);
-            if (!btn) {
-                btn = document.createElement('button');
-                btn.innerText = name;
-                btn.onclick = () => switchLigacoes(name);
-                container.appendChild(btn);
-            }
-            if (activeLigacoesKey !== name) {
-                btn.className = "px-3 py-1 rounded-md text-[9px] font-black uppercase border transition-all bg-white text-blue-600 border-blue-200 hover:bg-blue-50";
-            }
+            renderLigacoesNavButtons();
         }
 
         // --- LÓGICA LIGAÇÕES COPE ---
@@ -1931,7 +3645,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             reader.readAsArrayBuffer(file);
         });
 
-        function processLigacoesCope(data) {
+        function processLigacoesCope(data, fromMonthFilter = false) {
             let totalCalls = 0;
             let totalSeconds = 0;
             let totalRejected = 0;
@@ -2034,6 +3748,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 let dateObjForSort = null;
 
                 if (dateRaw) {
+                    row._dateObj = null; // Inicializa
                     if (typeof dateRaw === 'number') {
                         // Correção para datas Excel (Serial Number) evitando deslocamento de fuso horário
                         const dateObj = new Date(Math.round((dateRaw - 25569) * 86400 * 1000));
@@ -2041,6 +3756,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                         dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                         dateObjForSort = d;
                     } else {
+
                         // Tratamento robusto para string: Traz o valor EXATO da coluna (removendo hora se houver)
                         const str = String(dateRaw).trim();
                         dateStr = str.split(/\s+/)[0]; // Pega a primeira parte (data) ignorando hora
@@ -2075,6 +3791,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                         }
                     }
                 }
+                if(dateObjForSort) row._dateObj = dateObjForSort;
 
                 if (dateStr !== "N/A") {
                     // Normaliza para DD/MM/AAAA se tivermos um objeto de data válido
@@ -2132,6 +3849,8 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }).map(k => [k, dailyMap[k]]);
             
             if (charts.ligacoesCope) charts.ligacoesCope.destroy();
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'claro';
+            const chartColors = getChartColorsForTheme(currentTheme);
             const ligacoesCtx = document.getElementById('ligacoesCopeChart').getContext('2d');
             charts.ligacoesCope = new Chart(ligacoesCtx, {
                 type: 'line',
@@ -2141,7 +3860,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                         label: 'Ligações',
                         data: sortedDays.map(d => d[1]),
                         borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        backgroundColor: 'rgba(37, 99, 235, 0.12)',
                         fill: true,
                         tension: 0.3,
                         pointRadius: 4,
@@ -2152,8 +3871,15 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, ticks: { font: { size: 9, weight: '600' }, precision: 0 } },
-                        x: { ticks: { font: { size: 9, weight: '600' } } }
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: chartColors.gridColor },
+                            ticks: { color: chartColors.textColor, font: { size: 9, weight: '600' }, precision: 0 } 
+                        },
+                        x: { 
+                            grid: { color: chartColors.gridColor },
+                            ticks: { color: chartColors.textColor, font: { size: 9, weight: '600' } } 
+                        }
                     },
                     onClick: (e, activeEls) => {
                         if (activeEls.length > 0) {
@@ -2167,6 +3893,10 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             
             document.getElementById('ligacoes-content').classList.remove('hidden');
             document.getElementById('ligacoes-placeholder').classList.add('hidden');
+
+            if (!fromMonthFilter) {
+                runVolAnalysis(globalVolData);
+            }
         }
 
         window.openLigacoesGeneralModal = function(type, value) {
@@ -2235,69 +3965,99 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             setTimeout(() => document.getElementById('modalBox').classList.add('scale-100'), 10);
         }
 
-        // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (VOLUMETRIA) ---
+        // --- FUNÇÕES DE CARREGAMENTO ULTRARRÁPIDO PROGRESSIVO ---
+        function updateLoadingProgress(pct) {
+            const bar = document.getElementById('fastLoadingBar');
+            if (!bar) return;
+            bar.style.opacity = '1';
+            bar.style.width = pct + '%';
+            if (pct >= 100) {
+                setTimeout(() => {
+                    bar.style.opacity = '0';
+                    setTimeout(() => { bar.style.width = '0%'; }, 400);
+                }, 400);
+            }
+        }
+
+        async function fetchAndParseVolFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) return [];
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
+                
+                let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
+                if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
+                
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx, defval: "" });
+                return jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+            } catch (e) {
+                console.warn(`Volumetria: Erro ao carregar '${filename}'.`, e);
+                return [];
+            }
+        }
+
+        async function fetchAndParseLigFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) return null;
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
+                const name = filename.replace('Ligações_', '').replace('.xlsx', '').replace('.xls', '').toUpperCase();
+                return { name, data: jsonData };
+            } catch (e) {
+                console.warn(`Ligações: Erro ao carregar '${filename}'.`, e);
+                return null;
+            }
+        }
+
+        // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LAZY LOADING - MÊS MAIS ATUAL) ---
         async function loadDefaultFiles() {
             if (defaultFilesLoaded) return;
             defaultFilesLoaded = true;
 
-            const volFiles = ['Volumetria_Julho 2026.xls', 'Volumetria_Junho 2026.xls', 'Volumetria_Maio 2026.xls', 'Volumetria_Abril 2026.xls', 'Volumetria_Março 2026.xls', 'Volumetria_Fevereiro 2026.xls', 'Volumetria_Janeiro 2026.xls'];
-            let combinedData = [];
+            // Renderiza imediatamente os botões de meses e abas de ligações para interação instantânea
+            renderMonthButtons();
+            renderLigacoesNavButtons();
 
-            for (const filename of volFiles) {
-                try {
-                    const response = await fetch(filename);
-                    if (response.ok) {
-                        const data = await response.arrayBuffer();
-                        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                        
-                        // Lógica de detecção de cabeçalho (mesma do input manual)
-                        let hIdx = rowsRaw.findIndex(r => r && r.some(c => normalizeString(c).includes('CAUSA')));
-                        if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
-                        
-                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx, defval: "" });
-                        const validData = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
-                        
-                        if (validData.length > 0) {
-                            combinedData = combinedData.concat(validData);
-                            console.log(`Volumetria: Arquivo '${filename}' carregado e mesclado.`);
-                        }
-                    }
-                } catch (e) {
-                    console.log(`Volumetria: Erro ao carregar '${filename}'.`, e);
+            updateLoadingProgress(20);
+
+            // Carregamento sob demanda estritamente do mês mais atual (Julho/2026)
+            const latestCfg = DEFAULT_MONTH_CONFIGS[DEFAULT_MONTH_CONFIGS.length - 1];
+            activeMonthFilter = latestCfg.key;
+
+            try {
+                const [firstVol, firstLig] = await Promise.all([
+                    fetchAndParseVolFile(latestCfg.volFile),
+                    fetchAndParseLigFile(latestCfg.ligFile)
+                ]);
+
+                if (firstVol && firstVol.length > 0) {
+                    const normalizedVol = firstVol.map(row => normalizeVolRow(row));
+                    loadedVolByMonth.set(latestCfg.key, normalizedVol);
+                    rebuildGlobalVolData();
                 }
-            }
 
-            if (combinedData.length > 0) {
-                processVolData(combinedData);
-            } else {
-                console.log("Volumetria: Nenhum dado válido encontrado nos arquivos padrão.");
-            }
-
-            // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO PADRÃO (LIGAÇÕES) ---
-            const ligFiles = ['Ligações_Janeiro 2026.xlsx', 'Ligações_Fevereiro 2026.xlsx', 'Ligações_Março 2026.xlsx', 'Ligações_Abril 2026.xlsx', 'Ligações_Maio 2026.xlsx', 'Ligações_Junho 2026.xlsx', 'Ligações_Julho 2026.xls'];
-            for (const filename of ligFiles) {
-                try {
-                    const response = await fetch(filename);
-                    if (response.ok) {
-                        const data = await response.arrayBuffer();
-                        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
-                        
-                        let name = filename.replace('Ligações_', '').replace('.xlsx', '').toUpperCase();
-                        addLigacoesDataset(name, jsonData);
-                        
-                        // Carrega o último da lista por padrão (Fevereiro)
-                        if (filename === ligFiles[ligFiles.length - 1]) {
-                            switchLigacoes(name);
-                        }
-                        console.log(`Ligações: Arquivo '${filename}' carregado.`);
-                    }
-                } catch (e) {
-                    console.log(`Ligações: Erro ao carregar '${filename}'.`, e);
+                if (firstLig && firstLig.data) {
+                    loadedLigByMonth.set(latestCfg.key, firstLig);
+                    addLigacoesDataset(firstLig.name, firstLig.data);
+                    activeLigacoesKey = firstLig.name;
+                    renderLigacoesNavButtons();
                 }
+
+                updateLoadingProgress(80);
+
+                renderMonthButtons();
+                applyMonthFilter(latestCfg.key);
+
+                updateLoadingProgress(100);
+            } catch (e) {
+                console.warn("Erro no carregamento do mês mais atual:", e);
+                updateLoadingProgress(100);
             }
         }
 
@@ -2315,9 +4075,20 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Sincroniza o tema salvo com os botões e Chart.js
+            setTheme(getSavedTheme(), false);
+
+            // Fecha menu dropdown de tema ao clicar fora
+            document.addEventListener('click', (e) => {
+                const container = document.getElementById('theme-dropdown-container');
+                if (container && !container.contains(e.target)) {
+                    closeThemeDropdown();
+                }
+            });
+
             const params = new URLSearchParams(window.location.search);
             if (params.get('share') === 'true') {
-                const ids = ['global-back-btn', 'admin-btn-container', 'volumetria-back-btn', 'share-btn', 'import-dados-btn'];
+                const ids = ['global-back-btn', 'admin-btn-container', 'volumetria-back-btn', 'share-btn', 'import-dados-btn', 'theme-dropdown-container'];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.classList.add('hidden');
