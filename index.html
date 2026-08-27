@@ -157,15 +157,40 @@
                 linear-gradient(315deg, rgba(9,9,11,0.7) 25%, rgba(20,20,24,0.7) 25%) !important;
         }
 
+        /* --- FOCO INTERATIVO DAS CAIXAS PRINCIPAIS (+10% EXPANSÃO & CENTRO) --- */
+        #card-focus-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 45;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #card-focus-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .hover-lift-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.34, 1.25, 0.64, 1), border-color 0.3s ease, box-shadow 0.35s ease, background-color 0.3s ease;
             border: 1px solid var(--border-color) !important;
             background-color: var(--bg-card);
+            position: relative;
+            cursor: pointer;
         }
-        .hover-lift-card:hover {
+        .hover-lift-card:hover:not(.card-focused-active) {
             transform: translateY(-8px);
             border-color: var(--vivo-orange) !important;
             box-shadow: var(--box-shadow-card);
+        }
+        .hover-lift-card.card-focused-active {
+            transform: scale(1.10) !important;
+            z-index: 50 !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--vivo-orange) !important;
+            border-color: var(--vivo-orange) !important;
         }
 
         .btn-depth {
@@ -890,6 +915,9 @@
 </head>
 <body class="min-h-screen flex flex-col" id="main-body">
 
+    <!-- Backdrop Interativo para Foco nas Caixas Principais -->
+    <div id="card-focus-backdrop" onclick="closeCardFocus()"></div>
+
     <!-- Barra de Progresso de Carregamento Rápido -->
     <div id="fastLoadingBar"></div>
 
@@ -1187,7 +1215,7 @@
                             <div class="w-1.5 h-5 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-sm"></div>
                             <div>
                                 <h3 class="font-black text-slate-800 uppercase text-xs tracking-[0.2em] leading-tight">Distribuição de Tags</h3>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Painel Analítico de Classificações</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Painel Analítico</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 px-2.5 py-1 rounded-full text-slate-500 text-[9px] font-black uppercase tracking-wider no-print">
@@ -1201,7 +1229,7 @@
                         <div class="flex items-center justify-between border-b border-orange-200/70 pb-1.5 mb-2.5">
                             <div class="flex items-center gap-2">
                                 <div class="w-1.5 h-3.5 bg-gradient-to-b from-orange-500 to-amber-600 rounded-full"></div>
-                                <h4 class="text-[10.5px] font-black text-orange-950 uppercase tracking-[0.15em]">Salas de Crise</h4>
+                                <h4 class="text-[11.5px] font-black text-orange-950 uppercase tracking-[0.15em]">Salas de Crise</h4>
                             </div>
                             <span class="text-[8px] font-black text-orange-600 uppercase tracking-wider bg-orange-100/80 border border-orange-200/60 px-2 py-0.5 rounded-full">Críticos</span>
                         </div>
@@ -1214,21 +1242,21 @@
                                 <div class="my-auto pt-1 pb-1 flex items-center justify-center">
                                     <p id="tag-sala-cope-val" class="text-[28px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none">0</p>
                                 </div>
-                                <!-- Contadores AGG, B2B e PON LOSS abaixo do valor principal com valores pequenos acima dos rótulos -->
-                                <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1 px-1 flex items-center justify-around text-center gap-1 mt-auto">
+                                <!-- Contadores AGG, B2B e PON LOSS abaixo do valor principal com valores aumentados em 25% -->
+                                <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1.5 px-1 flex items-center justify-around text-center gap-1 mt-auto">
                                     <div class="flex flex-col items-center flex-1" title="AGG">
-                                        <span id="sc-agg-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                        <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">AGG</span>
+                                        <span id="sc-agg-val" class="text-[12.5px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[9.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">AGG</span>
                                     </div>
-                                    <span class="text-orange-200 font-light text-[10px]">|</span>
+                                    <span class="text-orange-200 font-light text-[11px]">|</span>
                                     <div class="flex flex-col items-center flex-1" title="B2B">
-                                        <span id="sc-b2b-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                        <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">B2B</span>
+                                        <span id="sc-b2b-val" class="text-[12.5px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[9.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">B2B</span>
                                     </div>
-                                    <span class="text-orange-200 font-light text-[10px]">|</span>
+                                    <span class="text-orange-200 font-light text-[11px]">|</span>
                                     <div class="flex flex-col items-center flex-1" title="PON">
-                                        <span id="sc-pon-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                        <span class="text-[7px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">PON</span>
+                                        <span id="sc-pon-val" class="text-[12.5px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[9px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">PON</span>
                                     </div>
                                 </div>
                             </div>
@@ -1261,7 +1289,7 @@
                                 </div>
                                 <div class="flex items-center gap-1.5 bg-white/95 border border-emerald-200 px-2 py-0.5 rounded-full shadow-xs">
                                     <span class="text-[8.5px] font-black text-emerald-600 uppercase tracking-wider">Total:</span>
-                                    <span id="tag-sagre-val" class="text-xs font-black text-emerald-800 leading-none">0</span>
+                                    <span id="tag-sagre-val" class="text-[15px] font-black text-emerald-800 leading-none">0</span>
                                 </div>
                             </div>
                             <div id="sagre-cities-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 h-[135px] overflow-y-auto custom-scrollbar p-0.5 flex-1">
@@ -1842,6 +1870,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
         // --- MODAL FUNCTIONS ---
         function openTagDetailsModal(tagName) {
+            if (typeof closeCardFocus === 'function') closeCardFocus();
             let list = tagDetailsLists[tagName] || [];
             document.getElementById('modalAnalista').innerText = tagName;
             document.getElementById('modalSubTitle').innerText = "Lista detalhada de referências e tags registradas";
@@ -1961,6 +1990,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         function openTotalPendenciasModal() {
+            if (typeof closeCardFocus === 'function') closeCardFocus();
             if (masterPendenciasList.length === 0) return;
             document.getElementById('modalAnalista').innerText = "TOTAL GERAL DE PENDÊNCIAS";
             document.getElementById('modalSubTitle').innerText = "Lista unificada de todas as pendências identificadas";
@@ -2002,6 +2032,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         function openDetailsModal(keyName) {
+            if (typeof closeCardFocus === 'function') closeCardFocus();
             const mode = pendenciasViewMode;
             const details = mode === 'causa' ? currentCausaPendenciaDetails[keyName] : currentAnalistaPendenciaDetails[keyName];
             document.getElementById('modalAnalista').innerText = keyName;
@@ -2021,6 +2052,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         function openGenericDataModal(data, title, subtitle = "", exportFileName = "EXPORT_DATA") {
+            if (typeof closeCardFocus === 'function') closeCardFocus();
             if (!data || data.length === 0) {
                 // Optionally show a toast message
                 return;
@@ -3166,7 +3198,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     sagreContainer.innerHTML = sortedSagreCities.map(([city, count]) => `
                         <div class="flex items-center justify-between bg-white hover:bg-emerald-50/90 p-1 px-2 rounded-lg border border-emerald-100 hover:border-emerald-300 shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none" ondblclick="openSagreCityModal('${city.replace(/'/g, "\\'")}')" title="Duplo clique para ver tickets de ${city}">
                             <span class="font-bold text-slate-700 group-hover:text-emerald-950 text-[9.5px] uppercase truncate pr-1 tracking-tight">${city}</span>
-                            <span class="bg-emerald-600 group-hover:bg-emerald-700 text-white font-black text-[8.5px] px-1.5 py-0.2 rounded-md shadow-xs flex-shrink-0 transition-colors">${count}</span>
+                            <span class="bg-emerald-600 group-hover:bg-emerald-700 text-white font-black text-[10.5px] px-1.5 py-0.5 rounded-md shadow-xs flex-shrink-0 transition-colors">${count}</span>
                         </div>
                     `).join('');
                 }
@@ -4285,6 +4317,61 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
         }
 
+        // --- SISTEMA DE FOCO INTERATIVO DAS CAIXAS PRINCIPAIS (+10% EXPANSÃO & CENTRO) ---
+        let currentlyFocusedCard = null;
+
+        function closeCardFocus() {
+            if (currentlyFocusedCard) {
+                currentlyFocusedCard.classList.remove('card-focused-active');
+                currentlyFocusedCard = null;
+            }
+            const backdrop = document.getElementById('card-focus-backdrop');
+            if (backdrop) backdrop.classList.remove('active');
+        }
+
+        function initCardFocusInteractions() {
+            const cards = document.querySelectorAll('.hover-lift-card');
+            cards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Ignora cliques em botões, links, inputs, selects, labels ou controles de rolagem
+                    const interactive = e.target.closest('button, input, select, label, a, .custom-scrollbar, #monthFilterContainer');
+                    if (interactive && interactive !== card) {
+                        return;
+                    }
+
+                    // Se o card já está em foco, um novo clique nele fecha o foco
+                    if (card.classList.contains('card-focused-active')) {
+                        closeCardFocus();
+                        return;
+                    }
+
+                    // Desativa qualquer outro card focado anteriormente
+                    if (currentlyFocusedCard && currentlyFocusedCard !== card) {
+                        currentlyFocusedCard.classList.remove('card-focused-active');
+                    }
+
+                    // Ativa o foco interativo (+10% de tamanho e foco no centro)
+                    card.classList.add('card-focused-active');
+                    currentlyFocusedCard = card;
+
+                    const backdrop = document.getElementById('card-focus-backdrop');
+                    if (backdrop) backdrop.classList.add('active');
+
+                    // Centraliza o card suavemente na tela
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 50);
+                });
+            });
+
+            // Fecha o foco ao pressionar ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' || e.key === 'Esc') {
+                    closeCardFocus();
+                }
+            });
+        }
+
         // --- COMPARTILHAMENTO EXTERNO ---
         function copyShareLink() {
             const url = new URL(window.location.href);
@@ -4299,6 +4386,9 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Inicializa foco interativo das caixas principais
+            initCardFocusInteractions();
+
             // Sincroniza o tema salvo com os botões e Chart.js
             setTheme(getSavedTheme(), false);
 
