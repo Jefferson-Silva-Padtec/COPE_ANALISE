@@ -2386,7 +2386,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         async function ensureMonthLoaded(monthKey) {
-            if (loadedVolByMonth.has(monthKey)) {
+            if (loadedVolByMonth.has(monthKey) && (loadedVolByMonth.get(monthKey) || []).length > 0) {
                 return loadedVolByMonth.get(monthKey);
             }
             const res = await ensureMonthsLoaded([monthKey]);
@@ -2394,7 +2394,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         async function ensureMonthsLoaded(monthKeys) {
-            const missing = monthKeys.filter(k => !loadedVolByMonth.has(k));
+            const missing = monthKeys.filter(k => !loadedVolByMonth.has(k) || (loadedVolByMonth.get(k) || []).length === 0);
             if (missing.length === 0) return [];
 
             updateLoadingProgress(15);
@@ -2413,10 +2413,12 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     ]);
 
                     const normalizedVol = (vData || []).map(row => normalizeVolRow(row));
-                    loadedVolByMonth.set(key, normalizedVol);
-                    results.push(normalizedVol);
+                    if (normalizedVol && normalizedVol.length > 0) {
+                        loadedVolByMonth.set(key, normalizedVol);
+                        results.push(normalizedVol);
+                    }
 
-                    if (lData && lData.data) {
+                    if (lData && lData.data && lData.data.length > 0) {
                         loadedLigByMonth.set(key, lData);
                         addLigacoesDataset(lData.name, lData.data);
                     }
@@ -2522,6 +2524,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 } else {
                     runVolAnalysis(globalVolData);
                 }
+                if (typeof hideDeployWarning === 'function') hideDeployWarning();
                 showImportLigacoesModal();
             };
             reader.readAsArrayBuffer(file);
@@ -4074,16 +4077,127 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             }
         }
 
+        // --- SISTEMA DE RESOLUÇÃO E CARREGAMENTO ROBUSTO DE ARQUIVOS (DEPLOY RESILIENTE) ---
+        function removeDiacritics(str) {
+            return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function getCandidateUrls(filename) {
+            if (!filename) return [];
+            const candidates = new Set();
+            const cleanAscii = removeDiacritics(filename);
+            const baseNames = [filename];
+            if (cleanAscii !== filename) baseNames.push(cleanAscii);
+
+            const allNameVariants = [];
+            baseNames.forEach(b => {
+                allNameVariants.push(b);
+                allNameVariants.push(b.replace(/ /g, '_'));
+                allNameVariants.push(b.replace(/ /g, '%20'));
+                allNameVariants.push(b.toLowerCase());
+                allNameVariants.push(b.replace(/ /g, '_').toLowerCase());
+                
+                // Variações de extensão .xls <-> .xlsx
+                if (b.endsWith('.xls')) {
+                    allNameVariants.push(b.replace('.xls', '.xlsx'));
+                    allNameVariants.push(b.replace(/ /g, '_').replace('.xls', '.xlsx'));
+                } else if (b.endsWith('.xlsx')) {
+                    allNameVariants.push(b.replace('.xlsx', '.xls'));
+                    allNameVariants.push(b.replace(/ /g, '_').replace('.xlsx', '.xls'));
+                }
+            });
+
+            // Prefixo de caminhos relativos
+            const prefixes = ['./', '', './COPE_ANALISE-main/', 'COPE_ANALISE-main/'];
+
+            prefixes.forEach(p => {
+                allNameVariants.forEach(v => {
+                    candidates.add(p + v);
+                    try {
+                        candidates.add(p + encodeURI(v));
+                    } catch(e) {}
+                });
+            });
+
+            return Array.from(candidates);
+        }
+
+        function showDeployWarning(message) {
+            let warnBox = document.getElementById('deploy-load-warning-banner');
+            if (!warnBox) {
+                const container = document.getElementById('dashboard-content');
+                if (!container) return;
+                warnBox = document.createElement('div');
+                warnBox.id = 'deploy-load-warning-banner';
+                warnBox.className = 'bg-amber-500/10 border border-amber-500/30 text-amber-300 p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs font-semibold mb-4 no-print shadow-lg';
+                container.insertBefore(warnBox, container.firstChild);
+            }
+            warnBox.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-amber-400 text-lg"></i>
+                    <span>${message}</span>
+                </div>
+                <div class="flex items-center gap-2 self-end md:self-auto">
+                    <label class="cursor-pointer bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition shadow">
+                        Importar Planilha
+                        <input type="file" onchange="document.getElementById('fileInputVol').files = this.files; document.getElementById('fileInputVol').dispatchEvent(new Event('change'))" class="hidden" accept=".xls,.xlsx,.csv">
+                    </label>
+                    <button onclick="document.getElementById('deploy-load-warning-banner')?.remove()" class="text-slate-400 hover:text-white px-2 py-1"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+        }
+
+        function hideDeployWarning() {
+            const warnBox = document.getElementById('deploy-load-warning-banner');
+            if (warnBox) warnBox.remove();
+        }
+
+        async function fetchBinaryWithFallbacks(filename, fileTypeLabel = "Arquivo") {
+            const urls = getCandidateUrls(filename);
+            let lastStatus = null;
+            let gitLfsDetected = false;
+
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, { cache: 'no-cache' });
+                    if (response.ok) {
+                        const buffer = await response.arrayBuffer();
+                        if (buffer && buffer.byteLength > 0) {
+                            // Verifica se é ponteiro do Git LFS (arquivo de texto de ~130 bytes)
+                            if (buffer.byteLength < 500) {
+                                const textCheck = new TextDecoder('utf-8').decode(new Uint8Array(buffer));
+                                if (textCheck.startsWith('version https://git-lfs.github.com/spec/v1')) {
+                                    gitLfsDetected = true;
+                                    console.warn(`[DEPLOY ALERTA] O arquivo '${filename}' é um ponteiro Git LFS de 130 bytes (${url}). O GitHub Pages/Deploy não baixou o binário real.`);
+                                    continue;
+                                }
+                            }
+                            console.log(`[DEPLOY SUCESSO] ${fileTypeLabel} carregado de: ${url} (${(buffer.byteLength / 1024).toFixed(1)} KB)`);
+                            return { buffer, url };
+                        }
+                    } else {
+                        lastStatus = response.status;
+                    }
+                } catch(err) {
+                    // Erro de rede ou restrição de CORS
+                }
+            }
+
+            if (gitLfsDetected) {
+                showDeployWarning(`O arquivo <b>${filename}</b> foi enviado via Git LFS e não pode ser servido diretamente pelo GitHub Pages. Use o botão <b>IMPORTAR DADOS</b> para carregar sua planilha.`);
+            } else if (lastStatus === 404) {
+                console.warn(`[DEPLOY AVISO] Arquivo '${filename}' não encontrado (404) no servidor.`);
+            }
+
+            return null;
+        }
+
         async function fetchAndParseVolFile(filename) {
             try {
-                let response = await fetch(filename);
-                if (!response.ok) {
-                    const altFilename = filename.endsWith('.xlsx') ? filename.replace('.xlsx', '.xls') : (filename.endsWith('.xls') ? filename.replace('.xls', '.xlsx') : null);
-                    if (altFilename) response = await fetch(altFilename);
-                }
-                if (!response.ok) return [];
-                const data = await response.arrayBuffer();
-                const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
+                const fetched = await fetchBinaryWithFallbacks(filename, "Volumetria");
+                if (!fetched || !fetched.buffer) return [];
+
+                const workbook = XLSX.read(new Uint8Array(fetched.buffer), { type: 'array', dense: true, cellDates: false, raw: true });
                 const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                 const rowsRaw = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
                 
@@ -4091,29 +4205,27 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 if (hIdx === -1 && rowsRaw.length > 1 && (!rowsRaw[0] || rowsRaw[0].length === 0)) hIdx = 1;
                 
                 const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: hIdx === -1 ? 0 : hIdx, defval: "" });
-                return jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+                const filtered = jsonData.filter(r => Object.values(r).some(v => v !== null && v !== ""));
+                if (filtered.length > 0) hideDeployWarning();
+                return filtered;
             } catch (e) {
-                console.warn(`Volumetria: Erro ao carregar '${filename}'.`, e);
+                console.warn(`Volumetria: Erro ao processar '${filename}'.`, e);
                 return [];
             }
         }
 
         async function fetchAndParseLigFile(filename) {
             try {
-                let response = await fetch(filename);
-                if (!response.ok) {
-                    const altFilename = filename.endsWith('.xlsx') ? filename.replace('.xlsx', '.xls') : (filename.endsWith('.xls') ? filename.replace('.xls', '.xlsx') : null);
-                    if (altFilename) response = await fetch(altFilename);
-                }
-                if (!response.ok) return null;
-                const data = await response.arrayBuffer();
-                const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
+                const fetched = await fetchBinaryWithFallbacks(filename, "Ligações");
+                if (!fetched || !fetched.buffer) return null;
+
+                const workbook = XLSX.read(new Uint8Array(fetched.buffer), { type: 'array', dense: true, cellDates: false, raw: true });
                 const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                 const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
-                const name = filename.replace('Ligações_', '').replace('.xlsx', '').replace('.xls', '').toUpperCase();
+                const name = filename.replace('Ligações_', '').replace('Ligacoes_', '').replace('.xlsx', '').replace('.xls', '').toUpperCase();
                 return { name, data: jsonData };
             } catch (e) {
-                console.warn(`Ligações: Erro ao carregar '${filename}'.`, e);
+                console.warn(`Ligações: Erro ao processar '${filename}'.`, e);
                 return null;
             }
         }
@@ -4139,17 +4251,21 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                     fetchAndParseLigFile(latestCfg.ligFile)
                 ]);
 
+                let loadedAny = false;
+
                 if (firstVol && firstVol.length > 0) {
                     const normalizedVol = firstVol.map(row => normalizeVolRow(row));
                     loadedVolByMonth.set(latestCfg.key, normalizedVol);
                     rebuildGlobalVolData();
+                    loadedAny = true;
                 }
 
-                if (firstLig && firstLig.data) {
+                if (firstLig && firstLig.data && firstLig.data.length > 0) {
                     loadedLigByMonth.set(latestCfg.key, firstLig);
                     addLigacoesDataset(firstLig.name, firstLig.data);
                     activeLigacoesKey = firstLig.name;
                     renderLigacoesNavButtons();
+                    loadedAny = true;
                 }
 
                 updateLoadingProgress(80);
@@ -4157,14 +4273,19 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 renderMonthButtons();
                 applyMonthFilter(latestCfg.key);
 
+                if (!loadedAny) {
+                    showDeployWarning(`Os arquivos de dados padrão não puderam ser carregados do servidor (HTTP 404 / bloqueio do host). Clique em <b>IMPORTAR DADOS</b> acima para carregar suas planilhas.`);
+                }
+
                 updateLoadingProgress(100);
             } catch (e) {
                 console.warn("Erro no carregamento do mês mais atual:", e);
+                showDeployWarning(`Erro ao carregar dados iniciais do servidor. Você pode utilizar o botão <b>IMPORTAR DADOS</b> acima.`);
                 updateLoadingProgress(100);
             }
         }
 
-        // --- COMPARTILHAMENTO EXTERNO  ---
+        // --- COMPARTILHAMENTO EXTERNO ---
         function copyShareLink() {
             const url = new URL(window.location.href);
             url.searchParams.set('page', 'volumetria');
