@@ -1196,34 +1196,85 @@
                         </div>
                     </div>
                     
-                    <!-- Cidades Sagre -->
-                    <div class="no-print bg-gradient-to-br from-emerald-50/60 via-slate-50/40 to-teal-50/30 border border-emerald-200/80 hover:border-emerald-300 rounded-xl p-3 shadow-xs transition-all flex flex-col">
-                        <div class="flex items-center justify-between mb-2">
+                    <!-- Salas de Crise (Topo) -->
+                    <div class="no-print bg-gradient-to-br from-orange-50/70 via-orange-50/30 to-amber-50/40 border border-orange-200/90 hover:border-orange-300 rounded-xl p-3.5 shadow-xs hover:shadow-md transition-all flex flex-col font-black">
+                        <div class="flex items-center justify-between border-b border-orange-200/70 pb-1.5 mb-2.5">
                             <div class="flex items-center gap-2">
-                                <span class="flex h-2 w-2 relative">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                </span>
-                                <h4 class="font-black text-emerald-900 uppercase text-[10.5px] tracking-[0.15em]">Cidades Sagre</h4>
+                                <div class="w-1.5 h-3.5 bg-gradient-to-b from-orange-500 to-amber-600 rounded-full"></div>
+                                <h4 class="text-[10.5px] font-black text-orange-950 uppercase tracking-[0.15em]">Salas de Crise</h4>
                             </div>
-                            <div class="flex items-center gap-1.5 bg-white/95 border border-emerald-200 px-2.5 py-0.5 rounded-full shadow-xs">
-                                <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider">Total:</span>
-                                <span id="tag-sagre-val" class="text-xs font-black text-emerald-800 leading-none">0</span>
-                            </div>
+                            <span class="text-[8px] font-black text-orange-600 uppercase tracking-wider bg-orange-100/80 border border-orange-200/60 px-2 py-0.5 rounded-full">Críticos</span>
                         </div>
-                        <div id="sagre-cities-list" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 h-[100px] overflow-y-auto custom-scrollbar p-0.5">
-                            <!-- Cidades Sagre serão injetadas aqui -->
+                        <div class="grid grid-cols-2 gap-2.5 items-stretch">
+                            <!-- Pod Salas COPE -->
+                            <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-2.5 flex flex-col justify-between items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
+                                 ondblclick="openTagDetailsModal('SALAS COPE')"
+                                 title="Clique 2x para abrir detalhes">
+                                <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas COPE</span>
+                                <div class="my-auto pt-1 pb-1 flex items-center justify-center">
+                                    <p id="tag-sala-cope-val" class="text-[28px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none">0</p>
+                                </div>
+                                <!-- Contadores AGG, B2B e PON LOSS abaixo do valor principal com valores pequenos acima dos rótulos -->
+                                <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1 px-1 flex items-center justify-around text-center gap-1 mt-auto">
+                                    <div class="flex flex-col items-center flex-1" title="AGG">
+                                        <span id="sc-agg-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">AGG</span>
+                                    </div>
+                                    <span class="text-orange-200 font-light text-[10px]">|</span>
+                                    <div class="flex flex-col items-center flex-1" title="B2B">
+                                        <span id="sc-b2b-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">B2B</span>
+                                    </div>
+                                    <span class="text-orange-200 font-light text-[10px]">|</span>
+                                    <div class="flex flex-col items-center flex-1" title="PON">
+                                        <span id="sc-pon-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
+                                        <span class="text-[7px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">PON</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pod Salas NOC -->
+                            <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-2.5 flex flex-col justify-between items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
+                                 ondblclick="openTagDetailsModal('SALAS NOC')"
+                                 title="Clique 2x para abrir detalhes">
+                                <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas NOC</span>
+                                <div class="my-auto pt-1 pb-1 flex items-center justify-center">
+                                    <p id="tag-sala-noc-val" class="text-[28px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none">0</p>
+                                </div>
+                                <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1 px-1 flex items-center justify-center text-center mt-auto">
+                                    <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight">NOC PADTEC</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid: Operacionais & Salas de Crise -->
+                    <!-- Grid Inferior: Cidades Sagre & Outras Tags -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 h-[210px]">
-                        <!-- Card Operacionais -->
+                        <!-- Card Cidades Sagre (Esquerda) -->
+                        <div class="no-print bg-gradient-to-br from-emerald-50/60 via-slate-50/40 to-teal-50/30 border border-emerald-200/80 hover:border-emerald-300 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all font-black">
+                            <div class="flex items-center justify-between border-b border-emerald-200/70 pb-1.5 mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="flex h-2 w-2 relative">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                    <h4 class="font-black text-emerald-900 uppercase text-[10px] tracking-widest">Cidades Sagre</h4>
+                                </div>
+                                <div class="flex items-center gap-1.5 bg-white/95 border border-emerald-200 px-2 py-0.5 rounded-full shadow-xs">
+                                    <span class="text-[8.5px] font-black text-emerald-600 uppercase tracking-wider">Total:</span>
+                                    <span id="tag-sagre-val" class="text-xs font-black text-emerald-800 leading-none">0</span>
+                                </div>
+                            </div>
+                            <div id="sagre-cities-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 h-[135px] overflow-y-auto custom-scrollbar p-0.5 flex-1">
+                                <!-- Cidades Sagre serão injetadas aqui -->
+                            </div>
+                        </div>
+
+                        <!-- Card Outras Tags (Direita) -->
                         <div class="bg-gradient-to-br from-slate-50 via-slate-50/60 to-blue-50/20 border border-slate-200/90 hover:border-slate-300 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all font-black">
                             <div class="flex items-center justify-between border-b border-slate-200/70 pb-1.5 mb-2">
                                 <div class="flex items-center gap-2">
                                     <div class="w-1.5 h-3.5 bg-slate-800 rounded-full"></div>
-                                    <h4 class="text-[10px] font-black text-slate-800 uppercase tracking-widest">Operacionais</h4>
+                                    <h4 class="text-[10px] font-black text-slate-800 uppercase tracking-widest">Outras Tags</h4>
                                 </div>
                                 <span class="text-[8px] font-black text-slate-400 uppercase tracking-wider bg-white/80 border border-slate-200/60 px-1.5 py-0.5 rounded">Status</span>
                             </div>
@@ -1242,52 +1293,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Card Salas de Crise -->
-                        <div class="bg-gradient-to-br from-orange-50/70 via-orange-50/30 to-amber-50/40 border border-orange-200/90 hover:border-orange-300 rounded-xl p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all font-black">
-                            <div class="flex items-center justify-between border-b border-orange-200/70 pb-1.5 mb-2">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-1.5 h-3.5 bg-gradient-to-b from-orange-500 to-amber-600 rounded-full"></div>
-                                    <h4 class="text-[10px] font-black text-orange-950 uppercase tracking-widest">Salas de Crise</h4>
-                                </div>
-                                <span class="text-[8px] font-black text-orange-600 uppercase tracking-wider bg-orange-100/80 border border-orange-200/60 px-1.5 py-0.5 rounded">Críticos</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2 flex-1 items-stretch">
-                                <!-- Pod Salas COPE -->
-                                <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-2.5 flex flex-col justify-between items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none h-full"
-                                     ondblclick="openTagDetailsModal('SALAS COPE')"
-                                     title="Clique 2x para abrir detalhes">
-                                    <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas COPE</span>
-                                    <div class="my-auto pt-2 pb-1 flex items-center justify-center">
-                                        <p id="tag-sala-cope-val" class="text-[32px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none">0</p>
-                                    </div>
-                                    <!-- Contadores AGG, B2B e PON LOSS abaixo do valor principal com valores pequenos acima dos rótulos -->
-                                    <div class="w-full bg-orange-50/90 border border-orange-100/90 rounded-md py-1 px-0.5 flex items-center justify-around text-center gap-0.5 mt-auto">
-                                        <div class="flex flex-col items-center flex-1" title="AGG">
-                                            <span id="sc-agg-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                            <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">AGG</span>
-                                        </div>
-                                        <span class="text-orange-200 font-light text-[10px]">|</span>
-                                        <div class="flex flex-col items-center flex-1" title="B2B">
-                                            <span id="sc-b2b-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                            <span class="text-[7.5px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">B2B</span>
-                                        </div>
-                                        <span class="text-orange-200 font-light text-[10px]">|</span>
-                                        <div class="flex flex-col items-center flex-1" title="PON">
-                                            <span id="sc-pon-val" class="text-[10px] font-black text-orange-700 leading-none">0</span>
-                                            <span class="text-[7px] font-bold text-orange-500 uppercase tracking-tight mt-0.5">PON</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Pod Salas NOC -->
-                                <div class="bg-white border border-orange-200/80 hover:border-orange-400 rounded-lg p-3 flex flex-col justify-center items-center shadow-xs hover:shadow-sm transition-all cursor-pointer group select-none"
-                                     ondblclick="openTagDetailsModal('SALAS NOC')"
-                                     title="Clique 2x para abrir detalhes">
-                                    <span class="text-[9.5px] font-black text-orange-700 uppercase tracking-wider text-center">Salas NOC</span>
-                                    <p id="tag-sala-noc-val" class="text-[32px] font-black text-orange-600 group-hover:text-orange-500 transition-colors leading-none my-2">0</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1295,14 +1300,14 @@
             <!-- LIGAÇÕES COPE -->
             <div class="w-full mb-8">
                 <div class="p-8 border-2 border-blue-200 rounded-2xl bg-blue-50 shadow-sm hover-lift-card flex flex-col">
-                    <div class="flex justify-between items-center mb-6 border-b border-blue-100 pb-4">
-                        <div class="flex items-center gap-3">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-blue-100 pb-4">
+                        <div class="flex items-center gap-3 flex-shrink-0">
                             <div class="w-1.5 h-5 bg-blue-600"></div>
                             <h3 class="font-black text-blue-900 uppercase text-xs tracking-[0.2em]">LIGAÇÕES COPE</h3>
                         </div>
-                        <div id="ligacoes-files-nav" class="flex gap-2 no-print overflow-x-auto max-w-[400px]"></div>
-                        <label class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase hover:bg-blue-700 transition shadow-lg flex items-center gap-2 no-print">
-                            IMPORTAR CSV/XLS
+                        <div id="ligacoes-files-nav" class="flex flex-wrap items-center gap-1.5 no-print flex-1 justify-start md:justify-end"></div>
+                        <label class="cursor-pointer bg-blue-600 text-white w-8 h-8 rounded-lg hover:bg-blue-700 transition shadow-md flex items-center justify-center no-print flex-shrink-0" title="Importar Ligações (CSV/XLS)">
+                            <i class="fas fa-file-import text-xs"></i>
                             <input type="file" id="fileInputLigacoesCope" class="hidden" accept=".csv,.xls,.xlsx">
                         </label>
                     </div>
@@ -1615,6 +1620,89 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         ];
         const UF_SAGRE = ["Aracruz", "Sao Mateus", "Tres Pontas", "Varginha", "Caldas Novas", "Catalao", "Itumbiara", "Morrinhos", "Santa Rosa", "Santo Angelo", "Tres de Maio"
         ];
+
+        const SAGRE_SIGLAS_MAP = {
+            'TPS': 'TRES PONTAS', 'TPN': 'TRES PONTAS', 'TP': 'TRES PONTAS', 'TPO': 'TRES PONTAS', 'TRESPONTAS': 'TRES PONTAS', 'TRES PONTAS': 'TRES PONTAS',
+            'VAR': 'VARGINHA', 'VGA': 'VARGINHA', 'VGH': 'VARGINHA', 'VRG': 'VARGINHA', 'VGN': 'VARGINHA', 'VARGINHA': 'VARGINHA',
+            'ARC': 'ARACRUZ', 'ACZ': 'ARACRUZ', 'ARA': 'ARACRUZ', 'ARZ': 'ARACRUZ', 'ARACRUZ': 'ARACRUZ',
+            'SMT': 'SAO MATEUS', 'SMA': 'SAO MATEUS', 'SM': 'SAO MATEUS', 'SAOMATEUS': 'SAO MATEUS', 'SAO MATEUS': 'SAO MATEUS',
+            'CLN': 'CALDAS NOVAS', 'CNV': 'CALDAS NOVAS', 'CAL': 'CALDAS NOVAS', 'CLD': 'CALDAS NOVAS', 'CALDASNOVAS': 'CALDAS NOVAS', 'CALDAS NOVAS': 'CALDAS NOVAS',
+            'CAT': 'CATALAO', 'CTL': 'CATALAO', 'CTO': 'CATALAO', 'CATALAO': 'CATALAO',
+            'ITB': 'ITUMBIARA', 'IUM': 'ITUMBIARA', 'ITM': 'ITUMBIARA', 'ITBR': 'ITUMBIARA', 'ITUMBIARA': 'ITUMBIARA',
+            'MOR': 'MORRINHOS', 'MRH': 'MORRINHOS', 'MRN': 'MORRINHOS', 'MRR': 'MORRINHOS', 'MORRINHOS': 'MORRINHOS',
+            'SRO': 'SANTA ROSA', 'STR': 'SANTA ROSA', 'SRA': 'SANTA ROSA', 'SNT': 'SANTA ROSA', 'SANTAROSA': 'SANTA ROSA', 'SANTA ROSA': 'SANTA ROSA',
+            'SAN': 'SANTO ANGELO', 'STO': 'SANTO ANGELO', 'STA': 'SANTO ANGELO', 'SAG': 'SANTO ANGELO', 'SANTOANGELO': 'SANTO ANGELO', 'SANTO ANGELO': 'SANTO ANGELO',
+            'TMA': 'TRES DE MAIO', 'TDM': 'TRES DE MAIO', 'TMD': 'TRES DE MAIO', 'TM': 'TRES DE MAIO', 'TRESMAIO': 'TRES DE MAIO', 'TRESDEMAIO': 'TRES DE MAIO', 'TRES DE MAIO': 'TRES DE MAIO'
+        };
+
+        function extractSagreCity(row, areaValue) {
+            const normArea = normalizeString(areaValue);
+
+            // 1. Se a área já contém sigla (ex: VIVO|TPS, ID: VIVO|TPS, TPS)
+            if (normArea.includes('|')) {
+                const parts = normArea.split('|');
+                const sigla = normalizeString(parts[parts.length - 1]).replace(/[^A-Z0-9]/g, '');
+                if (SAGRE_SIGLAS_MAP[sigla]) return SAGRE_SIGLAS_MAP[sigla];
+            }
+
+            // 2. Se a área já corresponde diretamente a uma cidade/sigla Sagre conhecida
+            if (SAGRE_SIGLAS_MAP[normArea]) return SAGRE_SIGLAS_MAP[normArea];
+            const directMatch = UF_SAGRE.find(c => {
+                const nC = normalizeString(c);
+                return normArea === nC || normArea.includes(nC) || nC.includes(normArea);
+            });
+            if (directMatch && normArea.length > 2) return normalizeString(directMatch);
+
+            // 3. Se a área estiver vazia, for N/A ou não for uma cidade conhecida, buscar na Coluna N / Histórico
+            const keyHist = findKeyFuzzy(row, ['Historico', 'Histórico', 'comentarios', 'Comentários', 'Historico Comentarios', 'HISTORICO']);
+            const histTxt = String((keyHist ? row[keyHist] : '') || row['N'] || row['n'] || row['HISTORICO'] || row['Histórico Comentários'] || '');
+
+            if (histTxt && histTxt.trim() !== '') {
+                const normHist = normalizeString(histTxt);
+
+                // A. Buscar após "cidade:" ou "município:" (ex: "cidade: Três Pontas", "cidade: VIVO|TPS", "cidade: ARACRUZ")
+                const cityMatch = histTxt.match(/(?:cidade|munic[ií]pio)\s*[:=-]\s*([^,\r\n;|\/]+)/i);
+                if (cityMatch && cityMatch[1]) {
+                    let extracted = cityMatch[1].trim();
+                    if (extracted.includes('|')) {
+                        const parts = extracted.split('|');
+                        extracted = parts[parts.length - 1].trim();
+                    }
+                    const normExtracted = normalizeString(extracted).replace(/[^A-Z0-9\s]/g, '').trim();
+                    if (SAGRE_SIGLAS_MAP[normExtracted]) return SAGRE_SIGLAS_MAP[normExtracted];
+                    const matchedSagre = UF_SAGRE.find(c => {
+                        const nC = normalizeString(c);
+                        return normExtracted === nC || normExtracted.includes(nC) || nC.includes(normExtracted);
+                    });
+                    if (matchedSagre) return normalizeString(matchedSagre);
+                    if (normExtracted.length > 2) return normExtracted;
+                }
+
+                // B. Buscar sigla após "|" (ex: "ID: VIVO|TPS", "VIVO|TPS", "|TPS", "|ARC")
+                const pipeRegex = /(?:[A-Za-z0-9_.-]+)?\s*\|\s*([A-Za-z0-9_-]+)/g;
+                let m;
+                while ((m = pipeRegex.exec(histTxt)) !== null) {
+                    if (m[1]) {
+                        const sigla = normalizeString(m[1]).replace(/[^A-Z0-9]/g, '');
+                        if (SAGRE_SIGLAS_MAP[sigla]) return SAGRE_SIGLAS_MAP[sigla];
+                        const matchedSagre = UF_SAGRE.find(c => normalizeString(c) === sigla);
+                        if (matchedSagre) return normalizeString(matchedSagre);
+                    }
+                }
+
+                // C. Buscar menção direta de qualquer uma das cidades SAGRE no texto do Histórico
+                for (const c of UF_SAGRE) {
+                    const normC = normalizeString(c);
+                    if (normHist.includes(normC)) return normC;
+                }
+            }
+
+            // Fallback: se tiver algum nome na área que não seja genérico/nulo, usa ele, senão "DESCONHECIDO"
+            if (normArea && normArea !== 'N/A' && normArea !== '-' && normArea !== 'NULL' && normArea !== 'UNDEFINED' && normArea !== 'SEM AREA') {
+                return normArea;
+            }
+            return 'DESCONHECIDO';
+        }
         
         // --- AUXILIARES ---
         function normalizeString(str) {
@@ -1974,12 +2062,16 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
         }
 
         function openSagreCityModal(cityName) {
+            const targetCityNorm = normalizeString(cityName);
             const sagreTickets = globalVolData.filter(row => {
                 const keyTag = findKeyFuzzy(row, ['Tag']);
                 const keyArea = findKeyFuzzy(row, ['Área Rede', 'Região']);
                 const tagValue = normalizeString(row[keyTag]);
                 const areaValue = normalizeString(row[keyArea]);
-                return (tagValue.includes("CIDADES SAGRE") || tagValue.includes("SAGRE")) && !tagValue.includes("DESAGREGADO") && areaValue === normalizeString(cityName);
+                const isSagre = (tagValue.includes("CIDADES SAGRE") || tagValue.includes("SAGRE")) && !tagValue.includes("DESAGREGADO");
+                if (!isSagre) return false;
+                const rowCity = row._sagreCity || extractSagreCity(row, areaValue);
+                return normalizeString(rowCity) === targetCityNorm;
             });
             openGenericDataModal(sagreTickets, `Tickets SAGRE em ${cityName}`, `${sagreTickets.length} registros`, `EXPORT_SAGRE_${cityName.replace(/[^a-z0-9]/gi, '_')}`);
         }
@@ -2249,7 +2341,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
             { key: '05/2026', name: 'MAIO', label: 'Maio/2026', month: 5, year: 2026, volFile: 'Volumetria_Maio 2026.xls', ligFile: 'Ligações_Maio 2026.xlsx', ligKey: 'MAIO 2026' },
             { key: '06/2026', name: 'JUNHO', label: 'Junho/2026', month: 6, year: 2026, volFile: 'Volumetria_Junho 2026.xls', ligFile: 'Ligações_Junho 2026.xlsx', ligKey: 'JUNHO 2026' },
             { key: '07/2026', name: 'JULHO', label: 'Julho/2026', month: 7, year: 2026, volFile: 'Volumetria_Julho 2026.xls', ligFile: 'Ligações_Julho 2026.xls', ligKey: 'JULHO 2026' },
-            { key: '08/2026', name: 'AGOSTO', label: 'Agosto/2026', month: 8, year: 2026, volFile: 'Volumetria_Agosto 2026.xls', ligFile: 'Ligações_Agosto 2026.xlsx', ligKey: 'AGOSTO 2026' },
+            { key: '08/2026', name: 'AGOSTO', label: 'Agosto/2026', month: 8, year: 2026, volFile: 'Volumetria_Agosto 2026.xls', ligFile: 'Ligações_Agosto 2026.xls', ligKey: 'AGOSTO 2026' },
         ];
 
         const loadedVolByMonth = new Map();
@@ -2844,8 +2936,10 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 }
                 const isSagre = (tagValue.includes("CIDADES SAGRE") || tagValue.includes("SAGRE")) && !tagValue.includes("DESAGREGADO");
                 if (isSagre) {
+                    const sagreCityName = extractSagreCity(row, areaValue);
+                    row._sagreCity = sagreCityName;
                     if(!s.Sagreet.has(refVal)) { s.Sagreet.add(refVal); }
-                    sagreCities[areaValue] = (sagreCities[areaValue] || 0) + 1;
+                    sagreCities[sagreCityName] = (sagreCities[sagreCityName] || 0) + 1;
                     if (row._filterDate && row._filterDate !== "N/A") {
                         sagreTimelineMap[row._filterDate] = (sagreTimelineMap[row._filterDate] || 0) + 1;
                     }
@@ -3602,7 +3696,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
                 const btn = document.createElement('button');
                 btn.innerText = name;
                 const isActive = activeLigacoesKey === name;
-                btn.className = "px-3 py-1 rounded-md text-[9px] font-black uppercase border transition-all " + 
+                btn.className = "px-2.5 py-1 rounded-md text-[9px] font-black uppercase border transition-all whitespace-nowrap shadow-xs " + 
                     (isActive ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-white text-blue-600 border-blue-200 hover:bg-blue-50");
                 btn.onclick = () => switchLigacoes(name);
                 container.appendChild(btn);
@@ -3982,7 +4076,11 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
         async function fetchAndParseVolFile(filename) {
             try {
-                const response = await fetch(filename);
+                let response = await fetch(filename);
+                if (!response.ok) {
+                    const altFilename = filename.endsWith('.xlsx') ? filename.replace('.xlsx', '.xls') : (filename.endsWith('.xls') ? filename.replace('.xls', '.xlsx') : null);
+                    if (altFilename) response = await fetch(altFilename);
+                }
                 if (!response.ok) return [];
                 const data = await response.arrayBuffer();
                 const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
@@ -4002,7 +4100,11 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
         async function fetchAndParseLigFile(filename) {
             try {
-                const response = await fetch(filename);
+                let response = await fetch(filename);
+                if (!response.ok) {
+                    const altFilename = filename.endsWith('.xlsx') ? filename.replace('.xlsx', '.xls') : (filename.endsWith('.xls') ? filename.replace('.xls', '.xlsx') : null);
+                    if (altFilename) response = await fetch(altFilename);
+                }
                 if (!response.ok) return null;
                 const data = await response.arrayBuffer();
                 const workbook = XLSX.read(new Uint8Array(data), { type: 'array', dense: true, cellDates: false, raw: true });
@@ -4027,7 +4129,7 @@ const ANALISTAS_ALVO = ["LUAN VIEIRA LOPES", "JULIANA COSTA PEREIRA DA SILVA", "
 
             updateLoadingProgress(20);
 
-            // Carregamento sob demanda estritamente do mês mais atual (Julho/2026)
+            // Carregamento sob demanda estritamente do mês mais atual (Agosto/2026)
             const latestCfg = DEFAULT_MONTH_CONFIGS[DEFAULT_MONTH_CONFIGS.length - 1];
             activeMonthFilter = latestCfg.key;
 
